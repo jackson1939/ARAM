@@ -9,24 +9,20 @@ import {
 } from 'lucide-react';
 
 const adminNav = [
-  { href: '/admin/dashboard',     label: 'Dashboard',        icon: LayoutDashboard },
-  { href: '/admin/validacion',    label: 'Validación',       icon: CheckSquare },
-  { href: '/admin/empresas',      label: 'Empresas',         icon: Building2 },
-  { href: '/empresa/extraer',     label: 'Recolectar',       icon: PlusCircle },
-  { href: '/empresa/educacion',   label: 'Educación',        icon: BookOpen },
-  { href: '/admin/reportes',      label: 'Reportes',         icon: BarChart3 },
-  { href: '/admin/ingreso-datos', label: 'Ingreso de datos', icon: Database },
-  { href: '/admin/monitoreo',     label: 'Monitoreo',        icon: Activity },
-  { href: '/admin/demostracion',  label: 'Demostración',     icon: MonitorPlay },
+  { href: '/admin/dashboard',    label: 'Dashboard',     icon: LayoutDashboard },
+  { href: '/admin/validacion',   label: 'Validación',    icon: CheckSquare },
+  { href: '/admin/empresas',     label: 'Empresas',      icon: Building2 },
+  { href: '/empresa/educacion',  label: 'Educación',     icon: BookOpen },
+  { href: '/admin/reportes',     label: 'Reportes',      icon: BarChart3 },
+  { href: '/admin/monitoreo',    label: 'Monitoreo',     icon: Activity },
+  { href: '/admin/demostracion', label: 'Demostración',  icon: MonitorPlay },
 ];
 
 const empresaNav = [
-  { href: '/empresa/dashboard',     label: 'Dashboard',        icon: LayoutDashboard },
-  { href: '/empresa/extraer',       label: 'Recolectar',       icon: PlusCircle },
-  { href: '/empresa/educacion',     label: 'Educación',        icon: BookOpen },
-  { href: '/empresa/reportes',      label: 'Reportes',         icon: FileText },
-  { href: '/empresa/ingreso-datos', label: 'Ingreso de datos', icon: Database },
-  { href: '/empresa/demostracion',  label: 'Demostración',     icon: MonitorPlay },
+  { href: '/empresa/dashboard',   label: 'Dashboard',    icon: LayoutDashboard },
+  { href: '/empresa/educacion',   label: 'Educación',    icon: BookOpen },
+  { href: '/empresa/reportes',    label: 'Reportes',     icon: FileText },
+  { href: '/empresa/demostracion',label: 'Demostración', icon: MonitorPlay },
 ];
 
 interface SidebarProps {

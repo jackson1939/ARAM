@@ -19,7 +19,7 @@ const PAGE_META: Record<string, PageMeta> = {
   '/admin/validacion':      { title: 'Validación' },
   '/admin/empresas':        { title: 'Empresas' },
   '/admin/reportes':        { title: 'Reportes' },
-  '/admin/ingreso-datos':   { title: 'Ingreso de datos', showAction: true  },
+  '/admin/ingreso-datos':   { title: 'Ingreso de datos' },
   '/admin/monitoreo':       { title: 'Monitoreo' },
   '/admin/demostracion':    { title: 'Demostración' },
   '/empresa/dashboard':     { title: 'Mi impacto',       showAction: true  },

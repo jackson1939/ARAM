@@ -8,6 +8,7 @@ import { LineChart } from '@/components/charts/LineChart';
 import { PieChart } from '@/components/charts/PieChart';
 import { Recycle, Droplets, TreePine, Wind } from 'lucide-react';
 import type { MetricasImpacto } from '@/types';
+import { TipsPersonalizados } from '@/components/TipsPersonalizados';
 
 interface Recoleccion {
   id: string;
@@ -114,7 +115,13 @@ export default function EmpresaDashboardPage() {
         </Card>
       </div>
 
-      {/* Row 3 — últimas recolecciones validadas */}
+      {/* Row 3 — tips personalizados */}
+      <div>
+        <h2 className="text-[13px] font-extrabold uppercase tracking-widest text-body-text mb-3">Recomendaciones para vos</h2>
+        <TipsPersonalizados data={data} loading={loading} />
+      </div>
+
+      {/* Row 4 — últimas recolecciones validadas */}
       <Card>
         <CardHeader>
           <CardTitle>Últimas recolecciones validadas</CardTitle>

@@ -12,19 +12,29 @@ interface PublicStats {
   total_empresas: number;
 }
 
+function Skel({ w = 'w-16', h = 'h-[0.9em]', className = '' }: { w?: string; h?: string; className?: string }) {
+  return (
+    <span
+      className={`inline-block rounded-[5px] animate-pulse ${w} ${h} ${className}`}
+      style={{ background: 'rgba(255,255,255,0.18)' }}
+    />
+  );
+}
+
 export default function LoginPage() {
   const router = useRouter();
-  const [email, setEmail]       = useState('');
-  const [password, setPassword] = useState('');
-  const [loading, setLoading]   = useState(false);
-  const [role, setRole]         = useState<'empresa' | 'admin'>('empresa');
-  const [stats, setStats]       = useState<PublicStats | null>(null);
+  const [email, setEmail]         = useState('');
+  const [password, setPassword]   = useState('');
+  const [loading, setLoading]     = useState(false);
+  const [role, setRole]           = useState<'empresa' | 'admin'>('empresa');
+  const [stats, setStats]         = useState<PublicStats | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     fetch('/api/public-stats')
       .then(r => { if (!r.ok) throw new Error(`${r.status}`); return r.json(); })
-      .then((d: PublicStats) => setStats(d))
-      .catch(e => console.warn('[public-stats]', e));
+      .then((d: PublicStats) => { setStats(d); setIsLoading(false); })
+      .catch(e => { console.warn('[public-stats]', e); setIsLoading(false); });
   }, []);
 
   function handleRoleChange(r: 'empresa' | 'admin') {
@@ -224,28 +234,31 @@ export default function LoginPage() {
           <div className="flex justify-center gap-10 mt-10 pt-8 border-t border-white/12 w-full">
             {[
               {
-                value: stats
+                value: isLoading ? null : (stats
                   ? stats.total_kg >= 1000
                     ? `${(stats.total_kg / 1000).toFixed(1)} t`
                     : `${stats.total_kg} kg`
-                  : '—',
+                  : '—'),
                 label: 'reciclado',
               },
               {
-                value: stats ? String(stats.total_empresas) : '—',
+                value: isLoading ? null : (stats ? String(stats.total_empresas) : '—'),
                 label: 'empresas',
               },
               {
-                value: stats
+                value: isLoading ? null : (stats
                   ? stats.co2_kg >= 1000
                     ? `${(stats.co2_kg / 1000).toFixed(1)} t`
                     : `${stats.co2_kg} kg`
-                  : '—',
+                  : '—'),
                 label: 'CO₂ evitado',
               },
             ].map(s => (
               <div key={s.label} className="text-center">
-                <span className="font-display font-extrabold text-[30px] text-white block tracking-tight leading-none">{s.value}</span>
+                {s.value === null
+                  ? <Skel w="w-14" h="h-8" className="mb-1" />
+                  : <span className="font-display font-extrabold text-[30px] text-white block tracking-tight leading-none">{s.value}</span>
+                }
                 <span className="font-mono text-[11px] text-[rgba(231,239,226,0.6)] tracking-[0.08em] uppercase mt-1.5 block">{s.label}</span>
               </div>
             ))}

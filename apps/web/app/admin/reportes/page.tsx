@@ -40,6 +40,7 @@ export default function AdminReportesPage() {
   const [preview,         setPreview]         = useState<PreviewData | null>(null);
   const [loadingPreview,  setLoadingPreview]  = useState(false);
   const [generando,       setGenerando]       = useState(false);
+  const [generandoExcel, setGenerandoExcel]   = useState(false);
 
   const [filtroTipo, setFiltroTipo] = useState<FiltroTipo>('anio');
   const [anio,       setAnio]       = useState(now.getFullYear());
@@ -80,6 +81,20 @@ export default function AdminReportesPage() {
     a.download = `reporte-${selectedEmpresa.nombre}-${d}-${h}.pdf`;
     a.click();
     setGenerando(false);
+  }
+
+  async function handleDescargarExcel() {
+    if (!selectedEmpresa) return;
+    setGenerandoExcel(true);
+    const p = new URLSearchParams({ empresa_id: selectedEmpresa.id, desde: d, hasta: h });
+    const res = await fetch(`/api/reporte-excel?${p.toString()}`);
+    if (!res.ok) { setGenerandoExcel(false); return; }
+    const blob = await res.blob();
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = `reporte-${selectedEmpresa.nombre}-${d}-${h}.xlsx`;
+    a.click();
+    setGenerandoExcel(false);
   }
 
   const barData = preview
@@ -177,11 +192,18 @@ export default function AdminReportesPage() {
             <p className="text-[12px] text-body-text">{rangeLabel(filtroTipo, anio, mes, desde, hasta)}</p>
           </div>
           {selectedEmpresa && (
-            <button data-tour="btn-descargar" onClick={handleDescargar} disabled={generando}
-              className="inline-flex items-center gap-1.5 bg-[#4BAF47] hover:bg-[#3d9a3a] text-white text-[13px] font-bold px-4 py-2 rounded-[8px] disabled:opacity-50 transition-colors">
-              <Download className="w-3.5 h-3.5"/>
-              {generando ? 'Generando…' : 'Descargar PDF'}
-            </button>
+            <div className="flex items-center gap-2">
+              <button onClick={handleDescargarExcel} disabled={generandoExcel}
+                className="inline-flex items-center gap-1.5 bg-[#217346] hover:bg-[#1a5c38] text-white text-[13px] font-bold px-4 py-2 rounded-[8px] disabled:opacity-50 transition-colors">
+                <Download className="w-3.5 h-3.5"/>
+                {generandoExcel ? 'Generando…' : 'Descargar Excel'}
+              </button>
+              <button data-tour="btn-descargar" onClick={handleDescargar} disabled={generando}
+                className="inline-flex items-center gap-1.5 bg-[#4BAF47] hover:bg-[#3d9a3a] text-white text-[13px] font-bold px-4 py-2 rounded-[8px] disabled:opacity-50 transition-colors">
+                <Download className="w-3.5 h-3.5"/>
+                {generando ? 'Generando…' : 'Descargar PDF'}
+              </button>
+            </div>
           )}
         </div>
 

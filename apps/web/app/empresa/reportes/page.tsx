@@ -30,6 +30,7 @@ export default function EmpresaReportesPage() {
   const [preview, setPreview] = useState<PreviewData | null>(null);
   const [loadingPreview, setLoadingPreview] = useState(true);
   const [generando, setGenerando] = useState(false);
+  const [generandoExcel, setGenerandoExcel] = useState(false);
   const [filtroTipo, setFiltroTipo] = useState<FiltroTipo>('anio');
   const [anio, setAnio] = useState(now.getFullYear());
   const [mes,  setMes]  = useState(now.getMonth() + 1);
@@ -54,6 +55,18 @@ export default function EmpresaReportesPage() {
     a.download = `mi-reporte-${d}-${h}.pdf`;
     a.click();
     setGenerando(false);
+  }
+
+  async function handleDescargarExcel() {
+    setGenerandoExcel(true);
+    const res = await fetch(`/api/reporte-excel?desde=${d}&hasta=${h}`);
+    if (!res.ok) { setGenerandoExcel(false); return; }
+    const blob = await res.blob();
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = `mi-reporte-${d}-${h}.xlsx`;
+    a.click();
+    setGenerandoExcel(false);
   }
 
   const barData = preview ? Object.entries(preview.distribucion).map(([name, value]) => ({ name, value: Math.round(value*10)/10 })) : [];
@@ -92,6 +105,9 @@ export default function EmpresaReportesPage() {
         <div className="flex-1"/>
         <div className="flex items-center gap-3">
           <span className="text-[12px] text-body-text hidden sm:block">{rangeLabel(filtroTipo, anio, mes, desde, hasta)}</span>
+          <button onClick={handleDescargarExcel} disabled={generandoExcel} className="inline-flex items-center gap-1.5 bg-[#217346] hover:bg-[#1a5c38] text-white text-[13px] font-bold px-4 py-2 rounded-[8px] disabled:opacity-50 transition-colors">
+            <Download className="w-3.5 h-3.5"/>{generandoExcel ? 'Generando…' : 'Descargar Excel'}
+          </button>
           <button onClick={handleDescargar} disabled={generando} className="inline-flex items-center gap-1.5 bg-[#4BAF47] hover:bg-[#3d9a3a] text-white text-[13px] font-bold px-4 py-2 rounded-[8px] disabled:opacity-50 transition-colors">
             <Download className="w-3.5 h-3.5"/>{generando ? 'Generando…' : 'Descargar PDF'}
           </button>

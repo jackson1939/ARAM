@@ -1,6 +1,5 @@
 import { redirect } from 'next/navigation';
-import { Sidebar } from '@/components/Sidebar';
-import { DoodleBackground } from '@/components/DoodleBackground';
+import { ShellLayout } from '@/components/ShellLayout';
 import { getSession } from '@/lib/session';
 
 export const dynamic = 'force-dynamic';
@@ -11,12 +10,12 @@ export default async function AdminLayout({ children }: { children: React.ReactN
   if (session.user.rol !== 'admin') redirect('/empresa/dashboard');
 
   return (
-    <div className="flex min-h-screen">
-      <Sidebar rol="admin" />
-      <main className="relative flex-1 overflow-auto">
-        <DoodleBackground />
-        <div className="relative z-10">{children}</div>
-      </main>
-    </div>
+    <ShellLayout
+      rol="admin"
+      userName={session.user.name}
+      userEmail={session.user.email}
+    >
+      {children}
+    </ShellLayout>
   );
 }

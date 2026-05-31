@@ -325,13 +325,15 @@ export class IdentificationService extends BaseService {
       };
     }
 
+    const today = new Date().toISOString().slice(0, 10);
+
     return {
       sessionId,
       inputType,
       confidence,
       extracted: {
         company:   analysis.company,
-        date:      analysis.date,
+        date:      analysis.date ?? today,
         materials: analysis.materials,
         notes:     analysis.notes,
       },

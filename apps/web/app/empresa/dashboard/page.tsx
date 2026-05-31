@@ -10,6 +10,20 @@ import { Recycle, Droplets, TreePine, Wind } from 'lucide-react';
 import type { MetricasImpacto } from '@/types';
 import { TipsPersonalizados } from '@/components/TipsPersonalizados';
 
+const MAT_COLOR: Record<string, string> = {
+  plastico: 'var(--mat-plastico)', plastico_sin_tilde: 'var(--mat-plastico)',
+  papel: 'var(--mat-papel)',
+  vidrio: 'var(--mat-vidrio)',
+  metal: 'var(--mat-metal)',
+  carton: 'var(--mat-carton)', carton_sin_tilde: 'var(--mat-carton)',
+  electronico: 'var(--mat-electronico)', electronico_sin_tilde: 'var(--mat-electronico)',
+  organico: 'var(--mat-organico)', organico_sin_tilde: 'var(--mat-organico)',
+};
+function matColor(m: string) {
+  const key = m.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+  return MAT_COLOR[key] ?? 'var(--green)';
+}
+
 interface Recoleccion {
   id: string;
   tipo_material: string;
@@ -142,7 +156,64 @@ export default function EmpresaDashboardPage() {
         </Card>
       </div>
 
-      {/* Row 3 — tips personalizados */}
+      {/* Row 3 — distribución por material */}
+      {(loading || Object.keys(data?.distribucion ?? {}).length > 0) && (
+        <Card>
+          <CardHeader>
+            <CardTitle>Distribución por material</CardTitle>
+          </CardHeader>
+          <CardBody>
+            {loading ? (
+              <div className="space-y-3">
+                {[...Array(4)].map((_, i) => (
+                  <div key={i} className="space-y-1.5">
+                    <div className="flex justify-between">
+                      <Skeleton className="h-3.5 w-24" />
+                      <Skeleton className="h-3.5 w-16" />
+                    </div>
+                    <Skeleton className="h-2 w-full rounded-full" />
+                  </div>
+                ))}
+              </div>
+            ) : (() => {
+              const entries = Object.entries(data!.distribucion).sort((a, b) => b[1] - a[1]);
+              const total = entries.reduce((s, [, v]) => s + v, 0);
+              return (
+                <div className="space-y-3">
+                  {entries.map(([mat, kg]) => {
+                    const pct = total > 0 ? Math.round((kg / total) * 100) : 0;
+                    return (
+                      <div key={mat}>
+                        <div className="flex items-center justify-between mb-1.5">
+                          <div className="flex items-center gap-2">
+                            <span className="w-2.5 h-2.5 rounded-[3px] shrink-0" style={{ background: matColor(mat) }} />
+                            <span className="text-[13px] font-semibold text-black-heading capitalize">{mat}</span>
+                          </div>
+                          <div className="flex items-center gap-3 text-[12px] font-mono">
+                            <span className="font-bold text-black-heading tabular-nums">{kg.toLocaleString()} kg</span>
+                            <span className="text-muted-text w-9 text-right tabular-nums">{pct}%</span>
+                          </div>
+                        </div>
+                        <div className="h-1.5 rounded-full overflow-hidden" style={{ background: 'var(--alt)' }}>
+                          <div
+                            className="h-1.5 rounded-full transition-all duration-500"
+                            style={{ width: `${pct}%`, background: matColor(mat) }}
+                          />
+                        </div>
+                      </div>
+                    );
+                  })}
+                  <p className="text-[11px] text-muted-text pt-1 font-mono">
+                    Total: {total.toLocaleString()} kg · {entries.length} materiales
+                  </p>
+                </div>
+              );
+            })()}
+          </CardBody>
+        </Card>
+      )}
+
+      {/* Row 4 — tips personalizados */}
       <div>
         <h2 className="text-[13px] font-extrabold uppercase tracking-widest text-body-text mb-3">Recomendaciones para vos</h2>
         <TipsPersonalizados data={data} loading={loading} />

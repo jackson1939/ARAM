@@ -1,13 +1,17 @@
-import { count, eq, desc } from 'drizzle-orm';
+import { count, eq, desc, sum, gte } from 'drizzle-orm';
 import { db, empresas, extracciones, recolecciones, mensajesRecolector, recolectores } from '@fundares/db';
 import { MetricCard } from '@/components/MetricCard';
 import { Card, CardBody, CardHeader, CardTitle } from '@/components/ui/card';
 import { BarChart } from '@/components/charts/BarChart';
+import { GroupedBarChart } from '@/components/charts/GroupedBarChart';
 import { calcularMetricas } from '@/lib/metricas';
 import { Recycle, Building2, AlertCircle, CheckCircle, Users } from 'lucide-react';
 
 export default async function AdminDashboardPage() {
   const database = db();
+
+  const sixMonthsAgo = new Date();
+  sixMonthsAgo.setMonth(sixMonthsAgo.getMonth() - 6);
 
   const [
     empresaCountResult,
@@ -16,6 +20,8 @@ export default async function AdminDashboardPage() {
     recolectoresCountResult,
     mensajesPorCanalRows,
     actividadRecienteRows,
+    extraccionesTendenciaRows,
+    rankingEmpresasRows,
   ] = await Promise.all([
     database.select({ value: count() }).from(empresas),
     database
@@ -47,6 +53,17 @@ export default async function AdminDashboardPage() {
       .leftJoin(empresas, eq(extracciones.empresaId, empresas.id))
       .orderBy(desc(extracciones.createdAt))
       .limit(8),
+    database
+      .select({ createdAt: extracciones.createdAt, estado: extracciones.estado })
+      .from(extracciones)
+      .where(gte(extracciones.createdAt, sixMonthsAgo)),
+    database
+      .select({ nombre: empresas.nombre, total_kg: sum(recolecciones.cantidadKg) })
+      .from(recolecciones)
+      .leftJoin(empresas, eq(recolecciones.empresaId, empresas.id))
+      .groupBy(empresas.nombre)
+      .orderBy(desc(sum(recolecciones.cantidadKg)))
+      .limit(8),
   ]);
 
   const empresaCount = empresaCountResult[0]!;
@@ -70,6 +87,28 @@ export default async function AdminDashboardPage() {
     (row) => row.estado === 'aprobado' || row.estado === 'corregido'
   ).length;
   const pendientes = extraccionesRows.filter((row) => row.estado === 'pendiente').length;
+
+  // Tendencia de validaciones — últimos 6 meses
+  const now = new Date();
+  const tendenciaMeses: Record<string, { aprobado: number; rechazado: number }> = {};
+  for (let i = 5; i >= 0; i--) {
+    const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+    tendenciaMeses[d.toISOString().slice(0, 7)] = { aprobado: 0, rechazado: 0 };
+  }
+  for (const row of extraccionesTendenciaRows) {
+    if (!row.createdAt) continue;
+    const mes = new Date(row.createdAt).toISOString().slice(0, 7);
+    if (!(mes in tendenciaMeses)) continue;
+    if (row.estado === 'aprobado' || row.estado === 'corregido') tendenciaMeses[mes].aprobado++;
+    else if (row.estado === 'rechazado') tendenciaMeses[mes].rechazado++;
+  }
+  const tendenciaData = Object.entries(tendenciaMeses).map(([mes, v]) => ({ mes, ...v }));
+
+  // Ranking de empresas por kg
+  const rankingEmpresas = rankingEmpresasRows
+    .filter(r => r.nombre)
+    .map(r => ({ nombre: r.nombre!, kg: Math.round(Number(r.total_kg ?? 0) * 10) / 10 }));
+  const maxKgEmpresa = rankingEmpresas[0]?.kg ?? 1;
 
   // Canal stats
   const totalMensajes = mensajesPorCanalRows.reduce((sum, r) => sum + Number(r.value), 0);
@@ -209,7 +248,58 @@ export default async function AdminDashboardPage() {
         </Card>
       </div>
 
-      {/* Row 3 — impact cards */}
+      {/* Row 3 — tendencia validaciones + ranking empresas */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <Card className="md:col-span-2">
+          <CardHeader>
+            <CardTitle>Tendencia de validaciones · últimos 6 meses</CardTitle>
+          </CardHeader>
+          <CardBody>
+            {tendenciaData.every(d => d.aprobado === 0 && d.rechazado === 0) ? (
+              <p className="text-sm text-body-text/70 py-8 text-center">Sin datos aún</p>
+            ) : (
+              <GroupedBarChart data={tendenciaData} />
+            )}
+          </CardBody>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Ranking empresas · kg total</CardTitle>
+          </CardHeader>
+          <CardBody>
+            {rankingEmpresas.length === 0 ? (
+              <p className="text-sm text-body-text/70 py-8 text-center">Sin datos aún</p>
+            ) : (
+              <div className="space-y-3">
+                {rankingEmpresas.map((e, i) => (
+                  <div key={e.nombre}>
+                    <div className="flex items-center justify-between mb-1">
+                      <div className="flex items-center gap-2 min-w-0">
+                        <span className="font-mono text-[10px] font-bold text-muted-text w-4 shrink-0">
+                          {String(i + 1).padStart(2, '0')}
+                        </span>
+                        <span className="text-[13px] font-semibold text-black-heading truncate">{e.nombre}</span>
+                      </div>
+                      <span className="font-mono text-[12px] font-bold text-black-heading shrink-0 ml-2 tabular-nums">
+                        {e.kg.toLocaleString()} kg
+                      </span>
+                    </div>
+                    <div className="h-1.5 rounded-full overflow-hidden" style={{ background: 'var(--alt)' }}>
+                      <div
+                        className="h-1.5 rounded-full transition-all duration-500"
+                        style={{ width: `${Math.round((e.kg / maxKgEmpresa) * 100)}%`, background: i === 0 ? 'var(--green)' : 'var(--gp)' }}
+                      />
+                    </div>
+                  </div>
+                ))}
+              </div>
+            )}
+          </CardBody>
+        </Card>
+      </div>
+
+      {/* Row 4 — impact cards */}
       <div data-tour="impact-cards" className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
         <div className="rounded-[12px] border border-border-default p-4 sm:p-5 text-center bg-green-light min-w-0">
           <p className="font-black text-[#4BAF47] break-all leading-tight" style={{ fontSize: 'clamp(22px, 5vw, 30px)' }}>{metricas.co2_kg}</p>

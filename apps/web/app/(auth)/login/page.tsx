@@ -1,10 +1,16 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import toast from 'react-hot-toast';
+
+interface PublicStats {
+  total_kg: number;
+  co2_kg: number;
+  total_empresas: number;
+}
 
 export default function LoginPage() {
   const router = useRouter();
@@ -12,6 +18,14 @@ export default function LoginPage() {
   const [password, setPassword] = useState('');
   const [loading, setLoading]   = useState(false);
   const [role, setRole]         = useState<'empresa' | 'admin'>('empresa');
+  const [stats, setStats]       = useState<PublicStats | null>(null);
+
+  useEffect(() => {
+    fetch('/api/public-stats')
+      .then(r => r.json())
+      .then((d: PublicStats) => setStats(d))
+      .catch(() => {});
+  }, []);
 
   function handleRoleChange(r: 'empresa' | 'admin') {
     setRole(r);
@@ -47,12 +61,12 @@ export default function LoginPage() {
       {/* ── Back link ── */}
       <Link
         href="/"
-        className="absolute top-6 left-6 z-10 inline-flex items-center gap-2 text-[13px] font-semibold text-body-text hover:text-green-mid transition-colors"
+        className="absolute top-5 left-5 z-20 inline-flex items-center gap-2 text-[13px] font-semibold text-body-text hover:text-[var(--green)] bg-card border border-border-default rounded-[8px] px-3 py-2 shadow-card transition-colors"
       >
-        <svg className="w-[15px] h-[15px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+        <svg className="w-[14px] h-[14px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
           <path d="M19 12H5M11 18l-6-6 6-6"/>
         </svg>
-        Volver
+        Inicio
       </Link>
 
       {/* ── Left panel: form ── */}
@@ -206,12 +220,29 @@ export default function LoginPage() {
             Gestión de recolección de materiales reciclables para la red de empresas aliadas a la Fundación para el Reciclaje.
           </p>
 
-          {/* Stats */}
+          {/* Stats — real data */}
           <div className="flex justify-center gap-10 mt-10 pt-8 border-t border-white/12 w-full">
             {[
-              { value: '42.6 t', label: 'reciclado' },
-              { value: '23',     label: 'empresas'  },
-              { value: '68 t',   label: 'CO₂ evitado' },
+              {
+                value: stats
+                  ? stats.total_kg >= 1000
+                    ? `${(stats.total_kg / 1000).toFixed(1)} t`
+                    : `${stats.total_kg} kg`
+                  : '—',
+                label: 'reciclado',
+              },
+              {
+                value: stats ? String(stats.total_empresas) : '—',
+                label: 'empresas',
+              },
+              {
+                value: stats
+                  ? stats.co2_kg >= 1000
+                    ? `${(stats.co2_kg / 1000).toFixed(1)} t`
+                    : `${stats.co2_kg} kg`
+                  : '—',
+                label: 'CO₂ evitado',
+              },
             ].map(s => (
               <div key={s.label} className="text-center">
                 <span className="font-display font-extrabold text-[30px] text-white block tracking-tight leading-none">{s.value}</span>

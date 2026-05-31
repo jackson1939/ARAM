@@ -1,31 +1,42 @@
 'use client';
 
-import React, { useRef, useEffect } from 'react';
+import React, { useRef } from 'react';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import gsap from 'gsap';
 import { useGSAP } from '@gsap/react';
+import { useTheme } from '@/components/ThemeProvider';
 
 export default function LandingPage() {
   const containerRef = useRef<HTMLDivElement>(null);
-  const tickerRef = useRef<HTMLDivElement>(null);
+  const tickerRef    = useRef<HTMLDivElement>(null);
+  const { theme, toggle: toggleTheme } = useTheme();
 
   useGSAP(() => {
-    // Reveal animations
+    // Fade-up reveals
     const elements = gsap.utils.toArray('.anim-fade-up') as HTMLElement[];
     elements.forEach((el, index) => {
       gsap.to(el, {
-        scrollTrigger: {
-          trigger: el,
-          start: 'top 85%',
-        },
-        opacity: 1,
-        y: 0,
-        duration: 0.7,
-        ease: 'power3.out',
-        delay: (index % 5) * 0.1
+        scrollTrigger: { trigger: el, start: 'top 85%' },
+        opacity: 1, y: 0, duration: 0.7, ease: 'power3.out',
+        delay: (index % 5) * 0.1,
       });
     });
+
+    // Left-to-right stagger for "Cómo funciona" steps
+    const stepsContainer = document.querySelector('.steps-container');
+    if (stepsContainer) {
+      const steps = gsap.utils.toArray('.anim-slide-left') as HTMLElement[];
+      gsap.fromTo(
+        steps,
+        { opacity: 0, x: -40 },
+        {
+          scrollTrigger: { trigger: stepsContainer, start: 'top 75%' },
+          opacity: 1, x: 0, duration: 0.65, ease: 'power3.out',
+          stagger: 0.14,
+        }
+      );
+    }
 
     // Ticker animation
     if (tickerRef.current) {
@@ -94,15 +105,34 @@ export default function LandingPage() {
             <div className="text-[11px] font-medium text-body-text tracking-[0.08em] uppercase">Plataforma de reciclaje</div>
           </div>
         </div>
-        <Link 
-          href="/login" 
-          className="flex items-center gap-2 bg-black-heading text-white text-[13px] font-bold py-2.5 px-5 rounded-[5px] transition-all duration-300 hover:bg-green-primary hover:-translate-y-px group"
-        >
-          Iniciar sesión
-          <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 stroke-current fill-none stroke-[2.5] [stroke-linecap:round] [stroke-linejoin:round] transition-transform duration-200 group-hover:translate-x-1">
-            <path d="M5 12h14M13 6l6 6-6 6"/>
-          </svg>
-        </Link>
+        <div className="flex items-center gap-3">
+          {/* Dark / Light toggle */}
+          <button
+            onClick={toggleTheme}
+            className="w-9 h-9 rounded-[8px] border border-border-default bg-card flex items-center justify-center text-body-text hover:text-black-heading hover:border-border-dark transition-colors"
+            aria-label="Toggle theme"
+          >
+            {theme === 'dark' ? (
+              <svg viewBox="0 0 24 24" className="w-4 h-4 fill-none stroke-current stroke-2 [stroke-linecap:round] [stroke-linejoin:round]">
+                <circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>
+              </svg>
+            ) : (
+              <svg viewBox="0 0 24 24" className="w-4 h-4 fill-none stroke-current stroke-2 [stroke-linecap:round] [stroke-linejoin:round]">
+                <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/>
+              </svg>
+            )}
+          </button>
+
+          <Link
+            href="/login"
+            className="flex items-center gap-2 bg-[#1A1D17] text-white text-[13px] font-bold py-2.5 px-5 rounded-[8px] transition-all duration-300 hover:bg-[var(--green)] hover:-translate-y-px group"
+          >
+            Iniciar sesión
+            <svg viewBox="0 0 24 24" className="w-3.5 h-3.5 stroke-current fill-none stroke-[2.5] [stroke-linecap:round] [stroke-linejoin:round] transition-transform duration-200 group-hover:translate-x-1">
+              <path d="M5 12h14M13 6l6 6-6 6"/>
+            </svg>
+          </Link>
+        </div>
       </nav>
 
       {/* HERO */}
@@ -302,14 +332,14 @@ export default function LandingPage() {
             Cuatro pasos simples que convierten información caótica en datos estructurados y certificados.
           </p>
 
-          <div className="anim-fade-up opacity-0 translate-y-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-px bg-white/10 rounded-[5px] overflow-hidden mt-16">
+          <div className="steps-container grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-px bg-white/10 rounded-[5px] overflow-hidden mt-16">
             {[
               { n: '01', i: <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>, t: 'La empresa carga', d: 'Texto, imagen o video del comprobante de recolección.' },
               { n: '02', i: <><path d="M12 2a10 10 0 110 20 10 10 0 010-20z"/><path d="M12 8v4l3 3"/></>, t: 'La IA extrae', d: 'Datos estructurados: empresa, fecha, materiales y cantidades.' },
               { n: '03', i: <><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></>, t: 'Fundares valida', d: 'Revisión y aprobación antes de registrarlo oficialmente.' },
               { n: '04', i: <><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/></>, t: 'Reporte generado', d: 'PDF certificado con impacto calculado listo para compartir.', noArrow: true }
             ].map((step, i) => (
-              <div key={i} className="bg-[#1A1D17] p-9 px-7 relative">
+              <div key={i} className="anim-slide-left bg-[#1A1D17] p-9 px-7 relative" style={{ opacity: 0 }}>
                 <div className="w-10 h-10 rounded-[10px] border border-green-primary/40 flex items-center justify-center text-sm font-black text-green-primary mb-6">{step.n}</div>
                 <div className="mb-4">
                   <svg viewBox="0 0 24 24" className="w-6 h-6 stroke-white/40 fill-none stroke-[1.5] [stroke-linecap:round] [stroke-linejoin:round]">{step.i}</svg>

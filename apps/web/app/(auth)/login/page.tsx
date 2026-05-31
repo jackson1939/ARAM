@@ -99,7 +99,7 @@ export default function LoginPage() {
             </div>
             <div>
               <p className="font-display font-bold text-[20px] text-black-heading tracking-tight leading-none">ARAM</p>
-              <p className="font-mono text-[10px] font-medium tracking-[0.16em] uppercase text-muted-text mt-1">Recolección Automatizada Multicanal</p>
+              <p className="font-mono text-[10px] font-medium tracking-[0.16em] uppercase text-muted-text mt-1">Asistente de Recolección Automatizada Multicanal</p>
             </div>
           </div>
 

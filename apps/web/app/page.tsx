@@ -155,7 +155,7 @@ export default function LandingPage() {
           </div>
           <div>
             <div className="font-display font-bold text-[16px] lg:text-[18px] tracking-tight" style={{ color: 'var(--bk)' }}>ARAM</div>
-            <div className="hidden sm:block font-mono text-[9px] lg:text-[9.5px] tracking-[0.16em] uppercase" style={{ color: 'var(--ink3)' }}>Recolección Automatizada Multicanal</div>
+            <div className="hidden sm:block font-mono text-[9px] lg:text-[9.5px] tracking-[0.16em] uppercase" style={{ color: 'var(--ink3)' }}>Asistente de Recolección Automatizada Multicanal</div>
           </div>
         </div>
 
@@ -538,7 +538,7 @@ export default function LandingPage() {
             </div>
             <div>
               <div className="font-display font-bold text-[15px]" style={{ color: 'var(--bg)' }}>ARAM</div>
-              <div className="font-mono text-[9.5px] tracking-[0.16em] uppercase" style={{ color: 'rgba(246,244,236,0.4)' }}>Recolección Automatizada Multicanal</div>
+              <div className="font-mono text-[9.5px] tracking-[0.16em] uppercase" style={{ color: 'rgba(246,244,236,0.4)' }}>Asistente de Recolección Automatizada Multicanal</div>
             </div>
           </div>
           <div className="font-mono text-[11px] lg:text-[12px]" style={{ color: 'rgba(246,244,236,0.45)' }}>© {new Date().getFullYear()} ARAM · Santa Cruz, Bolivia</div>

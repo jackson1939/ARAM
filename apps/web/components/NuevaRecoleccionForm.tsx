@@ -148,8 +148,20 @@ export function NuevaRecoleccionForm({ onSaved }: { onSaved?: () => void }) {
           ? d.materials.map(m => ({ tipo: m.type, cantidad: m.quantity != null ? String(m.quantity) : '', unidad: m.unit ?? 'kg' }))
           : [{ tipo: '', cantidad: '', unidad: 'kg' }]
       );
-      // Pre-fill empresa for empresa users
-      if (!isAdmin && session?.user?.empresaId) setEmpresaId(session.user.empresaId);
+
+      // Auto-match empresa by name
+      if (!isAdmin && session?.user?.empresaId) {
+        setEmpresaId(session.user.empresaId);
+      } else if (isAdmin && d.company) {
+        const normalize = (s: string) => s.toLowerCase().replace(/[^a-z0-9]/g, '');
+        const extracted = normalize(d.company);
+        const match = empresas.find(e => {
+          const nombre = normalize(e.nombre);
+          return nombre === extracted || nombre.includes(extracted) || extracted.includes(nombre);
+        });
+        if (match) setEmpresaId(match.id);
+      }
+
       setPhase('review');
     } catch (e: unknown) {
       setError(e instanceof Error ? e.message : 'Error inesperado');
@@ -238,14 +250,24 @@ export function NuevaRecoleccionForm({ onSaved }: { onSaved?: () => void }) {
           {/* Empresa */}
           {isAdmin ? (
             <div>
-              <label className="block text-[12px] font-semibold text-body-text mb-1.5">
-                Empresa <span className="text-[#D32F2F]">*</span>
-              </label>
+              <div className="flex items-center justify-between mb-1.5">
+                <label className="text-[12px] font-semibold text-body-text">
+                  Empresa <span className="text-[#D32F2F]">*</span>
+                </label>
+                {empresaId && (
+                  <span className="text-[11px] font-bold text-[#4BAF47] bg-green-light px-2 py-0.5 rounded-full">
+                    ✓ Detectada automáticamente
+                  </span>
+                )}
+              </div>
               <select value={empresaId} onChange={e => setEmpresaId(e.target.value)}
-                className={`w-full border rounded-[9px] px-3 py-2.5 text-sm bg-card outline-none transition-colors ${!empresaId ? 'border-[#D32F2F]' : 'border-border-default focus:border-[#4BAF47]'}`}>
+                className={`w-full border rounded-[9px] px-3 py-2.5 text-sm bg-card outline-none transition-colors ${!empresaId ? 'border-[#D32F2F]' : 'border-[#4BAF47]'}`}>
                 <option value="">Seleccioná una empresa…</option>
                 {empresas.map(e => <option key={e.id} value={e.id}>{e.nombre}</option>)}
               </select>
+              {!empresaId && (
+                <p className="text-[11px] text-[#D32F2F] mt-1">No se encontró coincidencia — seleccioná manualmente</p>
+              )}
             </div>
           ) : (
             <div>

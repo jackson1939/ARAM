@@ -241,7 +241,7 @@ export default function LoginPage() {
           </h2>
 
           <p className="text-[16px] leading-[1.7] text-[rgba(231,239,226,0.74)] max-w-[400px]">
-            Asistente de Recolección Automatizada Multicanal para empresas aliadas.
+            Asistente de Recolección Automatizada Multicanal.
           </p>
 
           {/* Stats — real data */}

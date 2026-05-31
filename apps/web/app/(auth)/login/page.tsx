@@ -37,9 +37,15 @@ export default function LoginPage() {
       .catch(e => { console.warn('[public-stats]', e); setIsLoading(false); });
   }, []);
 
+  const DEMO = {
+    empresa: { email: 'empresa@demo.com',   password: '12345'   },
+    admin:   { email: 'admin@fundares.org', password: 'Admin123!' },
+  } as const;
+
   function handleRoleChange(r: 'empresa' | 'admin') {
     setRole(r);
-    setEmail(r === 'admin' ? 'admin@fundares.org' : 'empresa@fundares.org');
+    setEmail(DEMO[r].email);
+    setPassword(DEMO[r].password);
   }
 
   async function handleSubmit(e: React.FormEvent) {
@@ -124,12 +130,20 @@ export default function LoginPage() {
           </div>
 
           {/* Demo hint */}
-          <div className="bg-[var(--alt)] border border-border-default rounded-input px-4 py-3 mb-7 text-[12.5px] text-body-text">
-            <span className="font-bold text-black-heading">Demo:</span> usá{' '}
-            <code className="font-mono text-[11.5px] bg-card border border-border-default rounded px-1.5 py-0.5 text-[var(--green)]">
-              {role === 'admin' ? 'admin@fundares.org' : 'empresa@fundares.org'}
-            </code>{' '}
-            con cualquier contraseña para previsualizar el panel.
+          <div className="bg-[var(--alt)] border border-border-default rounded-input px-4 py-3 mb-7 text-[12.5px] text-body-text space-y-1.5">
+            <p className="font-bold text-black-heading">Acceso demo</p>
+            <div className="flex items-center gap-2 flex-wrap">
+              <span className="text-muted-text">Email:</span>
+              <code className="font-mono text-[11.5px] bg-card border border-border-default rounded px-1.5 py-0.5 text-[var(--green)]">
+                {DEMO[role].email}
+              </code>
+            </div>
+            <div className="flex items-center gap-2 flex-wrap">
+              <span className="text-muted-text">Contraseña:</span>
+              <code className="font-mono text-[11.5px] bg-card border border-border-default rounded px-1.5 py-0.5 text-[var(--green)]">
+                {DEMO[role].password}
+              </code>
+            </div>
           </div>
 
           <form onSubmit={handleSubmit} className="space-y-5">
@@ -141,7 +155,7 @@ export default function LoginPage() {
                 value={email}
                 onChange={e => setEmail(e.target.value)}
                 className="w-full border border-border-default rounded-input px-3.5 py-3 text-sm text-black-heading placeholder:text-muted-text outline-none focus:border-[var(--green)] focus:ring-2 focus:ring-[var(--green)]/20 transition-colors bg-card"
-                placeholder={role === 'admin' ? 'admin@fundares.org' : 'empresa@fundares.org'}
+                placeholder={DEMO[role].email}
               />
             </div>
 

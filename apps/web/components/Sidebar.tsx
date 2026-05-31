@@ -82,8 +82,8 @@ export function Sidebar({ rol, collapsed = false }: SidebarProps) {
                   'relative flex items-center gap-3 rounded-[9px] text-[14px] transition-colors mb-0.5',
                   collapsed ? 'justify-center px-0 py-2.5' : 'px-3 py-2.5',
                   active
-                    ? 'bg-green-light text-[var(--forest)] font-bold'
-                    : 'text-body-text font-semibold hover:bg-bg-page hover:text-black-heading',
+                    ? 'bg-green-light text-[#1E3D2A] dark:text-[#4BAF47] font-bold'
+                    : 'text-body-text font-semibold hover:bg-[var(--alt)] hover:text-black-heading',
                 )}
               >
                 {/* Active indicator bar */}

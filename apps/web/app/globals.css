@@ -73,16 +73,16 @@ h1, h2, h3, h4 {
   .dark {
     --bg:         #111110;
     --card:       #1C1C1A;
-    --alt:        #161614;
+    --alt:        #222220;
     --wh:         #1C1C1A;
     --bk:         #EEECEA;
-    --bt:         #8A8980;
-    --ink3:       #6A6B62;
+    --bt:         #9A9B92;
+    --ink3:       #7A7B72;
     --bd:         #2C2C29;
     --bdd:        #3A3A36;
-    --forest:     #0F1E14;
-    --green:      #3A9A5C;
-    --gl:         #162016;
+    --forest:     #244B33;   /* lighter in dark so text-forest is visible */
+    --green:      #4BAF47;   /* use bright green in dark for active states */
+    --gl:         #1A2A1A;
     --gl2:        #1A2A1A;
     --clay-wash:  #2A1A10;
     --slate-wash: #0E1E26;

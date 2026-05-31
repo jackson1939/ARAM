@@ -119,9 +119,9 @@ export default function LandingPage() {
             Plataforma de Sostenibilidad
           </motion.div>
 
-          <motion.h1 initial={{ opacity: 0, y: 32 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.1, ease: [0.22, 1, 0.36, 1] }} className="text-[clamp(40px,4vw,62px)] font-black text-black-heading leading-[1.05] tracking-tight mb-6">
+          <motion.h1 initial={{ opacity: 0, y: 32 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.1, ease: [0.22, 1, 0.36, 1] }} className="text-[clamp(40px,4vw,62px)] font-black text-[#1A1D17] leading-[1.05] tracking-tight mb-6">
             Datos de reciclaje,<br/>
-            <span className="block text-transparent bg-clip-text bg-[image:var(--gradient-brand)]">sin esfuerzo.</span>
+            <span className="block text-[#2F7D4F]">sin esfuerzo.</span>
           </motion.h1>
 
           <motion.p initial={{ opacity: 0, y: 32 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.7, delay: 0.2, ease: [0.22, 1, 0.36, 1] }} className="text-base leading-[1.75] text-body-text max-w-[440px] mb-10">
@@ -209,7 +209,7 @@ export default function LandingPage() {
             </div>
 
             {/* Float 2 */}
-            <motion.div animate={{ y: [0, -8, 0], rotate: [-1.5, -1.5, -1.5] }} transition={{ repeat: Infinity, duration: 5, ease: "easeInOut" }} className="absolute -bottom-6 -left-5 z-20 bg-black-heading rounded-xl shadow-[0_16px_48px_rgba(0,0,0,0.2)] p-3.5 px-4">
+            <motion.div animate={{ y: [0, -8, 0], rotate: [-1.5, -1.5, -1.5] }} transition={{ repeat: Infinity, duration: 5, ease: "easeInOut" }} className="absolute -bottom-6 -left-5 z-20 bg-[#1A1D17] rounded-xl shadow-[0_16px_48px_rgba(0,0,0,0.2)] p-3.5 px-4">
               <div className="text-[10px] font-bold text-white/50 tracking-[0.06em] uppercase mb-2">Últimas recolecciones</div>
               <div className="flex flex-col gap-1.5">
                 {[
@@ -231,7 +231,7 @@ export default function LandingPage() {
       </section>
 
       {/* TICKER DIVIDER */}
-      <div className="w-full py-5 px-12 border-y border-border-default bg-white overflow-hidden">
+      <div className="w-full py-5 px-12 border-y border-border-default bg-[#F6F4EC] overflow-hidden">
         <div ref={tickerRef} className="flex items-center gap-10 whitespace-nowrap w-fit">
           {[1,2].map((group) => (
             <React.Fragment key={group}>
@@ -274,7 +274,7 @@ export default function LandingPage() {
             { n: '05', i: <><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></>, bg: 'bg-green-light', c: 'stroke-green-primary', t: 'Reportes certificados', d: 'Generá reportes en PDF con firma digital para presentar ante autoridades, clientes y auditorías de sostenibilidad.' },
             { n: '06', i: <><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></>, bg: 'bg-[#EBF4FF]', c: 'stroke-[#066AAB]', t: 'Historial completo', d: 'Accedé al historial completo de recolecciones con filtros por empresa, fecha, material y estado de validación.' }
           ].map((feat, i) => (
-            <div key={i} className="anim-fade-up opacity-0 translate-y-8 bg-white border border-border-default rounded-[5px] p-8 shadow-card transition-all duration-300 hover:-translate-y-1.5 hover:shadow-[0_40px_80px_rgba(0,0,0,0.12)] hover:border-green-primary/30 relative overflow-hidden group cursor-default">
+            <div key={i} className="anim-fade-up opacity-0 translate-y-8 bg-[#FFFFFF] border border-[#E2DFD1] rounded-[14px] p-8 shadow-[0_2px_8px_rgba(40,38,28,0.06)] transition-all duration-300 hover:-translate-y-1.5 hover:shadow-[0_40px_80px_rgba(0,0,0,0.12)] hover:border-[#4BAF47]/30 relative overflow-hidden group cursor-default">
               <div className="absolute inset-0 bg-gradient-to-br from-green-light to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100"></div>
               <div className="absolute right-6 top-6 text-5xl font-black text-green-primary/5 tracking-[-0.05em]">{feat.n}</div>
               <div className={`w-12 h-12 rounded-[10px] flex items-center justify-center mb-6 relative z-10 ${feat.bg}`}>
@@ -288,7 +288,7 @@ export default function LandingPage() {
       </section>
 
       {/* HOW IT WORKS */}
-      <section id="como-funciona" className="bg-black-heading py-24 px-6 md:px-12 relative overflow-hidden">
+      <section id="como-funciona" className="bg-[#1A1D17] py-24 px-6 md:px-12 relative overflow-hidden">
         <div className="absolute -bottom-16 -right-16 w-[300px] h-[300px] rounded-full bg-green-primary/10"></div>
         <div className="max-w-7xl mx-auto">
           <div className="anim-fade-up opacity-0 translate-y-8 flex items-center gap-3 mb-4">
@@ -298,7 +298,7 @@ export default function LandingPage() {
           <h2 className="anim-fade-up opacity-0 translate-y-8 text-[clamp(28px,3vw,44px)] font-black text-white tracking-tight leading-[1.1] mb-4">
             De dato crudo<br/>a reporte en minutos.
           </h2>
-          <p className="anim-fade-up opacity-0 translate-y-8 text-[15px] text-[#878680]/80 leading-[1.7] max-w-[400px]">
+          <p className="anim-fade-up opacity-0 translate-y-8 text-[15px] text-[#A8A9A0] leading-[1.7] max-w-[400px]">
             Cuatro pasos simples que convierten información caótica en datos estructurados y certificados.
           </p>
 
@@ -309,13 +309,13 @@ export default function LandingPage() {
               { n: '03', i: <><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></>, t: 'Fundares valida', d: 'Revisión y aprobación antes de registrarlo oficialmente.' },
               { n: '04', i: <><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/></>, t: 'Reporte generado', d: 'PDF certificado con impacto calculado listo para compartir.', noArrow: true }
             ].map((step, i) => (
-              <div key={i} className="bg-black-heading p-9 px-7 relative">
+              <div key={i} className="bg-[#1A1D17] p-9 px-7 relative">
                 <div className="w-10 h-10 rounded-[10px] border border-green-primary/40 flex items-center justify-center text-sm font-black text-green-primary mb-6">{step.n}</div>
                 <div className="mb-4">
                   <svg viewBox="0 0 24 24" className="w-6 h-6 stroke-white/40 fill-none stroke-[1.5] [stroke-linecap:round] [stroke-linejoin:round]">{step.i}</svg>
                 </div>
                 <h3 className="text-[15px] font-extrabold text-white mb-2 tracking-[-0.01em]">{step.t}</h3>
-                <p className="text-[13px] leading-[1.7] text-[#878680]/70">{step.d}</p>
+                <p className="text-[13px] leading-[1.7] text-[#A8A9A0]">{step.d}</p>
                 {!step.noArrow && (
                   <div className="hidden lg:flex absolute -right-3 top-1/2 -translate-y-1/2 w-6 h-6 bg-green-primary rounded-full items-center justify-center z-10">
                     <svg viewBox="0 0 24 24" className="w-2.5 h-2.5 stroke-white fill-none stroke-[3] [stroke-linecap:round] [stroke-linejoin:round]"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
@@ -343,7 +343,7 @@ export default function LandingPage() {
       </section>
 
       {/* FOOTER */}
-      <footer className="bg-black-heading border-t border-white/5 py-12 px-6 md:px-12">
+      <footer className="bg-[#1A1D17] border-t border-white/5 py-12 px-6 md:px-12">
         <div className="max-w-7xl mx-auto flex flex-col md:flex-row md:items-center justify-between gap-6">
           <div className="flex items-center gap-2.5">
             <div className="w-8 h-8 bg-green-primary rounded-[7px] flex items-center justify-center">

@@ -350,7 +350,7 @@ export function NuevaRecoleccionForm({ onSaved }: { onSaved?: () => void }) {
       <div className="flex-1 overflow-y-auto p-6 space-y-4">
 
         {/* Tabs */}
-        <div className="flex gap-1 border-b border-border-default">
+        <div data-tour="form-tabs" className="flex gap-1 border-b border-border-default">
           {([['texto', 'Texto'], ['imagen', 'Imagen'], ['video', 'Video']] as [Tab, string][]).map(([id, label]) => (
             <button key={id} onClick={() => changeTab(id)}
               className={[
@@ -434,7 +434,7 @@ export function NuevaRecoleccionForm({ onSaved }: { onSaved?: () => void }) {
 
       {/* Extract button */}
       <div className="p-4 border-t border-border-default flex-shrink-0">
-        <button onClick={handleExtract} disabled={!canExtract() || phase === 'extracting'}
+        <button data-tour="btn-extraer" onClick={handleExtract} disabled={!canExtract() || phase === 'extracting'}
           className="w-full py-3 bg-[#4BAF47] hover:bg-[#3d9a3a] text-white font-bold rounded-[9px] text-[15px] inline-flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors">
           {phase === 'extracting' ? (
             <>

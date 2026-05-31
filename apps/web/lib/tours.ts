@@ -3,6 +3,7 @@ export interface TourStep {
   title?: string;
   intro: string;
   position?: 'top' | 'bottom' | 'left' | 'right' | 'auto';
+  waitForClick?: boolean;
 }
 
 export interface TourDef {
@@ -82,8 +83,9 @@ export const TOURS: TourDef[] = [
     title: 'Crear recolección (admin)',
     href: '/admin/dashboard',
     steps: [
-      { element: '[data-tour="btn-nueva-recoleccion"]', title: '+ Nueva recolección', intro: 'Este botón está disponible en el header en el dashboard, ingreso de datos y más. Abrí el panel lateral.' },
-      { element: '[data-tour="header"]',           title: 'Panel de extracción IA', intro: 'Se abre un drawer con el formulario. Podés enviar texto, imagen o video para que la IA extraiga los datos.' },
+      { element: '[data-tour="btn-nueva-recoleccion"]', title: '+ Nueva recolección', intro: 'Hacé click en este botón para abrir el formulario de recolección con IA.', waitForClick: true },
+      { element: '[data-tour="form-tabs"]',             title: 'Modo de entrada',     intro: 'Elegí cómo ingresar los datos: texto libre, imagen o video. La IA interpreta cada formato automáticamente.' },
+      { element: '[data-tour="btn-extraer"]',           title: 'Extraer con IA',      intro: 'Presioná para que la IA analice el contenido y extraiga empresa, fecha y materiales. Luego podés revisar y corregir antes de guardar.' },
     ],
   },
 
@@ -117,8 +119,9 @@ export const TOURS: TourDef[] = [
     title: 'Crear recolección',
     href: '/empresa/dashboard',
     steps: [
-      { element: '[data-tour="btn-nueva-recoleccion"]', title: '+ Nueva recolección', intro: 'Hacé click aquí para registrar una nueva recolección. Podés usar texto, foto o video.' },
-      { element: '[data-tour="header"]',           title: 'Extracción con IA',      intro: 'La IA analiza tu mensaje o imagen y extrae automáticamente empresa, fecha y materiales. Revisás los datos antes de confirmar.' },
+      { element: '[data-tour="btn-nueva-recoleccion"]', title: '+ Nueva recolección', intro: 'Hacé click en este botón para abrir el formulario de recolección con IA.', waitForClick: true },
+      { element: '[data-tour="form-tabs"]',             title: 'Modo de entrada',     intro: 'Elegí cómo ingresar los datos: texto libre, imagen o video. La IA interpreta cada formato automáticamente.' },
+      { element: '[data-tour="btn-extraer"]',           title: 'Extraer con IA',      intro: 'Presioná para que la IA analice el contenido y extraiga empresa, fecha y materiales. Luego podés revisar y corregir antes de guardar.' },
     ],
   },
 ];

@@ -228,17 +228,25 @@ export default function EmpresasPage() {
               <button
                 key={emp.id}
                 onClick={() => handleSelectEmpresa(emp)}
-                className={`w-full flex items-center gap-3 px-4 py-3 text-left transition-colors hover:bg-bg-page ${
-                  selected?.id === emp.id ? 'bg-[#EDF7ED]' : ''
-                }`}
+                className={[
+                  'w-full flex items-center gap-3 px-4 py-3 text-left transition-colors',
+                  selected?.id === emp.id
+                    ? 'bg-green-light border-r-2 border-r-[#4BAF47]'
+                    : 'hover:bg-bg-page border-r-2 border-r-transparent',
+                ].join(' ')}
               >
-                <div className="w-8 h-8 bg-primary-100 rounded-lg flex items-center justify-center flex-shrink-0">
-                  <Building2 className="w-4 h-4 text-primary-600" />
+                <div className={[
+                  'w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0',
+                  selected?.id === emp.id ? 'bg-[#4BAF47]' : 'bg-green-light',
+                ].join(' ')}>
+                  <Building2 className={`w-4 h-4 ${selected?.id === emp.id ? 'text-white' : 'text-[#4BAF47]'}`} />
                 </div>
                 <div className="min-w-0">
-                  <p className="text-sm font-medium text-black-heading truncate">{emp.nombre}</p>
+                  <p className={`text-sm font-semibold truncate ${selected?.id === emp.id ? 'text-[#4BAF47]' : 'text-black-heading'}`}>
+                    {emp.nombre}
+                  </p>
                   {emp.contacto_email && (
-                    <p className="text-xs text-body-text/70 truncate">{emp.contacto_email}</p>
+                    <p className="text-xs text-body-text truncate">{emp.contacto_email}</p>
                   )}
                 </div>
               </button>
@@ -276,7 +284,7 @@ export default function EmpresasPage() {
                   variant="ghost"
                   size="sm"
                   onClick={() => handleEliminarEmpresa(selected.id, selected.nombre)}
-                  className="text-red-400 hover:text-red-600 hover:bg-red-50"
+                  className="text-[#D32F2F] hover:bg-[#FBEAEA] dark:hover:bg-[#2A1010]"
                 >
                   <Trash2 className="w-4 h-4" />
                 </Button>

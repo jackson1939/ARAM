@@ -1,6 +1,8 @@
 'use client';
 
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
+import { useSession } from 'next-auth/react';
+import toast from 'react-hot-toast';
 
 // ─── Types ────────────────────────────────────────────────────────────────────
 
@@ -345,7 +347,9 @@ function IconNotes() {
 
 // ─── Component ────────────────────────────────────────────────────────────────
 
-export function ExtractionDemo() {
+interface EmpresaOption { id: string; nombre: string; }
+
+export function ExtractionDemo({ mode = 'demo' }: { mode?: 'demo' | 'create' }) {
   const [tab, setTab]               = useState<Tab>('texto');
   const [text, setText]             = useState('');
   const [imgFile, setImgFile]       = useState<File | null>(null);
@@ -363,6 +367,61 @@ export function ExtractionDemo() {
 
   const imgInputRef = useRef<HTMLInputElement>(null);
   const vidInputRef = useRef<HTMLInputElement>(null);
+
+  // ── Create mode ──────────────────────────────────────────────────────────
+  const { data: session } = useSession();
+  const isAdmin = session?.user?.rol === 'admin';
+  const [empresasList,      setEmpresasList]      = useState<EmpresaOption[]>([]);
+  const [selectedEmpresaId, setSelectedEmpresaId] = useState('');
+  const [saving,            setSaving]            = useState(false);
+  const [saved,             setSaved]             = useState(false);
+
+  useEffect(() => {
+    if (mode !== 'create' || !isAdmin) return;
+    fetch('/api/empresas')
+      .then(r => r.json())
+      .then((j: { data: EmpresaOption[] }) => setEmpresasList(j.data ?? []))
+      .catch(() => {});
+  }, [mode, isAdmin]);
+
+  // Reset saved when user starts a new extraction
+  useEffect(() => { if (phase === 'loading') setSaved(false); }, [phase]);
+
+  async function handleSave() {
+    if (!result || result.status !== 'success') return;
+    const empresaId = isAdmin ? selectedEmpresaId : (session?.user?.empresaId ?? '');
+    if (!empresaId) { toast.error('Seleccioná una empresa'); return; }
+    if (!result.materials?.length) { toast.error('No hay materiales para guardar'); return; }
+
+    setSaving(true);
+    try {
+      const res = await fetch('/api/extracciones', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          texto: text || undefined,
+          empresa_id: empresaId,
+          materiales: result.materials.map(m => ({
+            tipo: m.material,
+            cantidad_kg: parseFloat(m.cantidad ?? '0') || 0,
+            unidad: m.unidad,
+          })),
+          fecha: result.fecha ?? new Date().toISOString().slice(0, 10),
+          notas: result.notas,
+          confianza: result.confidence ?? 'medium',
+          datos_raw: { empresa: result.empresa, materials: result.materials, notas: result.notas },
+        }),
+      });
+      if (!res.ok) {
+        const json = await res.json() as { error?: string };
+        toast.error(json.error ?? 'Error al guardar');
+        return;
+      }
+      toast.success('Recolección guardada correctamente');
+      setSaved(true);
+    } catch { toast.error('Error al guardar'); }
+    finally { setSaving(false); }
+  }
 
   const canExtract = (): boolean => {
     if (tab === 'texto')  return text.trim().length > 0;
@@ -727,6 +786,70 @@ export function ExtractionDemo() {
 
                 {result.usage && (
                   <UsageRow usage={result.usage} />
+                )}
+
+                {/* ── Save section (create mode only) ── */}
+                {mode === 'create' && !saved && (
+                  <div className="mt-5 pt-4 border-t border-border-default space-y-3">
+                    {isAdmin && (
+                      <div>
+                        <label className="block text-[12px] font-semibold text-body-text mb-1.5">
+                          Empresa <span className="text-[#D32F2F]">*</span>
+                        </label>
+                        <select
+                          value={selectedEmpresaId}
+                          onChange={e => setSelectedEmpresaId(e.target.value)}
+                          className={[
+                            'w-full border rounded-[9px] px-3 py-2.5 text-sm text-black-heading bg-card outline-none transition-colors',
+                            !selectedEmpresaId ? 'border-[#D32F2F]' : 'border-border-default focus:border-[#4BAF47]',
+                          ].join(' ')}
+                        >
+                          <option value="">Seleccioná una empresa…</option>
+                          {empresasList.map(e => (
+                            <option key={e.id} value={e.id}>{e.nombre}</option>
+                          ))}
+                        </select>
+                        {!selectedEmpresaId && (
+                          <p className="text-[11px] text-[#D32F2F] mt-1">Requerido para guardar</p>
+                        )}
+                      </div>
+                    )}
+                    <button
+                      onClick={handleSave}
+                      disabled={saving || (isAdmin && !selectedEmpresaId)}
+                      className="w-full py-3 bg-[#4BAF47] hover:bg-[#3d9a3a] text-white font-bold rounded-[9px] text-[14px] inline-flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                    >
+                      {saving ? (
+                        <><IconSpin /> Guardando…</>
+                      ) : (
+                        <>
+                          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                            <polyline points="20 6 9 17 4 12"/>
+                          </svg>
+                          Confirmar y guardar recolección
+                        </>
+                      )}
+                    </button>
+                  </div>
+                )}
+
+                {/* Saved confirmation */}
+                {mode === 'create' && saved && (
+                  <div className="mt-5 pt-4 border-t border-border-default">
+                    <div className="flex items-center gap-2 text-[#4BAF47] font-bold text-sm">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                        <polyline points="22 4 12 14.01 9 11.01"/>
+                      </svg>
+                      Recolección guardada — pendiente de validación
+                    </div>
+                    <button
+                      onClick={() => { setSaved(false); setPhase('idle'); setResult(null); setText(''); }}
+                      className="mt-2 text-[12px] text-body-text hover:text-black-heading underline"
+                    >
+                      Cargar otra recolección
+                    </button>
+                  </div>
                 )}
               </div>
             )}

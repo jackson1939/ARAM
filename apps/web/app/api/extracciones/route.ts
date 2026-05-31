@@ -6,7 +6,63 @@ import {
   extracciones,
   mensajesRecolector,
 } from '@fundares/db';
-import { requireAdmin } from '@/lib/session';
+import { requireAdmin, requireSession } from '@/lib/session';
+
+export async function POST(req: NextRequest) {
+  const { session, error } = await requireSession();
+  if (error || !session) return error;
+
+  const body = await req.json() as {
+    texto?: string;
+    empresa_id: string;
+    materiales: { tipo: string; cantidad_kg: number; unidad?: string | null }[];
+    fecha: string;
+    notas?: string | null;
+    confianza: 'high' | 'medium' | 'low';
+    datos_raw?: Record<string, unknown>;
+  };
+
+  if (!body.empresa_id) {
+    return NextResponse.json({ error: 'empresa_id requerido' }, { status: 400 });
+  }
+  if (!body.materiales?.length) {
+    return NextResponse.json({ error: 'Al menos un material requerido' }, { status: 400 });
+  }
+
+  // Empresa users can only create for their own empresa
+  if (session.user.rol === 'empresa' && session.user.empresaId !== body.empresa_id) {
+    return NextResponse.json({ error: 'Forbidden' }, { status: 403 });
+  }
+
+  const confianzaNum = body.confianza === 'high' ? '0.9' : body.confianza === 'medium' ? '0.6' : '0.3';
+
+  const [mensaje] = await db()
+    .insert(mensajesRecolector)
+    .values({
+      contenidoTexto: body.texto ?? null,
+      estado: 'extraido',
+      canal: 'web',
+      canalUserId: session.user.id,
+    })
+    .returning({ id: mensajesRecolector.id });
+
+  const inserted = await Promise.all(
+    body.materiales.map(m =>
+      db().insert(extracciones).values({
+        mensajeId: mensaje.id,
+        empresaId: body.empresa_id,
+        tipoMaterial: m.tipo,
+        cantidadKg: String(m.cantidad_kg),
+        fechaRecoleccion: body.fecha,
+        confianzaIa: confianzaNum,
+        datosRaw: body.datos_raw ?? null,
+        estado: 'pendiente',
+      }).returning({ id: extracciones.id })
+    )
+  );
+
+  return NextResponse.json({ data: { mensaje_id: mensaje.id, extraccion_ids: inserted.flat().map(r => r.id) } }, { status: 201 });
+}
 
 export async function GET(req: NextRequest) {
   const { session, error } = await requireAdmin();

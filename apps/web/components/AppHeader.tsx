@@ -51,7 +51,7 @@ export function AppHeader({ onToggleSidebar, userName, userEmail, rol }: AppHead
   function openRecoleccion() {
     drawer.open({
       title: 'Nueva recolección',
-      children: <ExtractionDemo />,
+      children: <ExtractionDemo mode="create" />,
       defaultExpanded: true,
     });
   }

@@ -195,7 +195,7 @@ async function handleMessage(msg: TelegramMessage): Promise<void> {
     await resetConversacion(conversacion.id);
     await sendMessage(
       chatId,
-      '🌿 <b>Bot de ARAM</b>\n\nSoy el asistente de registro de recolecciones.\n\nPodés enviarme:\n• Un <b>mensaje de texto</b> con los datos del retiro\n• Una <b>foto</b> del remito o comprobante\n• Un <b>video</b> corto (máx. 2 min)\n\n¡Empezá enviando los datos de tu próxima recolección!',
+      '🌿 <b>Bot de ARAM</b>\n\nSoy el asistente de registro de recolecciones.\n\nPodés enviarme:\n• Un <b>mensaje de texto</b> con los datos del retiro\n• Una <b>foto</b> del remito o comprobante\n• Un <b>video</b> corto (máx. 2 min)\n\n📝 <b>Ejemplo de texto:</b>\n<i>"Empresa Verdesur entregó 50 kg de papel y 30 kg de cartón el 15/03/2026. También dejaron 12 kg de plástico. Material limpio y seco, retiro en domicilio."</i>\n\n¡Empezá enviando los datos de tu próxima recolección!',
     );
     return;
   }

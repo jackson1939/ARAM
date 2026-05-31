@@ -46,26 +46,38 @@ export function TourStarter() {
 
       let stepIdx = -1;
 
+      function setClickThrough(enabled: boolean) {
+        // Make overlay and helper layer transparent to pointer events so the
+        // highlighted element underneath is actually clickable
+        document
+          .querySelectorAll<HTMLElement>('.introjs-overlay, .introjs-helperLayer')
+          .forEach(el => { el.style.pointerEvents = enabled ? 'none' : ''; });
+      }
+
       instance.onchange(function(targetElement: Element | null) {
         stepIdx++;
         const stepDef = tour.steps[stepIdx];
         if (!stepDef) return;
 
-        // Wait for intro.js to render the tooltip before touching it
+        // Small delay so intro.js has rendered the tooltip DOM
         setTimeout(() => {
           const nextBtn = document.querySelector<HTMLElement>('.introjs-nextbutton');
 
           if (stepDef.waitForClick && targetElement) {
-            // Hide "Next" — user must click the actual element
+            // Let clicks pass through overlay → reach the actual element
+            setClickThrough(true);
             if (nextBtn) nextBtn.style.visibility = 'hidden';
 
             targetElement.addEventListener('click', () => {
-              // Wait for drawer/panel animation before advancing
+              // Restore overlay before advancing so later steps behave normally
+              setClickThrough(false);
+              // Wait for drawer/panel animation to complete
               setTimeout(() => {
                 try { instance.nextStep(); } catch { /* tour may have ended */ }
               }, 500);
             }, { once: true });
           } else {
+            setClickThrough(false);
             if (nextBtn) nextBtn.style.visibility = 'visible';
           }
         }, 80);

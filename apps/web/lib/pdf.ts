@@ -3,6 +3,8 @@ import React from 'react';
 import type { Recoleccion, Empresa, MetricasImpacto } from '@/types';
 import { calcularMetricas } from './metricas';
 
+type RecoleccionConEmpresa = Recoleccion & { empresa_nombre?: string | null };
+
 const styles = StyleSheet.create({
   page:         { padding: 40, fontFamily: 'Helvetica', fontSize: 10, color: '#1f2937' },
   header:       { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24, borderBottom: '2 solid #16a34a', paddingBottom: 12 },
@@ -23,14 +25,14 @@ const styles = StyleSheet.create({
   footer:       { position: 'absolute', bottom: 24, left: 40, right: 40, textAlign: 'center', fontSize: 8, color: '#9ca3af' },
 });
 
-function agruparPorMaterial(recolecciones: Recoleccion[]) {
+function agruparPorMaterial(recolecciones: RecoleccionConEmpresa[]) {
   return recolecciones.reduce<Record<string, number>>((acc, r) => {
     acc[r.tipo_material] = (acc[r.tipo_material] ?? 0) + Number(r.cantidad_kg);
     return acc;
   }, {});
 }
 
-function agruparPorMes(recolecciones: Recoleccion[]) {
+function agruparPorMes(recolecciones: RecoleccionConEmpresa[]) {
   return recolecciones.reduce<Record<string, number>>((acc, r) => {
     const mes = r.fecha_recoleccion.slice(0, 7);
     acc[mes] = (acc[mes] ?? 0) + Number(r.cantidad_kg);
@@ -38,16 +40,26 @@ function agruparPorMes(recolecciones: Recoleccion[]) {
   }, {});
 }
 
+function agruparPorEmpresa(recolecciones: RecoleccionConEmpresa[]) {
+  return recolecciones.reduce<Record<string, number>>((acc, r) => {
+    const nombre = r.empresa_nombre ?? r.empresa_id;
+    acc[nombre] = (acc[nombre] ?? 0) + Number(r.cantidad_kg);
+    return acc;
+  }, {});
+}
+
 interface ReporteProps {
   empresa: Empresa;
-  recolecciones: Recoleccion[];
+  recolecciones: RecoleccionConEmpresa[];
   anio: number;
   metricas: MetricasImpacto;
 }
 
 function ReportePDF({ empresa, recolecciones, anio, metricas }: ReporteProps) {
+  const todasLasEmpresas = empresa.id === 'all';
   const porMaterial = agruparPorMaterial(recolecciones);
   const porMes      = agruparPorMes(recolecciones);
+  const porEmpresa  = todasLasEmpresas ? agruparPorEmpresa(recolecciones) : null;
 
   return React.createElement(Document, null,
     React.createElement(Page, { size: 'A4', style: styles.page },
@@ -55,7 +67,11 @@ function ReportePDF({ empresa, recolecciones, anio, metricas }: ReporteProps) {
       React.createElement(View, { style: styles.header },
         React.createElement(View, null,
           React.createElement(Text, { style: styles.title }, 'Fundares Recycling'),
-          React.createElement(Text, { style: styles.subtitle }, `Reporte Anual ${anio} — ${empresa.nombre}`),
+          React.createElement(Text, { style: styles.subtitle },
+            todasLasEmpresas
+              ? `Reporte Global ${anio} — Todas las Empresas`
+              : `Reporte Anual ${anio} — ${empresa.nombre}`
+          ),
         ),
       ),
 
@@ -112,6 +128,23 @@ function ReportePDF({ empresa, recolecciones, anio, metricas }: ReporteProps) {
         ),
       ),
 
+      // Por empresa (solo modo global)
+      ...(porEmpresa ? [
+        React.createElement(View, { style: styles.section, key: 'por-empresa' },
+          React.createElement(Text, { style: styles.sectionTitle }, 'Reciclaje por Empresa'),
+          React.createElement(View, { style: styles.tableHeader },
+            React.createElement(Text, { style: styles.col2 }, 'Empresa'),
+            React.createElement(Text, { style: styles.col4 }, 'Total (kg)'),
+          ),
+          ...Object.entries(porEmpresa).sort((a, b) => b[1] - a[1]).map(([nombre, kg]) =>
+            React.createElement(View, { style: styles.tableRow, key: nombre },
+              React.createElement(Text, { style: styles.col2 }, nombre),
+              React.createElement(Text, { style: styles.col4 }, kg.toFixed(2)),
+            )
+          ),
+        ),
+      ] : []),
+
       // Footer
       React.createElement(Text, { style: styles.footer },
         `Generado por Fundares Recycling Platform · ${new Date().toLocaleDateString('es-BO')}`
@@ -122,7 +155,7 @@ function ReportePDF({ empresa, recolecciones, anio, metricas }: ReporteProps) {
 
 export async function generarReportePDF(
   empresa: Empresa,
-  recolecciones: Recoleccion[],
+  recolecciones: RecoleccionConEmpresa[],
   anio: number,
 ): Promise<Buffer> {
   const metricas = calcularMetricas(recolecciones);

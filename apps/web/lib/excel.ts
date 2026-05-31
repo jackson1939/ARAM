@@ -2,14 +2,16 @@ import * as XLSX from 'xlsx';
 import type { Recoleccion, Empresa } from '@/types';
 import { calcularMetricas } from './metricas';
 
-function agruparPorMaterial(recolecciones: Recoleccion[]) {
+type RecoleccionConEmpresa = Recoleccion & { empresa_nombre?: string | null };
+
+function agruparPorMaterial(recolecciones: RecoleccionConEmpresa[]) {
   return recolecciones.reduce<Record<string, number>>((acc, r) => {
     acc[r.tipo_material] = (acc[r.tipo_material] ?? 0) + Number(r.cantidad_kg);
     return acc;
   }, {});
 }
 
-function agruparPorMes(recolecciones: Recoleccion[]) {
+function agruparPorMes(recolecciones: RecoleccionConEmpresa[]) {
   return recolecciones.reduce<Record<string, number>>((acc, r) => {
     const mes = r.fecha_recoleccion.slice(0, 7);
     acc[mes] = (acc[mes] ?? 0) + Number(r.cantidad_kg);
@@ -17,18 +19,27 @@ function agruparPorMes(recolecciones: Recoleccion[]) {
   }, {});
 }
 
+function agruparPorEmpresa(recolecciones: RecoleccionConEmpresa[]) {
+  return recolecciones.reduce<Record<string, number>>((acc, r) => {
+    const nombre = r.empresa_nombre ?? r.empresa_id;
+    acc[nombre] = (acc[nombre] ?? 0) + Number(r.cantidad_kg);
+    return acc;
+  }, {});
+}
+
 export function generarReporteExcel(
   empresa: Empresa,
-  recolecciones: Recoleccion[],
+  recolecciones: RecoleccionConEmpresa[],
   anio: number,
 ): Buffer {
+  const todasLasEmpresas = empresa.id === 'all';
   const metricas = calcularMetricas(recolecciones);
   const wb = XLSX.utils.book_new();
 
   // Sheet 1: Resumen de métricas
   const resumenRows = [
     ['Reporte Fundares Recycling'],
-    [`Empresa: ${empresa.nombre}`],
+    [`${todasLasEmpresas ? 'Alcance: Todas las empresas' : `Empresa: ${empresa.nombre}`}`],
     [`Período: ${anio}`],
     [`Generado: ${new Date().toLocaleDateString('es-BO')}`],
     [],
@@ -60,16 +71,28 @@ export function generarReporteExcel(
   const wsMes = XLSX.utils.aoa_to_sheet(mesRows);
   XLSX.utils.book_append_sheet(wb, wsMes, 'Por Mes');
 
-  // Sheet 4: Detalle de recolecciones
+  // Sheet 4 (solo all): Por empresa
+  if (todasLasEmpresas) {
+    const porEmpresa = agruparPorEmpresa(recolecciones);
+    const empresaRows = [
+      ['Empresa', 'Total (kg)'],
+      ...Object.entries(porEmpresa).sort((a, b) => b[1] - a[1]).map(([nombre, kg]) => [nombre, Math.round(kg * 100) / 100]),
+    ];
+    const wsEmpresa = XLSX.utils.aoa_to_sheet(empresaRows);
+    XLSX.utils.book_append_sheet(wb, wsEmpresa, 'Por Empresa');
+  }
+
+  // Sheet: Detalle de recolecciones
+  const detalleHeader = todasLasEmpresas
+    ? ['ID', 'Empresa', 'Material', 'Cantidad (kg)', 'Fecha', 'Validado por']
+    : ['ID', 'Material', 'Cantidad (kg)', 'Fecha', 'Validado por'];
+
   const detalleRows = [
-    ['ID', 'Material', 'Cantidad (kg)', 'Fecha', 'Validado por'],
-    ...recolecciones.map(r => [
-      r.id,
-      r.tipo_material,
-      Number(r.cantidad_kg),
-      r.fecha_recoleccion,
-      r.validado_por ?? '',
-    ]),
+    detalleHeader,
+    ...recolecciones.map(r => todasLasEmpresas
+      ? [r.id, r.empresa_nombre ?? r.empresa_id, r.tipo_material, Number(r.cantidad_kg), r.fecha_recoleccion, r.validado_por ?? '']
+      : [r.id, r.tipo_material, Number(r.cantidad_kg), r.fecha_recoleccion, r.validado_por ?? '']
+    ),
   ];
   const wsDetalle = XLSX.utils.aoa_to_sheet(detalleRows);
   XLSX.utils.book_append_sheet(wb, wsDetalle, 'Detalle');

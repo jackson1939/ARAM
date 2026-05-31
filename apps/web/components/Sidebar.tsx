@@ -51,8 +51,8 @@ export function Sidebar({ rol, collapsed = false, onClose }: SidebarProps) {
         <div className="flex items-center gap-3 min-w-0">
           <div className="w-9 h-9 bg-[var(--green)] rounded-[11px] flex items-center justify-center shrink-0">
             <svg viewBox="0 0 24 24" className="w-5 h-5 stroke-white fill-none stroke-2 [stroke-linecap:round] [stroke-linejoin:round]">
-              <path d="M4 20c0-9 7-15 16-15 0 9-6 15-15 15-1 0-1 0-1 0z"/>
-              <path d="M4 20c4-6 8-9 12-11"/>
+              <path d="M12 22V12M12 12C12 7 7 5 3 7M12 12C12 7 17 5 21 7"/>
+              <circle cx="12" cy="12" r="2"/>
             </svg>
           </div>
           {!collapsed && (

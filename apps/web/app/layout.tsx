@@ -6,6 +6,11 @@ import './globals.css';
 export const metadata: Metadata = {
   title: 'ARAM · Asistente de Recolección Automatizada Multicanal',
   description: 'Asistente de Recolección Automatizada Multicanal',
+  icons: {
+    icon: '/icon.svg',
+    shortcut: '/icon.svg',
+    apple: '/icon.svg',
+  },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

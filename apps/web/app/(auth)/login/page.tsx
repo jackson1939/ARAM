@@ -22,9 +22,9 @@ export default function LoginPage() {
 
   useEffect(() => {
     fetch('/api/public-stats')
-      .then(r => r.json())
+      .then(r => { if (!r.ok) throw new Error(`${r.status}`); return r.json(); })
       .then((d: PublicStats) => setStats(d))
-      .catch(() => {});
+      .catch(e => console.warn('[public-stats]', e));
   }, []);
 
   function handleRoleChange(r: 'empresa' | 'admin') {

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { and, eq, gte, lte } from 'drizzle-orm';
+import { and, desc, eq } from 'drizzle-orm';
 import { db, empresas, recolecciones } from '@fundares/db';
 import { calcularMetricas } from '@/lib/metricas';
 import { requireSession } from '@/lib/session';
@@ -54,5 +54,44 @@ export async function GET(req: NextRequest) {
     distribucion[row.tipo_material] = (distribucion[row.tipo_material] ?? 0) + row.cantidad_kg;
   }
 
-  return NextResponse.json({ metricas, series, distribucion });
+  // Last 8 recolecciones with empresa name
+  let recientesQuery = db()
+    .select({
+      id: recolecciones.id,
+      tipo_material: recolecciones.tipoMaterial,
+      cantidad_kg: recolecciones.cantidadKg,
+      fecha_recoleccion: recolecciones.fechaRecoleccion,
+      validado_at: recolecciones.validadoAt,
+      empresa_nombre: empresas.nombre,
+    })
+    .from(recolecciones)
+    .leftJoin(empresas, eq(recolecciones.empresaId, empresas.id));
+
+  if (session.user.rol === 'empresa') {
+    recientesQuery = recientesQuery.where(
+      eq(recolecciones.empresaId, session.user.empresaId!)
+    ) as typeof recientesQuery;
+  } else if (empresaId) {
+    recientesQuery = recientesQuery.where(
+      eq(recolecciones.empresaId, empresaId)
+    ) as typeof recientesQuery;
+  }
+
+  const recientesRows = await recientesQuery
+    .orderBy(desc(recolecciones.validadoAt))
+    .limit(8);
+
+  return NextResponse.json({
+    metricas,
+    series,
+    distribucion,
+    recolecciones_recientes: recientesRows.map((r) => ({
+      id: r.id,
+      tipo_material: r.tipo_material,
+      cantidad_kg: Number(r.cantidad_kg),
+      fecha_recoleccion: r.fecha_recoleccion,
+      validado_at: r.validado_at,
+      empresa_nombre: r.empresa_nombre ?? null,
+    })),
+  });
 }

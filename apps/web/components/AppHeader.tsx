@@ -64,7 +64,7 @@ export function AppHeader({ onToggleSidebar, userName, userEmail, rol }: AppHead
   }
 
   return (
-    <header className="sticky top-0 z-20 h-14 bg-card/90 backdrop-blur-sm border-b border-border-default flex items-center justify-between px-4 gap-4">
+    <header data-tour="header" className="sticky top-0 z-20 h-14 bg-card/90 backdrop-blur-sm border-b border-border-default flex items-center justify-between px-4 gap-4">
 
       {/* Left */}
       <div className="flex items-center gap-3 min-w-0">
@@ -95,6 +95,7 @@ export function AppHeader({ onToggleSidebar, userName, userEmail, rol }: AppHead
         {/* Nueva recolección */}
         {meta.showAction && (
           <button
+            data-tour="btn-nueva-recoleccion"
             onClick={openRecoleccion}
             className="inline-flex items-center gap-1.5 bg-[#4BAF47] hover:bg-[#3d9a3a] text-white text-[13px] font-bold px-3 py-1.5 rounded-[7px] transition-colors"
           >

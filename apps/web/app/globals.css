@@ -55,6 +55,28 @@ body { font-family: 'Manrope', sans-serif; scroll-behavior: smooth; }
   opacity: 0.7;
 }
 
+/* ── Intro.js custom styles ── */
+@import 'intro.js/introjs.css';
+
+.fundares-intro-tooltip.introjs-tooltip {
+  font-family: 'Manrope', sans-serif;
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0,0,0,0.14);
+  max-width: 340px;
+  border: 1px solid var(--bd);
+  background: var(--card);
+  color: var(--bk);
+}
+.fundares-intro-tooltip .introjs-tooltip-title { font-weight: 800; font-size: 15px; color: var(--bk); }
+.fundares-intro-tooltip .introjs-tooltiptext    { font-size: 13.5px; color: var(--bt); line-height: 1.55; }
+.fundares-intro-tooltip .introjs-button         { font-family: 'Manrope', sans-serif; font-weight: 700; font-size: 13px; border-radius: 8px; border: none; padding: 8px 14px; }
+.fundares-intro-tooltip .introjs-nextbutton     { background: #4BAF47; color: #fff; }
+.fundares-intro-tooltip .introjs-nextbutton:hover { background: #3d9a3a; }
+.fundares-intro-tooltip .introjs-prevbutton     { background: var(--bg); color: var(--bt); border: 1px solid var(--bd); }
+.fundares-intro-tooltip .introjs-donebutton     { background: #4BAF47; color: #fff; }
+.introjs-progressbar                            { background: #4BAF47 !important; }
+.introjs-helperLayer                            { border-radius: 10px; }
+
 /* ── Scrollbar ── */
 ::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track { background: var(--bg); }

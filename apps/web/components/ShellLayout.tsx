@@ -5,6 +5,7 @@ import { Sidebar } from '@/components/Sidebar';
 import { AppHeader } from '@/components/AppHeader';
 import { DoodleBackground } from '@/components/DoodleBackground';
 import { DrawerProvider } from '@/components/Drawer';
+import { TourStarter } from '@/components/TourStarter';
 
 interface ShellLayoutProps {
   children: React.ReactNode;
@@ -18,6 +19,7 @@ export function ShellLayout({ children, rol, userName, userEmail }: ShellLayoutP
 
   return (
     <DrawerProvider>
+      <TourStarter />
       <div className="flex min-h-screen">
         <Sidebar rol={rol} collapsed={collapsed} />
         <div className="flex flex-col flex-1 min-w-0">

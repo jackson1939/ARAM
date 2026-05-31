@@ -107,7 +107,7 @@ export default async function AdminDashboardPage() {
   return (
     <div className="p-6 space-y-6 h-[calc(100vh-56px)] overflow-y-auto">
       {/* Row 1 — 5 metric cards */}
-      <div className="grid grid-cols-2 xl:grid-cols-5 gap-4">
+      <div data-tour="metric-cards" className="grid grid-cols-2 xl:grid-cols-5 gap-4">
         <MetricCard
           label="Total reciclado"
           value={`${metricas.total_kg} kg`}
@@ -142,7 +142,7 @@ export default async function AdminDashboardPage() {
 
       {/* Row 2 — charts 3-column grid */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
-        <Card className="lg:col-span-2">
+        <Card data-tour="chart-materiales" className="lg:col-span-2">
           <CardHeader>
             <CardTitle>Materiales reciclados</CardTitle>
           </CardHeader>
@@ -155,7 +155,7 @@ export default async function AdminDashboardPage() {
           </CardBody>
         </Card>
 
-        <Card>
+        <Card data-tour="canales-panel">
           <CardHeader>
             <CardTitle>Canales de entrada</CardTitle>
           </CardHeader>
@@ -194,7 +194,7 @@ export default async function AdminDashboardPage() {
       </div>
 
       {/* Row 3 — impact cards */}
-      <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+      <div data-tour="impact-cards" className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         <div className="rounded-[12px] border border-border-default p-5 text-center bg-green-light">
           <p className="text-3xl font-black text-[#4BAF47]">{metricas.co2_kg}</p>
           <p className="text-body-text text-sm mt-1">kg CO₂ evitado</p>
@@ -212,7 +212,7 @@ export default async function AdminDashboardPage() {
       </div>
 
       {/* Row 4 — actividad reciente */}
-      <Card>
+      <Card data-tour="actividad">
         <CardHeader>
           <CardTitle>Actividad reciente</CardTitle>
         </CardHeader>

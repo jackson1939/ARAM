@@ -94,7 +94,7 @@ export default function AdminReportesPage() {
 
         {/* Filter type */}
         <div className="p-3 border-b border-border-default">
-          <div className="flex rounded-[8px] bg-bg-page p-0.5 gap-0.5">
+          <div data-tour="filtro-tipo" className="flex rounded-[8px] bg-bg-page p-0.5 gap-0.5">
             {(['anio', 'mes', 'custom'] as FiltroTipo[]).map(t => (
               <button key={t} onClick={() => setFiltroTipo(t)}
                 className={[
@@ -140,7 +140,7 @@ export default function AdminReportesPage() {
         </div>
 
         {/* Empresa list */}
-        <div className="flex-1 overflow-y-auto p-2 space-y-0.5">
+        <div data-tour="empresa-selector" className="flex-1 overflow-y-auto p-2 space-y-0.5">
           <button onClick={() => setSelectedEmpresa(null)}
             className={[
               'w-full flex items-center gap-2.5 px-3 py-2.5 rounded-[7px] text-sm transition-colors border-r-2',
@@ -177,7 +177,7 @@ export default function AdminReportesPage() {
             <p className="text-[12px] text-body-text">{rangeLabel(filtroTipo, anio, mes, desde, hasta)}</p>
           </div>
           {selectedEmpresa && (
-            <button onClick={handleDescargar} disabled={generando}
+            <button data-tour="btn-descargar" onClick={handleDescargar} disabled={generando}
               className="inline-flex items-center gap-1.5 bg-[#4BAF47] hover:bg-[#3d9a3a] text-white text-[13px] font-bold px-4 py-2 rounded-[8px] disabled:opacity-50 transition-colors">
               <Download className="w-3.5 h-3.5"/>
               {generando ? 'Generando…' : 'Descargar PDF'}

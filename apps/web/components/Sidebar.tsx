@@ -69,6 +69,7 @@ export function Sidebar({ rol, collapsed = false }: SidebarProps) {
               key={href}
               href={href}
               title={collapsed ? label : undefined}
+              data-tour={`nav-${href.split('/').pop()}`}
               className={clsx(
                 'flex items-center gap-3 rounded-[7px] text-sm transition-colors',
                 collapsed ? 'justify-center px-0 py-2.5' : 'px-3 py-2.5',

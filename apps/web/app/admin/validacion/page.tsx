@@ -289,10 +289,10 @@ export default function ValidacionPage() {
           <Skeleton className="h-full w-full" />
         </div>
       ) : (
-        <div className="flex-1 min-h-0 bg-card border border-border-default rounded-[12px] overflow-hidden shadow-card flex flex-col">
+        <div data-tour="calendario" className="flex-1 min-h-0 bg-card border border-border-default rounded-[12px] overflow-hidden shadow-card flex flex-col">
 
           {/* Month nav */}
-          <div className="flex items-center justify-between px-5 py-3 border-b border-border-default flex-shrink-0">
+          <div data-tour="cal-nav" className="flex items-center justify-between px-5 py-3 border-b border-border-default flex-shrink-0">
             <button onClick={prevMonth}
               className="w-8 h-8 rounded-[7px] flex items-center justify-center text-body-text hover:bg-bg-page hover:text-black-heading transition-colors">
               <ChevronLeft className="w-4 h-4" />
@@ -365,7 +365,7 @@ export default function ValidacionPage() {
           </div>
 
           {/* Legend */}
-          <div className="px-5 py-2.5 border-t border-border-default flex items-center gap-5 text-[12px] text-body-text flex-shrink-0">
+          <div data-tour="cal-legend" className="px-5 py-2.5 border-t border-border-default flex items-center gap-5 text-[12px] text-body-text flex-shrink-0">
             <span className="flex items-center gap-1.5">
               <span className="w-2.5 h-2.5 rounded-full bg-[#4BAF47]" />
               Con extracciones

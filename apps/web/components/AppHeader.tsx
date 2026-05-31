@@ -7,7 +7,7 @@ import { Menu, Plus, LogOut, ChevronDown, Sun, Moon } from 'lucide-react';
 import { useState } from 'react';
 import { useTheme } from '@/components/ThemeProvider';
 import { useDrawer } from '@/components/Drawer';
-import { ExtractionDemo } from '@/components/ExtractionDemo';
+import { NuevaRecoleccionForm } from '@/components/NuevaRecoleccionForm';
 
 interface PageMeta {
   title: string;
@@ -51,7 +51,7 @@ export function AppHeader({ onToggleSidebar, userName, userEmail, rol }: AppHead
   function openRecoleccion() {
     drawer.open({
       title: 'Nueva recolección',
-      children: <ExtractionDemo mode="create" />,
+      children: <NuevaRecoleccionForm />,
       defaultExpanded: true,
     });
   }

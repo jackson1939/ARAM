@@ -3,11 +3,12 @@
 import { usePathname } from 'next/navigation';
 import { signOut } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import { Menu, Plus, LogOut, ChevronDown, Sun, Moon } from 'lucide-react';
+import { Menu, Plus, Upload, LogOut, ChevronDown, Sun, Moon } from 'lucide-react';
 import { useState } from 'react';
 import { useTheme } from '@/components/ThemeProvider';
 import { useDrawer } from '@/components/Drawer';
 import { NuevaRecoleccionForm } from '@/components/NuevaRecoleccionForm';
+import { BulkUploadDrawer } from '@/components/BulkUploadDrawer';
 
 interface PageMeta {
   title: string;
@@ -56,6 +57,14 @@ export function AppHeader({ onToggleSidebar, userName, userEmail, rol }: AppHead
     });
   }
 
+  function openBulkUpload() {
+    drawer.open({
+      title: 'Carga masiva · CSV / Excel',
+      children: <BulkUploadDrawer onClose={() => drawer.close()} />,
+      defaultExpanded: true,
+    });
+  }
+
   async function handleLogout() {
     setMenuOpen(false);
     await signOut({ redirect: false });
@@ -91,6 +100,19 @@ export function AppHeader({ onToggleSidebar, userName, userEmail, rol }: AppHead
         >
           {theme === 'dark' ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
         </button>
+
+        {/* Carga masiva — solo empresa */}
+        {meta.showAction && rol === 'empresa' && (
+          <button
+            onClick={openBulkUpload}
+            title="Carga masiva CSV / Excel"
+            className="inline-flex items-center gap-1.5 border font-bold rounded-[9px] transition-all hover:-translate-y-px px-2.5 py-2 md:px-3 md:text-[13px]"
+            style={{ borderColor: 'var(--bd)', background: 'var(--card)', color: 'var(--bt)' }}
+          >
+            <Upload className="w-4 h-4 shrink-0" strokeWidth={2} />
+            <span className="hidden sm:inline">Subir archivo</span>
+          </button>
+        )}
 
         {/* Nueva recolección */}
         {meta.showAction && (

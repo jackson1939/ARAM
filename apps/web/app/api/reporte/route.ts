@@ -8,8 +8,13 @@ export async function GET(req: NextRequest) {
   const { session, error } = await requireSession();
   if (error || !session) return error;
 
-  const empresaId = req.nextUrl.searchParams.get('empresa_id') ?? session.user.empresaId;
-  const anio = parseInt(req.nextUrl.searchParams.get('anio') ?? String(new Date().getFullYear()), 10);
+  const p          = req.nextUrl.searchParams;
+  const empresaId  = p.get('empresa_id') ?? session.user.empresaId;
+  const anio       = parseInt(p.get('anio') ?? String(new Date().getFullYear()), 10);
+  const desdeParam = p.get('desde');
+  const hastaParam = p.get('hasta');
+  const desde      = desdeParam ?? `${anio}-01-01`;
+  const hasta      = hastaParam ?? `${anio}-12-31`;
 
   if (!empresaId) return NextResponse.json({ error: 'empresa_id required' }, { status: 400 });
   if (session.user.rol === 'empresa' && session.user.empresaId !== empresaId) {
@@ -28,8 +33,8 @@ export async function GET(req: NextRequest) {
     .where(
       and(
         eq(recolecciones.empresaId, empresaId),
-        gte(recolecciones.fechaRecoleccion, `${anio}-01-01`),
-        lte(recolecciones.fechaRecoleccion, `${anio}-12-31`)
+        gte(recolecciones.fechaRecoleccion, desde),
+        lte(recolecciones.fechaRecoleccion, hasta),
       )
     );
 

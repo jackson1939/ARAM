@@ -72,7 +72,7 @@ export default function EmpresaReportesPage() {
   const barData = preview ? Object.entries(preview.distribucion).map(([name, value]) => ({ name, value: Math.round(value*10)/10 })) : [];
 
   return (
-    <div className="p-6 space-y-5 h-[calc(100vh-56px)] overflow-y-auto">
+    <div className="p-6 space-y-5 h-[calc(100vh-66px)] overflow-y-auto">
       <div className="bg-card border border-border-default rounded-[12px] p-4 flex flex-wrap items-center gap-4">
         <div className="flex rounded-[8px] bg-bg-page p-0.5 gap-0.5">
           {(['anio','mes','custom'] as FiltroTipo[]).map(t => (

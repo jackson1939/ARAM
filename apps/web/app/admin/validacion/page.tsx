@@ -271,7 +271,7 @@ export default function ValidacionPage() {
   const cells     = Math.ceil((startDay + totalDays) / 7) * 7;
 
   return (
-    <div className="flex flex-col h-[calc(100vh-56px)] p-5 gap-4">
+    <div className="flex flex-col h-[calc(100vh-66px)] p-5 gap-4">
 
       {/* Header */}
       <div className="flex items-center gap-3 flex-shrink-0">

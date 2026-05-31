@@ -105,7 +105,7 @@ export default async function AdminDashboardPage() {
   }
 
   return (
-    <div className="p-6 space-y-6 h-[calc(100vh-56px)] overflow-y-auto">
+    <div className="p-6 space-y-6 h-[calc(100vh-66px)] overflow-y-auto">
       {/* Row 1 — 5 metric cards */}
       <div data-tour="metric-cards" className="grid grid-cols-2 xl:grid-cols-5 gap-4">
         <MetricCard

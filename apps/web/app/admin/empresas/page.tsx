@@ -208,7 +208,7 @@ export default function EmpresasPage() {
   }
 
   return (
-    <div className="flex h-[calc(100vh-56px)]">
+    <div className="flex h-[calc(100vh-66px)]">
       <aside className="w-72 border-r border-border-default flex flex-col bg-card flex-shrink-0">
         <div className="p-4 border-b border-border-default flex-shrink-0">
           <Button onClick={abrirNuevaEmpresa} className="w-full" size="sm">

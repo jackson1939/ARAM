@@ -53,7 +53,7 @@ export default function EducacionPage() {
   const iconoTipo: Record<string, React.ReactNode> = { articulo: <BookOpen className="w-4 h-4 text-[#4BAF47]"/>, video: <Video className="w-4 h-4 text-[#4BAF47]"/>, infografia: <ImageIcon className="w-4 h-4 text-[#4BAF47]"/> };
 
   return (
-    <div className="p-6 h-[calc(100vh-56px)] overflow-y-auto space-y-8">
+    <div className="p-6 h-[calc(100vh-66px)] overflow-y-auto space-y-8">
       <div>
         <h1 className="text-2xl font-extrabold text-black-heading tracking-tight">Educación</h1>
         <p className="text-sm text-body-text mt-1">Guías interactivas para aprender a usar el sistema.</p>

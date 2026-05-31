@@ -1,4 +1,3 @@
-import { Card, CardBody } from './ui/card';
 import { Skeleton } from './ui/skeleton';
 import type { LucideIcon } from 'lucide-react';
 
@@ -12,38 +11,45 @@ interface MetricCardProps {
 }
 
 const colorMap = {
-  green:  { bg: 'bg-green-light',  icon: 'bg-green-primary text-white' },
-  blue:   { bg: 'bg-[#EBF4FF]',     icon: 'bg-[#066AAB] text-white' },
-  yellow: { bg: 'bg-warning-light',   icon: 'bg-warning-amber text-white' },
-  purple: { bg: 'bg-purple-50',   icon: 'bg-purple-600 text-white' },
+  green:  { ico: 'bg-green-light   text-green-mid',   ring: 'border-[var(--gl)]'  },
+  blue:   { ico: 'bg-slate-light   text-slate',        ring: 'border-[var(--slate-wash)]' },
+  yellow: { ico: 'bg-[var(--amber-wash)] text-[var(--amber)]', ring: 'border-[var(--amber-wash)]' },
+  purple: { ico: 'bg-purple-50     text-purple-600',   ring: 'border-purple-100'   },
 };
 
 export function MetricCard({ label, value, sub, icon: Icon, color = 'green', loading }: MetricCardProps) {
   const c = colorMap[color];
+
   if (loading) return (
-    <Card className={c.bg}>
-      <CardBody className="flex gap-4 items-center">
-        <Skeleton className="w-12 h-12 rounded-[10px]" />
-        <div className="flex-1 space-y-2">
-          <Skeleton className="h-4 w-24" />
-          <Skeleton className="h-7 w-16" />
-        </div>
-      </CardBody>
-    </Card>
+    <div className="bg-card border border-border-default rounded-card p-5 shadow-card">
+      <div className="flex items-center justify-between mb-4">
+        <Skeleton className="w-9 h-9 rounded-[10px]" />
+        <Skeleton className="h-3 w-20 rounded" />
+      </div>
+      <Skeleton className="h-8 w-24 rounded mb-2" />
+      <Skeleton className="h-3 w-16 rounded" />
+    </div>
   );
 
+  const [num, unit] = value.split(' ');
+
   return (
-    <Card className={`border-none ${c.bg} shadow-none`}>
-      <CardBody className="flex gap-4 items-center">
-        <div className={`w-12 h-12 rounded-[10px] flex items-center justify-center flex-shrink-0 ${c.icon}`}>
-          <Icon className="w-6 h-6" />
+    <div className="bg-card border border-border-default rounded-card p-5 shadow-card hover:-translate-y-0.5 hover:shadow-card-md transition-all duration-300">
+      <div className="flex items-center justify-between mb-4">
+        <div className={`w-9 h-9 rounded-[10px] flex items-center justify-center flex-shrink-0 ${c.ico}`}>
+          <Icon className="w-[18px] h-[18px]" strokeWidth={2} />
         </div>
-        <div>
-          <p className="text-sm font-semibold text-body-text">{label}</p>
-          <p className="text-2xl font-black text-black-heading tracking-tight">{value}</p>
-          {sub && <p className="text-xs font-semibold text-body-text mt-0.5">{sub}</p>}
-        </div>
-      </CardBody>
-    </Card>
+        <span className="font-mono text-[10.5px] font-medium tracking-[0.12em] uppercase text-muted-text">
+          {label}
+        </span>
+      </div>
+      <p className="font-display text-[32px] font-bold text-black-heading tracking-[-0.03em] leading-none">
+        {num}
+        {unit && <small className="text-[17px] font-semibold text-muted-text ml-1">{unit}</small>}
+      </p>
+      {sub && (
+        <p className="text-[12px] font-semibold text-muted-text mt-2">{sub}</p>
+      )}
+    </div>
   );
 }

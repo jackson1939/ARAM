@@ -177,7 +177,7 @@ export default function MonitoreoPage() {
   const channelKeys = ['all', 'telegram', 'whatsapp'];
 
   return (
-    <div className="flex h-[calc(100vh-56px)] overflow-hidden">
+    <div className="flex h-[calc(100vh-66px)] overflow-hidden">
 
       {/* ── Left: channel list ──────────────────────────────────────── */}
       <aside className="w-56 flex-shrink-0 border-r border-border-default bg-card flex flex-col">

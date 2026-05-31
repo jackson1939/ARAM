@@ -102,7 +102,7 @@ export default function AdminReportesPage() {
     : [];
 
   return (
-    <div className="flex h-[calc(100vh-56px)]">
+    <div className="flex h-[calc(100vh-66px)]">
 
       {/* ── Left panel ── */}
       <aside className="w-64 flex-shrink-0 border-r border-border-default flex flex-col bg-card">

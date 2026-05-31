@@ -9,20 +9,20 @@ import {
 } from 'lucide-react';
 
 const adminNav = [
-  { href: '/admin/dashboard',    label: 'Dashboard',     icon: LayoutDashboard },
+  { href: '/admin/dashboard',    label: 'Dashboard',     icon: LayoutDashboard, section: 'Operación' },
   { href: '/admin/validacion',   label: 'Validación',    icon: CheckSquare },
   { href: '/admin/empresas',     label: 'Empresas',      icon: Building2 },
   { href: '/admin/educacion',    label: 'Educación',     icon: BookOpen },
-  { href: '/admin/reportes',     label: 'Reportes',      icon: BarChart3 },
+  { href: '/admin/reportes',     label: 'Reportes',      icon: BarChart3, section: 'Reportería' },
   { href: '/admin/monitoreo',    label: 'Monitoreo',     icon: Activity },
   { href: '/admin/demostracion', label: 'Demostración',  icon: MonitorPlay },
 ];
 
 const empresaNav = [
-  { href: '/empresa/dashboard',   label: 'Dashboard',    icon: LayoutDashboard },
-  { href: '/empresa/educacion',   label: 'Educación',    icon: BookOpen },
-  { href: '/empresa/reportes',    label: 'Reportes',     icon: FileText },
-  { href: '/empresa/demostracion',label: 'Demostración', icon: MonitorPlay },
+  { href: '/empresa/dashboard',    label: 'Mi impacto',   icon: LayoutDashboard, section: 'Mi empresa' },
+  { href: '/empresa/educacion',    label: 'Educación',    icon: BookOpen },
+  { href: '/empresa/reportes',     label: 'Reportes',     icon: FileText },
+  { href: '/empresa/demostracion', label: 'Demostración', icon: MonitorPlay },
 ];
 
 interface SidebarProps {
@@ -34,19 +34,19 @@ export function Sidebar({ rol, collapsed = false }: SidebarProps) {
   const pathname = usePathname();
   const nav      = rol === 'admin' ? adminNav : empresaNav;
 
+  let lastSection = '';
+
   return (
-    <aside
-      className={clsx(
-        'shrink-0 bg-card border-r border-border-default flex flex-col h-screen sticky top-0 transition-all duration-200 overflow-hidden',
-        collapsed ? 'w-[60px]' : 'w-60',
-      )}
-    >
+    <aside className={clsx(
+      'shrink-0 bg-card border-r border-border-default flex flex-col h-screen sticky top-0 transition-all duration-200 overflow-hidden',
+      collapsed ? 'w-[60px]' : 'w-[248px]',
+    )}>
       {/* Brand */}
       <div className={clsx(
         'flex items-center gap-3 border-b border-border-default transition-all duration-200',
-        collapsed ? 'px-3 py-5 justify-center' : 'px-5 py-6',
+        collapsed ? 'px-3 py-5 justify-center' : 'px-5 py-5',
       )}>
-        <div className="w-9 h-9 bg-[#4BAF47] rounded-[8px] flex items-center justify-center shrink-0 flex-shrink-0">
+        <div className="w-9 h-9 bg-[var(--green)] rounded-[11px] flex items-center justify-center shrink-0 flex-shrink-0">
           <svg viewBox="0 0 24 24" className="w-5 h-5 stroke-white fill-none stroke-2 [stroke-linecap:round] [stroke-linejoin:round]">
             <path d="M4 20c0-9 7-15 16-15 0 9-6 15-15 15-1 0-1 0-1 0z"/>
             <path d="M4 20c4-6 8-9 12-11"/>
@@ -54,33 +54,46 @@ export function Sidebar({ rol, collapsed = false }: SidebarProps) {
         </div>
         {!collapsed && (
           <div className="overflow-hidden">
-            <p className="font-extrabold text-[15px] text-black-heading tracking-tight leading-none mb-1 whitespace-nowrap">Fundares</p>
-            <p className="text-[11px] font-semibold text-body-text uppercase tracking-widest leading-none capitalize">{rol}</p>
+            <p className="font-display font-bold text-[16px] text-black-heading tracking-tight leading-none mb-1 whitespace-nowrap">Fundares</p>
+            <p className="font-mono text-[10px] font-medium tracking-[0.16em] uppercase text-muted-text leading-none">{rol === 'admin' ? 'Administración' : 'Empresa'}</p>
           </div>
         )}
       </div>
 
       {/* Nav */}
-      <nav className={clsx('flex-1 py-4 space-y-0.5 transition-all duration-200', collapsed ? 'px-2' : 'px-3')}>
-        {nav.map(({ href, label, icon: Icon }) => {
+      <nav className={clsx('flex-1 py-3 overflow-y-auto transition-all duration-200', collapsed ? 'px-2' : 'px-3')}>
+        {nav.map(({ href, label, icon: Icon, section }) => {
           const active = pathname === href;
+          const showSection = !collapsed && section && section !== lastSection;
+          if (section) lastSection = section;
+
           return (
-            <Link
-              key={href}
-              href={href}
-              title={collapsed ? label : undefined}
-              data-tour={`nav-${href.split('/').pop()}`}
-              className={clsx(
-                'flex items-center gap-3 rounded-[7px] text-sm transition-colors',
-                collapsed ? 'justify-center px-0 py-2.5' : 'px-3 py-2.5',
-                active
-                  ? 'bg-green-light text-[#4BAF47] font-bold'
-                  : 'text-body-text font-semibold hover:bg-bg-page hover:text-black-heading',
+            <div key={href}>
+              {showSection && (
+                <p className="font-mono text-[10px] font-medium tracking-[0.14em] uppercase text-muted-text px-3 pt-4 pb-2">
+                  {section}
+                </p>
               )}
-            >
-              <Icon className="w-4 h-4 shrink-0" />
-              {!collapsed && <span className="truncate">{label}</span>}
-            </Link>
+              <Link
+                href={href}
+                title={collapsed ? label : undefined}
+                data-tour={`nav-${href.split('/').pop()}`}
+                className={clsx(
+                  'relative flex items-center gap-3 rounded-[9px] text-[14px] transition-colors mb-0.5',
+                  collapsed ? 'justify-center px-0 py-2.5' : 'px-3 py-2.5',
+                  active
+                    ? 'bg-green-light text-[var(--forest)] font-bold'
+                    : 'text-body-text font-semibold hover:bg-bg-page hover:text-black-heading',
+                )}
+              >
+                {/* Active indicator bar */}
+                {active && !collapsed && (
+                  <span className="absolute left-0 top-2 bottom-2 w-[3px] bg-[var(--green)] rounded-r-[3px]" />
+                )}
+                <Icon className="w-[18px] h-[18px] shrink-0" strokeWidth={2} />
+                {!collapsed && <span className="truncate">{label}</span>}
+              </Link>
+            </div>
           );
         })}
       </nav>

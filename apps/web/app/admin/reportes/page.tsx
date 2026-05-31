@@ -35,7 +35,7 @@ export default function AdminReportesPage() {
   }
 
   return (
-    <div className="p-6 space-y-6 max-w-lg">
+    <div className="p-6 space-y-6">
       <h1 className="text-2xl font-bold text-black-heading">Generar reportes</h1>
 
       <Card>

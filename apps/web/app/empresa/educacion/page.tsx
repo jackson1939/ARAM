@@ -48,7 +48,7 @@ export default async function EducacionPage({
   const allTags = [...new Set(items.flatMap((item) => item.tags ?? []))].sort();
 
   return (
-    <div className="p-6 space-y-6">
+    <div className="p-6">
       <h1 className="text-2xl font-bold text-black-heading">Educación ambiental</h1>
 
       {allTags.length > 0 && (
@@ -74,7 +74,7 @@ export default async function EducacionPage({
       {items.length === 0 ? (
         <p className="text-center text-body-text/70 py-20">Sin contenido publicado aún</p>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
           {items.map((item) => {
             const Icon = iconoTipo[item.tipo ?? 'articulo'];
             return (

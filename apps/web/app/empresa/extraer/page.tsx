@@ -77,8 +77,8 @@ export default function ExtraerPage() {
   };
 
   return (
-    <div ref={containerRef} className="min-h-screen bg-bg-page font-sans text-body-text py-12 px-4 sm:px-6">
-      <div className="max-w-2xl mx-auto space-y-8">
+    <div ref={containerRef} className="p-6 text-body-text">
+      <div className="space-y-8 max-w-3xl">
         <div ref={headerRef}>
           <h1 className="text-black-heading text-3xl font-extrabold tracking-tight">Cargar recolección</h1>
           <p className="mt-2 text-sm">Registrá los materiales recolectados mediante texto, imagen o video.</p>

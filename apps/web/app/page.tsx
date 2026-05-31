@@ -10,6 +10,48 @@ import { useTheme } from '@/components/ThemeProvider';
 // ── Easing ──────────────────────────────────────────────────────────────────
 const EASE = [0.22, 1, 0.36, 1] as const;
 
+// ── Types ────────────────────────────────────────────────────────────────────
+interface MatDist  { material: string; kg: number; pct: number; }
+interface Reciente { empresa: string; initials: string; kg: string; material: string; }
+interface Stats {
+  total_kg: number; co2_kg: number; agua_litros: number; arboles: number;
+  total_empresas: number;
+  distribucion: MatDist[];
+  recientes: Reciente[];
+}
+
+// ── Helpers ───────────────────────────────────────────────────────────────────
+function fmtKg(kg: number): string {
+  if (kg >= 1_000_000) return `${(kg / 1_000_000).toFixed(1)} kt`;
+  if (kg >= 1_000)     return `${(kg / 1_000).toFixed(1)} t`;
+  return `${kg} kg`;
+}
+
+// Material color map (matching CSS vars)
+const MAT_COLORS: Record<string, string> = {
+  plastico:    'var(--mat-plastico)', plástico: 'var(--mat-plastico)',
+  papel:       'var(--mat-papel)',
+  vidrio:      'var(--mat-vidrio)',
+  metal:       'var(--mat-metal)',
+  carton:      'var(--mat-carton)',   cartón: 'var(--mat-carton)',
+  electronico: 'var(--mat-electronico)', electrónico: 'var(--mat-electronico)',
+  organico:    'var(--mat-organico)', orgánico: 'var(--mat-organico)',
+};
+function matColor(m: string) {
+  return MAT_COLORS[m.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '')] ?? 'var(--green)';
+}
+
+// Donut segment builder
+function buildDonut(dist: MatDist[]): { color: string; dash: number; offset: number }[] {
+  const segs: { color: string; dash: number; offset: number }[] = [];
+  let offset = 0;
+  for (const d of dist) {
+    segs.push({ color: matColor(d.material), dash: d.pct, offset: -offset });
+    offset += d.pct;
+  }
+  return segs;
+}
+
 // ── Data ─────────────────────────────────────────────────────────────────────
 const FEATURES = [
   { n: '01', bg: 'bg-green-light', ic: 'text-green-mid', path: <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/>, t: 'Extracción inteligente', d: 'Pegá el texto del recolector, subí una foto del comprobante o un video. La IA identifica empresa, fecha, materiales y cantidades, y devuelve un nivel de confianza.', api: 'POST /api/extraer' },
@@ -29,7 +71,15 @@ export default function LandingPage() {
   const leaf1Ref     = useRef<HTMLDivElement>(null);
   const visualRef    = useRef<HTMLDivElement>(null);
   const [scrolled, setScrolled] = useState(false);
+  const [stats, setStats]       = useState<Stats | null>(null);
   const { theme, toggle: toggleTheme } = useTheme();
+
+  useEffect(() => {
+    fetch('/api/public-stats')
+      .then(r => r.json())
+      .then((d: Stats) => setStats(d))
+      .catch(() => {});
+  }, []);
 
   // Nav scroll state
   useEffect(() => {
@@ -63,14 +113,23 @@ export default function LandingPage() {
           scrollTrigger: { trigger: el, start: 'top 86%' } }
       );
     });
-    // Steps stagger
-    gsap.utils.toArray<HTMLElement>('.step-item').forEach((el, i) => {
-      gsap.fromTo(el,
-        { opacity: 0, y: 24 },
-        { opacity: 1, y: 0, duration: 0.6, ease: 'power3.out', delay: i * 0.1,
-          scrollTrigger: { trigger: '.steps-grid', start: 'top 82%' } }
+    // Steps — slide in left-to-right as user scrolls into the section
+    const stepItems = gsap.utils.toArray<HTMLElement>('.step-item');
+    if (stepItems.length) {
+      gsap.fromTo(stepItems,
+        { opacity: 0, x: -36 },
+        {
+          opacity: 1, x: 0,
+          duration: 0.65, ease: 'power3.out',
+          stagger: 0.12,
+          scrollTrigger: {
+            trigger: '.steps-grid',
+            start: 'top 80%',
+            toggleActions: 'play none none reverse',
+          },
+        }
       );
-    });
+    }
   }, { scope: containerRef });
 
   return (
@@ -195,26 +254,32 @@ export default function LandingPage() {
                 </div>
 
                 <div className="flex items-baseline gap-3 mb-1">
-                  <span className="font-display font-black leading-none tracking-[-0.04em]" style={{ fontSize: 52, color: 'var(--bk)' }}>4.2</span>
-                  <span className="text-[18px] font-bold" style={{ color: 'var(--ink3)' }}>toneladas recicladas</span>
+                  <span className="font-display font-black leading-none tracking-[-0.04em]" style={{ fontSize: 52, color: 'var(--bk)' }}>
+                    {stats ? fmtKg(stats.total_kg) : '—'}
+                  </span>
+                  <span className="text-[18px] font-bold" style={{ color: 'var(--ink3)' }}>reciclados</span>
                 </div>
-                <div className="font-mono text-[12.5px] mb-6" style={{ color: 'var(--ink3)' }}>+18% frente a febrero · 23 empresas activas</div>
+                <div className="font-mono text-[12.5px] mb-6" style={{ color: 'var(--ink3)' }}>
+                  {stats ? `${stats.total_empresas} empresas aliadas` : '…'}
+                </div>
 
                 {/* Donut + legend */}
                 <div className="flex items-center gap-6 py-5 border-t border-b" style={{ borderColor: 'var(--bd)' }}>
                   <svg className="-rotate-90 shrink-0" width="104" height="104" viewBox="0 0 36 36">
                     <circle cx="18" cy="18" r="15.5" fill="none" stroke="var(--alt)" strokeWidth="5"/>
-                    <circle cx="18" cy="18" r="15.5" fill="none" stroke="var(--mat-plastico)" strokeWidth="5" strokeDasharray="38 100" strokeDashoffset="0"/>
-                    <circle cx="18" cy="18" r="15.5" fill="none" stroke="var(--mat-papel)"    strokeWidth="5" strokeDasharray="26 100" strokeDashoffset="-38"/>
-                    <circle cx="18" cy="18" r="15.5" fill="none" stroke="var(--mat-vidrio)"   strokeWidth="5" strokeDasharray="18 100" strokeDashoffset="-64"/>
-                    <circle cx="18" cy="18" r="15.5" fill="none" stroke="var(--mat-metal)"    strokeWidth="5" strokeDasharray="18 100" strokeDashoffset="-82"/>
+                    {stats?.distribucion && buildDonut(stats.distribucion).map((seg, i) => (
+                      <circle key={i} cx="18" cy="18" r="15.5" fill="none"
+                        stroke={seg.color} strokeWidth="5"
+                        strokeDasharray={`${seg.dash} 100`}
+                        strokeDashoffset={seg.offset} />
+                    ))}
                   </svg>
                   <div className="flex flex-col gap-2.5 flex-1">
-                    {[['var(--mat-plastico)', 'Plástico', '38%'], ['var(--mat-papel)', 'Papel', '26%'], ['var(--mat-vidrio)', 'Vidrio', '18%'], ['var(--mat-metal)', 'Metal', '18%']].map(([c, n, p]) => (
-                      <div key={n} className="flex items-center gap-2.5 text-[12.5px]">
-                        <span className="w-2.5 h-2.5 rounded-[3px] shrink-0" style={{ background: c }} />
-                        <span className="flex-1 font-semibold" style={{ color: 'var(--bt)' }}>{n}</span>
-                        <span className="font-mono font-semibold" style={{ color: 'var(--bk)' }}>{p}</span>
+                    {(stats?.distribucion ?? []).slice(0, 4).map(d => (
+                      <div key={d.material} className="flex items-center gap-2.5 text-[12.5px]">
+                        <span className="w-2.5 h-2.5 rounded-[3px] shrink-0" style={{ background: matColor(d.material) }} />
+                        <span className="flex-1 font-semibold capitalize" style={{ color: 'var(--bt)' }}>{d.material}</span>
+                        <span className="font-mono font-semibold" style={{ color: 'var(--bk)' }}>{d.pct}%</span>
                       </div>
                     ))}
                   </div>
@@ -223,11 +288,11 @@ export default function LandingPage() {
                 {/* Ledger */}
                 <div className="mt-5">
                   <div className="font-mono text-[9.5px] tracking-[0.14em] uppercase mb-3" style={{ color: 'var(--ink3)' }}>Últimas recolecciones</div>
-                  {[['var(--mat-vidrio)', 'PX', 'Industrias Plastex S.R.L.', '320 kg'], ['var(--slate)', 'AB', 'Empresa ABC', '85 kg'], ['var(--clay)', 'EC', 'EcoComm Santa Cruz', '210 kg']].map(([bg, av, nm, kg]) => (
-                    <div key={nm} className="flex items-center gap-3 py-2.5 border-b border-dashed last:border-0" style={{ borderColor: 'var(--bd)' }}>
-                      <div className="w-7 h-7 rounded-[8px] grid place-items-center font-display text-[10px] font-bold text-white shrink-0" style={{ background: bg }}>{av}</div>
-                      <div className="flex-1 text-[12.5px] font-semibold" style={{ color: 'var(--bk)' }}>{nm}</div>
-                      <div className="font-mono text-[12px] font-semibold" style={{ color: 'var(--green)' }}>{kg}</div>
+                  {(stats?.recientes ?? []).map((r, i) => (
+                    <div key={i} className="flex items-center gap-3 py-2.5 border-b border-dashed last:border-0" style={{ borderColor: 'var(--bd)' }}>
+                      <div className="w-7 h-7 rounded-[8px] grid place-items-center font-display text-[10px] font-bold text-white shrink-0" style={{ background: matColor(r.material) }}>{r.initials}</div>
+                      <div className="flex-1 text-[12.5px] font-semibold truncate" style={{ color: 'var(--bk)' }}>{r.empresa}</div>
+                      <div className="font-mono text-[12px] font-semibold shrink-0" style={{ color: 'var(--green)' }}>{r.kg}</div>
                     </div>
                   ))}
                 </div>
@@ -239,8 +304,10 @@ export default function LandingPage() {
                   <svg viewBox="0 0 24 24" className="w-4 h-4 stroke-white fill-none stroke-[2.5] [stroke-linecap:round] [stroke-linejoin:round]"><path d="M5 12l5 5L20 7"/></svg>
                 </div>
                 <div>
-                  <div className="font-mono text-[10px] tracking-[0.08em] uppercase" style={{ color: 'rgba(246,244,236,0.6)' }}>CO₂ evitado hoy</div>
-                  <div className="font-bold text-[13px]" style={{ color: 'var(--bg)' }}>1.4 t · validado</div>
+                  <div className="font-mono text-[10px] tracking-[0.08em] uppercase" style={{ color: 'rgba(246,244,236,0.6)' }}>CO₂ evitado total</div>
+                  <div className="font-bold text-[13px]" style={{ color: 'var(--bg)' }}>
+                    {stats ? fmtKg(stats.co2_kg) : '—'} · validado
+                  </div>
                 </div>
               </div>
             </motion.div>
@@ -358,14 +425,14 @@ export default function LandingPage() {
       <div className="border-t border-b" style={{ background: 'var(--alt)', borderColor: 'var(--bd)' }}>
         <div className="max-w-[1240px] mx-auto px-10 py-16 grid grid-cols-2 lg:grid-cols-4 gap-8">
           {[
-            { val: '42.6', u: 't',  label: 'reciclado acumulado' },
-            { val: '23',   u: '',   label: 'empresas aliadas' },
-            { val: '68',   u: 't',  label: 'CO₂ evitado' },
-            { val: '640',  u: 'k',  label: 'litros de agua ahorrados' },
+            { val: stats ? fmtKg(stats.total_kg)    : '—', label: 'reciclado acumulado' },
+            { val: stats ? String(stats.total_empresas) : '—', label: 'empresas aliadas' },
+            { val: stats ? fmtKg(stats.co2_kg)      : '—', label: 'CO₂ evitado' },
+            { val: stats ? `${(stats.agua_litros / 1000).toFixed(0)}k L` : '—', label: 'agua ahorrada' },
           ].map((s, i) => (
             <div key={s.label} data-reveal className={i < 3 ? 'border-r pr-8' : ''} style={{ borderColor: 'var(--bd)' }}>
               <div className="font-display font-black leading-none tracking-[-0.04em] mb-2" style={{ fontSize: 'clamp(38px,4.2vw,58px)', color: 'var(--bk)' }}>
-                {s.val}<span style={{ color: 'var(--green)', fontSize: '0.5em' }}>{s.u}</span>
+                {s.val}
               </div>
               <div className="text-[13px] font-semibold" style={{ color: 'var(--bt)' }}>{s.label}</div>
             </div>

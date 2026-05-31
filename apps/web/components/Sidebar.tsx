@@ -5,7 +5,7 @@ import { usePathname } from 'next/navigation';
 import { clsx } from 'clsx';
 import {
   LayoutDashboard, CheckSquare, Building2, BarChart3,
-  BookOpen, FileText, PlusCircle, Database, MonitorPlay,
+  BookOpen, FileText, PlusCircle, Database, MonitorPlay, Activity,
 } from 'lucide-react';
 
 const adminNav = [
@@ -16,6 +16,7 @@ const adminNav = [
   { href: '/empresa/educacion',   label: 'Educación',        icon: BookOpen },
   { href: '/admin/reportes',      label: 'Reportes',         icon: BarChart3 },
   { href: '/admin/ingreso-datos', label: 'Ingreso de datos', icon: Database },
+  { href: '/admin/monitoreo',     label: 'Monitoreo',        icon: Activity },
   { href: '/admin/demostracion',  label: 'Demostración',     icon: MonitorPlay },
 ];
 

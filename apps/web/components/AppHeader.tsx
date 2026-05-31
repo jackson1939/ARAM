@@ -18,6 +18,7 @@ const PAGE_META: Record<string, PageMeta> = {
   '/admin/empresas':        { title: 'Empresas' },
   '/admin/reportes':        { title: 'Reportes' },
   '/admin/ingreso-datos':   { title: 'Ingreso de datos', action: { label: 'Nueva recolección', href: '/empresa/extraer' } },
+  '/admin/monitoreo':       { title: 'Monitoreo' },
   '/admin/demostracion':    { title: 'Demostración' },
   '/empresa/dashboard':     { title: 'Mi impacto',       action: { label: 'Nueva recolección', href: '/empresa/extraer' } },
   '/empresa/extraer':       { title: 'Recolectar' },

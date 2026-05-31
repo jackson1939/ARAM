@@ -4,7 +4,7 @@ import { Providers } from './providers';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'ARAM · Asistente de Recolección Automatizada Multicanal',
+  title: 'ARAM',
   description: 'Asistente de Recolección Automatizada Multicanal',
   icons: {
     icon: '/icon.svg',

@@ -144,7 +144,7 @@ export default function LandingPage() {
         'fixed top-0 left-0 right-0 z-[80] flex items-center justify-between h-[64px] lg:h-[72px] px-4 sm:px-6 lg:px-10 transition-all duration-300',
         scrolled ? 'border-b backdrop-blur-[14px] shadow-sm' : 'border-b border-transparent',
       ].join(' ')}
-        style={scrolled ? { background: 'rgba(246,244,236,0.86)', borderColor: 'var(--bd)' } : {}}
+        style={scrolled ? { background: 'var(--nav-scrolled-bg)', borderColor: 'var(--bd)' } : {}}
       >
         {/* Brand */}
         <div className="flex items-center gap-2.5">

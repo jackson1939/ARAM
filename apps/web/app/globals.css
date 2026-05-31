@@ -21,6 +21,7 @@ h1, h2, h3, h4 {
   :root {
     /* ── Surfaces ── */
     --bg:   #F6F4EC;   /* paper — app background */
+    --nav-scrolled-bg: rgba(246,244,236,0.88);
     --card: #FFFFFF;   /* white cards */
     --alt:  #EFEDE1;   /* inset / alt surface */
     --wh:   #FFFFFF;
@@ -72,6 +73,7 @@ h1, h2, h3, h4 {
 
   .dark {
     --bg:         #111110;
+    --nav-scrolled-bg: rgba(17,17,16,0.92);
     --card:       #1C1C1A;
     --alt:        #222220;
     --wh:         #1C1C1A;

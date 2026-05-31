@@ -1,7 +1,9 @@
 import { NextResponse } from 'next/server';
 import { db, empresas, recolecciones } from '@fundares/db';
 import { calcularMetricas } from '@/lib/metricas';
-import { count, sql } from 'drizzle-orm';
+import { count } from 'drizzle-orm';
+
+export const dynamic = 'force-dynamic';
 
 export async function GET() {
   const [empresasRow] = await db()

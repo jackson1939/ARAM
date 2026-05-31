@@ -105,9 +105,9 @@ export default async function AdminDashboardPage() {
   }
 
   return (
-    <div className="p-6 space-y-6 h-[calc(100vh-66px)] overflow-y-auto">
+    <div className="p-4 md:p-6 space-y-4 md:space-y-6 h-[calc(100vh-66px)] overflow-y-auto">
       {/* Row 1 — 5 metric cards */}
-      <div data-tour="metric-cards" className="grid grid-cols-2 xl:grid-cols-5 gap-4">
+      <div data-tour="metric-cards" className="grid grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-3 md:gap-4">
         <MetricCard
           label="Total reciclado"
           value={`${metricas.total_kg} kg`}
@@ -141,7 +141,7 @@ export default async function AdminDashboardPage() {
       </div>
 
       {/* Row 2 — charts 3-column grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
         <Card data-tour="chart-materiales" className="lg:col-span-2">
           <CardHeader>
             <CardTitle>Materiales reciclados</CardTitle>

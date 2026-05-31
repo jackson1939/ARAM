@@ -72,8 +72,8 @@ export default function EmpresaReportesPage() {
   const barData = preview ? Object.entries(preview.distribucion).map(([name, value]) => ({ name, value: Math.round(value*10)/10 })) : [];
 
   return (
-    <div className="p-6 space-y-5 h-[calc(100vh-66px)] overflow-y-auto">
-      <div className="bg-card border border-border-default rounded-[12px] p-4 flex flex-wrap items-center gap-4">
+    <div className="p-4 md:p-6 space-y-4 md:space-y-5 h-[calc(100vh-66px)] overflow-y-auto">
+      <div className="bg-card border border-border-default rounded-[12px] p-3 md:p-4 flex flex-wrap items-center gap-3">
         <div className="flex rounded-[8px] bg-bg-page p-0.5 gap-0.5">
           {(['anio','mes','custom'] as FiltroTipo[]).map(t => (
             <button key={t} onClick={() => setFiltroTipo(t)} className={['px-3 py-1.5 text-[12px] font-bold rounded-[6px] transition-colors', filtroTipo===t ? 'bg-card text-black-heading shadow-sm' : 'text-body-text hover:text-black-heading'].join(' ')}>
@@ -114,7 +114,7 @@ export default function EmpresaReportesPage() {
         </div>
       </div>
 
-      <div className="grid grid-cols-3 gap-4">
+      <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 md:gap-4">
         <MetricCard loading={loadingPreview} label="Total reciclado" value={`${preview?.metricas.total_kg??0} kg`} icon={Recycle} color="green"/>
         <MetricCard loading={loadingPreview} label="CO₂ evitado" value={`${preview?.metricas.co2_kg??0} kg`} icon={Droplets} color="blue"/>
         <MetricCard loading={loadingPreview} label="Agua ahorrada" value={`${(preview?.metricas.agua_litros??0).toLocaleString()} L`} icon={TreePine} color="blue"/>

@@ -271,7 +271,7 @@ export default function ValidacionPage() {
   const cells     = Math.ceil((startDay + totalDays) / 7) * 7;
 
   return (
-    <div className="flex flex-col h-[calc(100vh-66px)] p-5 gap-4">
+    <div className="flex flex-col h-auto md:h-[calc(100vh-66px)] p-4 md:p-5 gap-4">
 
       {/* Header */}
       <div className="flex items-center gap-3 flex-shrink-0">
@@ -289,7 +289,7 @@ export default function ValidacionPage() {
           <Skeleton className="h-full w-full" />
         </div>
       ) : (
-        <div data-tour="calendario" className="flex-1 min-h-0 bg-card border border-border-default rounded-[12px] overflow-hidden shadow-card flex flex-col">
+        <div data-tour="calendario" className="flex-1 min-h-[400px] md:min-h-0 bg-card border border-border-default rounded-[12px] overflow-hidden shadow-card flex flex-col">
 
           {/* Month nav */}
           <div data-tour="cal-nav" className="flex items-center justify-between px-5 py-3 border-b border-border-default flex-shrink-0">

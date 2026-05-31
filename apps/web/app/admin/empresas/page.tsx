@@ -208,15 +208,15 @@ export default function EmpresasPage() {
   }
 
   return (
-    <div className="flex h-[calc(100vh-66px)]">
-      <aside className="w-72 border-r border-border-default flex flex-col bg-card flex-shrink-0">
+    <div className="flex flex-col md:flex-row h-auto md:h-[calc(100vh-66px)]">
+      <aside className="w-full md:w-72 border-b md:border-b-0 md:border-r border-border-default flex flex-col bg-card md:flex-shrink-0">
         <div className="p-4 border-b border-border-default flex-shrink-0">
           <Button onClick={abrirNuevaEmpresa} className="w-full" size="sm">
             <Plus className="w-4 h-4" />
             Nueva empresa
           </Button>
         </div>
-        <div className="flex-1 overflow-y-auto">
+        <div className="flex-1 overflow-y-auto max-h-56 md:max-h-none">
           {loading ? (
             <div className="p-4 space-y-2">
               {[1, 2, 3].map((i) => <Skeleton key={i} className="h-12" />)}

@@ -54,7 +54,7 @@ export default function EmpresaDashboardPage() {
   const totalRec = data?.recolecciones_recientes?.length ?? 0;
 
   return (
-    <div className="p-6 space-y-5 h-[calc(100vh-66px)] overflow-y-auto">
+    <div className="p-4 md:p-6 space-y-4 md:space-y-5 h-[calc(100vh-66px)] overflow-y-auto">
 
       {/* Impact banner */}
       {!loading && totalKg > 0 && (
@@ -76,7 +76,7 @@ export default function EmpresaDashboardPage() {
       )}
 
       {/* Row 1 — 4 metric cards */}
-      <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
+      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
         <MetricCard
           loading={loading}
           label="Total reciclado"
@@ -108,7 +108,7 @@ export default function EmpresaDashboardPage() {
       </div>
 
       {/* Row 2 — charts */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
         <Card>
           <CardHeader>
             <CardTitle>Evolución mensual (kg)</CardTitle>

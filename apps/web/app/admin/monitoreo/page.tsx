@@ -177,10 +177,10 @@ export default function MonitoreoPage() {
   const channelKeys = ['all', 'telegram', 'whatsapp'];
 
   return (
-    <div className="flex h-[calc(100vh-66px)] overflow-hidden">
+    <div className="flex flex-col md:flex-row h-auto md:h-[calc(100vh-66px)] overflow-hidden">
 
       {/* ── Left: channel list ──────────────────────────────────────── */}
-      <aside className="w-56 flex-shrink-0 border-r border-border-default bg-card flex flex-col">
+      <aside className="w-full md:w-56 md:flex-shrink-0 border-b md:border-b-0 md:border-r border-border-default bg-card flex flex-col">
         <div className="px-4 py-4 border-b border-border-default flex items-center justify-between">
           <span className="text-[12px] font-bold uppercase tracking-widest text-body-text">Canales</span>
           <button
@@ -192,7 +192,7 @@ export default function MonitoreoPage() {
           </button>
         </div>
 
-        <nav className="flex-1 overflow-y-auto py-2 px-2 space-y-0.5">
+        <nav className="flex md:flex-col overflow-x-auto md:overflow-x-visible overflow-y-hidden md:overflow-y-auto flex-shrink-0 md:flex-1 py-2 px-2 gap-1 md:gap-0 md:space-y-0.5">
           {channelKeys.map(key => {
             const meta   = CANAL_META[key]!;
             const count  = key === 'all'

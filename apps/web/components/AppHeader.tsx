@@ -97,10 +97,10 @@ export function AppHeader({ onToggleSidebar, userName, userEmail, rol }: AppHead
           <button
             data-tour="btn-nueva-recoleccion"
             onClick={openRecoleccion}
-            className="inline-flex items-center gap-1.5 bg-[var(--green)] hover:bg-[var(--forest-2)] text-white text-[13px] font-bold px-3 py-2 rounded-[9px] transition-all hover:-translate-y-px shadow-green"
+            className="inline-flex items-center gap-1.5 bg-[var(--green)] hover:bg-[var(--forest-2)] text-white font-bold rounded-[9px] transition-all hover:-translate-y-px shadow-green px-2.5 py-2 md:px-3 md:text-[13px]"
           >
-            <Plus className="w-3.5 h-3.5" strokeWidth={2.4} />
-            Nueva recolección
+            <Plus className="w-4 h-4 shrink-0" strokeWidth={2.4} />
+            <span className="hidden sm:inline">Nueva recolección</span>
           </button>
         )}
 

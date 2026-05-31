@@ -102,10 +102,10 @@ export default function AdminReportesPage() {
     : [];
 
   return (
-    <div className="flex h-[calc(100vh-66px)]">
+    <div className="flex flex-col md:flex-row h-auto md:h-[calc(100vh-66px)]">
 
       {/* ── Left panel ── */}
-      <aside className="w-64 flex-shrink-0 border-r border-border-default flex flex-col bg-card">
+      <aside className="w-full md:w-64 flex-shrink-0 border-b md:border-b-0 md:border-r border-border-default flex flex-col bg-card">
 
         {/* Filter type */}
         <div className="p-3 border-b border-border-default">
@@ -155,7 +155,7 @@ export default function AdminReportesPage() {
         </div>
 
         {/* Empresa list */}
-        <div data-tour="empresa-selector" className="flex-1 overflow-y-auto p-2 space-y-0.5">
+        <div data-tour="empresa-selector" className="flex-1 overflow-y-auto md:overflow-y-auto max-h-48 md:max-h-none p-2 space-y-0.5">
           <button onClick={() => setSelectedEmpresa(null)}
             className={[
               'w-full flex items-center gap-2.5 px-3 py-2.5 rounded-[7px] text-sm transition-colors border-r-2',

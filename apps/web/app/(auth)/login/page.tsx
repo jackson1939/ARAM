@@ -3,6 +3,7 @@
 import { useState } from 'react';
 import { signIn } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import toast from 'react-hot-toast';
 
 export default function LoginPage() {
@@ -10,6 +11,12 @@ export default function LoginPage() {
   const [email, setEmail]       = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading]   = useState(false);
+  const [role, setRole]         = useState<'empresa' | 'admin'>('empresa');
+
+  function handleRoleChange(r: 'empresa' | 'admin') {
+    setRole(r);
+    setEmail(r === 'admin' ? 'admin@fundares.org' : 'empresa@fundares.org');
+  }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -37,52 +44,91 @@ export default function LoginPage() {
 
   return (
     <>
-      {/* ── Left panel: form (1/3) ─────────────────── */}
-      <div className="w-full lg:w-1/3 flex items-center justify-center min-h-screen bg-white px-8 py-12 relative z-10">
-        <div className="w-full max-w-sm">
+      {/* ── Back link ── */}
+      <Link
+        href="/"
+        className="absolute top-6 left-6 z-10 inline-flex items-center gap-2 text-[13px] font-semibold text-body-text hover:text-green-mid transition-colors"
+      >
+        <svg className="w-[15px] h-[15px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round">
+          <path d="M19 12H5M11 18l-6-6 6-6"/>
+        </svg>
+        Volver
+      </Link>
 
-          {/* Logo + brand (mobile only) */}
-          <div className="flex items-center gap-3 mb-10 lg:hidden">
-            <div className="w-10 h-10 rounded-[9px] bg-[#4BAF47] grid place-items-center flex-shrink-0">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <path d="M4 20c0-9 7-15 16-15 0 9-6 15-15 15-1 0-1 0-1 0z"/>
-                <path d="M4 20c4-6 8-9 12-11"/>
+      {/* ── Left panel: form ── */}
+      <div className="w-full lg:w-[42%] lg:min-w-[380px] flex items-center justify-center min-h-screen bg-bg-page px-10 py-14 relative z-10">
+        <div className="w-full max-w-[380px]">
+
+          {/* Brand */}
+          <div className="flex items-center gap-3 mb-12">
+            <div className="w-[42px] h-[42px] bg-[var(--green)] rounded-[11px] flex items-center justify-center flex-shrink-0">
+              <svg viewBox="0 0 24 24" className="w-5 h-5 fill-none stroke-white stroke-2 [stroke-linecap:round] [stroke-linejoin:round]">
+                <path d="M12 22V12M12 12C12 7 7 5 3 7M12 12C12 7 17 5 21 7"/>
+                <circle cx="12" cy="12" r="2"/>
               </svg>
             </div>
             <div>
-              <div className="font-extrabold text-[18px] text-[#1A1A18] leading-none">Fundares</div>
-              <div className="text-[13px] text-[#6B6A62] font-semibold mt-0.5">Empresas</div>
+              <p className="font-display font-bold text-[20px] text-black-heading tracking-tight leading-none">Fundares</p>
+              <p className="font-mono text-[10px] font-medium tracking-[0.16em] uppercase text-muted-text mt-1">Plataforma de reciclaje</p>
             </div>
           </div>
 
-          <h1 className="text-2xl font-extrabold text-[#1A1A18] tracking-tight mb-1">Iniciar sesión</h1>
-          <p className="text-sm text-[#6B6A62] mb-8">Ingresá con tu cuenta para continuar.</p>
+          <h1 className="font-display font-extrabold text-[30px] text-black-heading tracking-tight leading-tight mb-2">
+            Iniciar sesión
+          </h1>
+          <p className="text-[14.5px] text-body-text mb-8">
+            Ingresá con tu cuenta para continuar.
+          </p>
+
+          {/* Role toggle */}
+          <div className="flex gap-1.5 bg-[var(--alt)] border border-border-default rounded-input p-1 mb-6">
+            {(['empresa', 'admin'] as const).map(r => (
+              <button
+                key={r}
+                type="button"
+                onClick={() => handleRoleChange(r)}
+                className={[
+                  'flex-1 py-2 text-[13px] font-bold rounded-[7px] transition-all',
+                  role === r
+                    ? 'bg-card text-[var(--forest)] shadow-[0_1px_3px_rgba(40,38,28,0.08)]'
+                    : 'text-muted-text hover:text-body-text',
+                ].join(' ')}
+              >
+                {r === 'empresa' ? 'Empresa' : 'Administración'}
+              </button>
+            ))}
+          </div>
+
+          {/* Demo hint */}
+          <div className="bg-[var(--alt)] border border-border-default rounded-input px-4 py-3 mb-7 text-[12.5px] text-body-text">
+            <span className="font-bold text-black-heading">Demo:</span> usá{' '}
+            <code className="font-mono text-[11.5px] bg-card border border-border-default rounded px-1.5 py-0.5 text-[var(--green)]">
+              {role === 'admin' ? 'admin@fundares.org' : 'empresa@fundares.org'}
+            </code>{' '}
+            con cualquier contraseña para previsualizar el panel.
+          </div>
 
           <form onSubmit={handleSubmit} className="space-y-5">
             <div>
-              <label className="block text-sm font-semibold text-[#1A1A18] mb-1.5">
-                Email
-              </label>
+              <label className="block text-[13px] font-bold text-black-heading mb-1.5">Email</label>
               <input
                 type="email"
                 required
                 value={email}
                 onChange={e => setEmail(e.target.value)}
-                className="w-full px-4 py-3 border border-[#E4E3DC] rounded-[9px] text-sm text-[#1A1A18] placeholder:text-[#B9B8B1] outline-none focus:border-[#4BAF47] focus:ring-1 focus:ring-[#4BAF47] transition-colors bg-white"
-                placeholder="admin@fundares.org"
+                className="w-full border border-border-default rounded-input px-3.5 py-3 text-sm text-black-heading placeholder:text-muted-text outline-none focus:border-[var(--green)] focus:ring-2 focus:ring-[var(--green)]/20 transition-colors bg-card"
+                placeholder={role === 'admin' ? 'admin@fundares.org' : 'empresa@fundares.org'}
               />
             </div>
 
             <div>
-              <label className="block text-sm font-semibold text-[#1A1A18] mb-1.5">
-                Contraseña
-              </label>
+              <label className="block text-[13px] font-bold text-black-heading mb-1.5">Contraseña</label>
               <input
                 type="password"
                 required
                 value={password}
                 onChange={e => setPassword(e.target.value)}
-                className="w-full px-4 py-3 border border-[#E4E3DC] rounded-[9px] text-sm text-[#1A1A18] placeholder:text-[#B9B8B1] outline-none focus:border-[#4BAF47] focus:ring-1 focus:ring-[#4BAF47] transition-colors bg-white"
+                className="w-full border border-border-default rounded-input px-3.5 py-3 text-sm text-black-heading placeholder:text-muted-text outline-none focus:border-[var(--green)] focus:ring-2 focus:ring-[var(--green)]/20 transition-colors bg-card"
                 placeholder="••••••••"
               />
             </div>
@@ -90,109 +136,89 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-3 bg-[#4BAF47] hover:bg-[#3d9a3a] text-white font-bold rounded-[9px] text-[15px] transition-colors disabled:opacity-50 disabled:cursor-not-allowed mt-2"
+              className="w-full py-3.5 bg-[var(--green)] hover:bg-[var(--forest-2)] text-white font-bold text-[15px] rounded-input transition-all disabled:opacity-50 disabled:cursor-not-allowed shadow-[0_4px_14px_rgba(47,125,79,0.3)] hover:-translate-y-px mt-1"
             >
               {loading ? 'Entrando…' : 'Iniciar sesión'}
             </button>
           </form>
 
-          <p className="text-xs text-[#B9B8B1] text-center mt-10">
-            Fundación para el Reciclaje · Santa Cruz
+          <p className="font-mono text-[11.5px] text-muted-text text-center tracking-[0.04em] mt-10">
+            Fundación para el Reciclaje · Santa Cruz, Bolivia
           </p>
         </div>
       </div>
 
-      {/* ── Right panel: branding + doodle (2/3, desktop only) ─── */}
-      <div className="hidden lg:flex lg:w-2/3 relative overflow-hidden bg-[#4BAF47] items-center justify-center">
+      {/* ── Right panel: brand ── */}
+      <div className="hidden lg:flex flex-1 relative overflow-hidden bg-[var(--forest)] items-center justify-center">
 
-        {/* Doodle SVG background */}
-        <svg
-          aria-hidden="true"
-          className="absolute inset-0 w-full h-full pointer-events-none"
-          xmlns="http://www.w3.org/2000/svg"
-        >
+        {/* SVG doodle pattern */}
+        <svg aria-hidden="true" className="absolute inset-0 w-full h-full pointer-events-none" xmlns="http://www.w3.org/2000/svg">
           <defs>
-            <symbol id="lp-leaf" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M4 20c0-9 7-15 16-15 0 9-6 15-15 15-1 0-1 0-1 0z"/>
-              <path d="M4 20c4-6 8-9 12-11"/>
+            <symbol id="lp-leaf" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M11 20A7 7 0 019 6c4-2 7-1 9-1 0 4-1 7-3 9a7 7 0 01-4 6z"/>
+              <path d="M11 20c0-5 2-9 6-12"/>
             </symbol>
-            <symbol id="lp-recycle" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-              <polyline points="1 4 1 10 7 10"/>
-              <polyline points="23 20 23 14 17 14"/>
-              <path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10M23 14l-4.64 4.36A9 9 0 0 1 3.51 15"/>
+            <symbol id="lp-recycle" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M7 19H4.8a1.8 1.8 0 01-1.6-2.7L5 13"/>
+              <path d="M9.3 5.5l1.4-2.4a1.8 1.8 0 013.1 0l1.6 2.8"/>
+              <path d="M14.5 17h4.7a1.8 1.8 0 001.6-2.7l-1-1.8"/>
+              <path d="M9 19l2 2-2 2"/>
             </symbol>
-            <symbol id="lp-bottle" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M9 2h6M8 4l-1 3v13a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V7l-1-3"/>
-              <line x1="7" y1="10" x2="17" y2="10"/>
+            <symbol id="lp-bottle" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
+              <path d="M9 2h6M8 4l-1 3v13a2 2 0 002 2h6a2 2 0 002-2V7l-1-3"/>
+              <line x1="7" y1="11" x2="17" y2="11"/>
             </symbol>
-            <symbol id="lp-box" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+            <symbol id="lp-box" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="1.4" strokeLinecap="round" strokeLinejoin="round">
               <path d="M21 16V8l-9-5-9 5v8l9 5 9-5z"/>
-              <polyline points="3.27 6.96 12 12.01 20.73 6.96"/>
-              <line x1="12" y1="22.08" x2="12" y2="12"/>
+              <polyline points="3.3 7 12 12 20.7 7"/>
+              <line x1="12" y1="22" x2="12" y2="12"/>
             </symbol>
-            <symbol id="lp-paper" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-              <polyline points="14 2 14 8 20 8"/>
-              <line x1="8" y1="13" x2="16" y2="13"/>
-              <line x1="8" y1="17" x2="13" y2="17"/>
-            </symbol>
-
-            <pattern id="lp-tile-a" x="0" y="0" width="96" height="88" patternUnits="userSpaceOnUse">
-              <g color="#fff" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round">
-                <g transform="translate(14,16) rotate(-15)"><use href="#lp-leaf"    width="18" height="18" x="-9"  y="-9"/></g>
-                <g transform="translate(66,9)  rotate(22)"> <use href="#lp-recycle" width="16" height="16" x="-8"  y="-8"/></g>
-                <g transform="translate(84,50) rotate(-10)"><use href="#lp-bottle"  width="14" height="14" x="-7"  y="-7"/></g>
-                <g transform="translate(30,54) rotate(8)">  <use href="#lp-box"     width="18" height="18" x="-9"  y="-9"/></g>
-                <g transform="translate(8,72)  rotate(-20)"><use href="#lp-paper"   width="14" height="14" x="-7"  y="-7"/></g>
-                <circle cx="54" cy="34" r="2" fill="currentColor" stroke="none"/>
-                <circle cx="78" cy="76" r="2" fill="currentColor" stroke="none"/>
-              </g>
-            </pattern>
-
-            <pattern id="lp-tile-b" x="48" y="44" width="120" height="108" patternUnits="userSpaceOnUse">
-              <g color="#fff" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round">
-                <g transform="translate(18,20) rotate(12)">  <use href="#lp-paper"   width="16" height="16" x="-8"  y="-8"/></g>
-                <g transform="translate(80,12) rotate(-18)"> <use href="#lp-leaf"    width="18" height="18" x="-9"  y="-9"/></g>
-                <g transform="translate(106,55) rotate(15)"> <use href="#lp-recycle" width="16" height="16" x="-8"  y="-8"/></g>
-                <g transform="translate(44,74) rotate(-8)">  <use href="#lp-bottle"  width="14" height="14" x="-7"  y="-7"/></g>
-                <g transform="translate(90,88) rotate(20)">  <use href="#lp-box"     width="16" height="16" x="-8"  y="-8"/></g>
-                <circle cx="28" cy="56" r="2" fill="currentColor" stroke="none"/>
-                <circle cx="66" cy="38" r="2" fill="currentColor" stroke="none"/>
-              </g>
-            </pattern>
-
-            <pattern id="lp-tile-c" x="24" y="22" width="72" height="66" patternUnits="userSpaceOnUse">
-              <g color="#fff" fill="none" stroke="currentColor" strokeLinecap="round" strokeLinejoin="round">
-                <g transform="translate(10,12) rotate(-24)"><use href="#lp-leaf"   width="14" height="14" x="-7" y="-7"/></g>
-                <g transform="translate(52,8)  rotate(18)"> <use href="#lp-bottle" width="12" height="12" x="-6" y="-6"/></g>
-                <g transform="translate(58,46) rotate(-12)"><use href="#lp-paper"  width="12" height="12" x="-6" y="-6"/></g>
-                <circle cx="28" cy="50" r="1.5" fill="currentColor" stroke="none"/>
-              </g>
+            <pattern id="lp-tile" x="0" y="0" width="108" height="100" patternUnits="userSpaceOnUse">
+              <g transform="translate(16,18) rotate(-14)"><use href="#lp-leaf" width="20" height="20" x="-10" y="-10"/></g>
+              <g transform="translate(74,12) rotate(20)"><use href="#lp-recycle" width="18" height="18" x="-9" y="-9"/></g>
+              <g transform="translate(92,58) rotate(-8)"><use href="#lp-bottle" width="16" height="16" x="-8" y="-8"/></g>
+              <g transform="translate(34,62) rotate(10)"><use href="#lp-box" width="20" height="20" x="-10" y="-10"/></g>
+              <circle cx="60" cy="40" r="2" fill="#fff"/>
+              <circle cx="90" cy="86" r="2" fill="#fff"/>
             </pattern>
           </defs>
-
-          <rect width="100%" height="100%" fill="url(#lp-tile-a)" opacity="0.18"/>
-          <rect width="100%" height="100%" fill="url(#lp-tile-b)" opacity="0.14"/>
-          <rect width="100%" height="100%" fill="url(#lp-tile-c)" opacity="0.12"/>
+          <rect width="100%" height="100%" fill="url(#lp-tile)" opacity="0.16"/>
         </svg>
 
-        {/* Branding content */}
-        <div className="relative z-10 flex flex-col items-center text-center px-12 max-w-lg">
-          <div className="w-20 h-20 rounded-2xl bg-white/20 backdrop-blur-sm grid place-items-center mb-8 shadow-lg">
-            <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="#fff" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M4 20c0-9 7-15 16-15 0 9-6 15-15 15-1 0-1 0-1 0z"/>
-              <path d="M4 20c4-6 8-9 12-11"/>
+        {/* Content */}
+        <div className="relative z-10 flex flex-col items-center text-center px-14 max-w-[520px]">
+          <div className="w-[84px] h-[84px] rounded-[22px] bg-white/12 backdrop-blur-sm border border-white/14 grid place-items-center mb-8">
+            <svg viewBox="0 0 24 24" className="w-10 h-10 fill-none stroke-white stroke-2 [stroke-linecap:round] [stroke-linejoin:round]">
+              <path d="M12 22V12M12 12C12 7 7 5 3 7M12 12C12 7 17 5 21 7"/>
+              <circle cx="12" cy="12" r="2"/>
             </svg>
           </div>
-          <h2 className="text-5xl font-extrabold text-white tracking-tight leading-none mb-3">
+
+          <p className="font-mono text-[12px] font-medium tracking-[0.2em] uppercase text-[#4BAF47] mb-5">
+            Datos de reciclaje, con rigor
+          </p>
+
+          <h2 className="font-display font-extrabold text-[46px] text-white tracking-tight leading-none mb-6">
             Fundares
           </h2>
-          <p className="text-white/80 font-semibold text-lg mb-6 tracking-wide">
-            Empresas
+
+          <p className="text-[16px] leading-[1.7] text-[rgba(231,239,226,0.74)] max-w-[400px]">
+            Gestión de recolección de materiales reciclables para la red de empresas aliadas a la Fundación para el Reciclaje.
           </p>
-          <p className="text-white/70 text-base leading-relaxed max-w-sm">
-            Plataforma de gestión de recolección de materiales reciclables para empresas asociadas a la Fundación para el Reciclaje.
-          </p>
+
+          {/* Stats */}
+          <div className="flex justify-center gap-10 mt-10 pt-8 border-t border-white/12 w-full">
+            {[
+              { value: '42.6 t', label: 'reciclado' },
+              { value: '23',     label: 'empresas'  },
+              { value: '68 t',   label: 'CO₂ evitado' },
+            ].map(s => (
+              <div key={s.label} className="text-center">
+                <span className="font-display font-extrabold text-[30px] text-white block tracking-tight leading-none">{s.value}</span>
+                <span className="font-mono text-[11px] text-[rgba(231,239,226,0.6)] tracking-[0.08em] uppercase mt-1.5 block">{s.label}</span>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </>

@@ -7,7 +7,20 @@ import {
   date,
   boolean,
   jsonb,
+  uniqueIndex,
 } from 'drizzle-orm/pg-core';
+
+export interface ConversacionContexto {
+  pendingExtraction?: {
+    empresa: string | null;
+    fecha: string | null;
+    materiales: { tipo: string; cantidad: number | null; unidad: string | null }[];
+    notas: string | null;
+    confianza: 'high' | 'medium' | 'low';
+    textoOriginal: string;
+    description?: string;
+  };
+}
 
 export const users = pgTable('users', {
   id: uuid('id').defaultRandom().primaryKey(),
@@ -39,6 +52,8 @@ export const mensajesRecolector = pgTable('mensajes_recolector', {
   fotosUrls: text('fotos_urls').array(),
   recibidoAt: timestamp('recibido_at', { withTimezone: true }).defaultNow(),
   estado: text('estado').default('pendiente'),
+  canal: text('canal').default('whatsapp'),
+  canalUserId: text('canal_user_id'),
 });
 
 export const extracciones = pgTable('extracciones', {
@@ -78,3 +93,29 @@ export const contenidoEducativo = pgTable('contenido_educativo', {
   publicado: boolean('publicado').default(false),
   createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
 });
+
+export const recolectores = pgTable('recolectores', {
+  id: uuid('id').defaultRandom().primaryKey(),
+  nombre: text('nombre'),
+  telegramChatId: text('telegram_chat_id').unique(),
+  whatsappNumber: text('whatsapp_number').unique(),
+  empresaId: uuid('empresa_id').references(() => empresas.id, { onDelete: 'set null' }),
+  activo: boolean('activo').default(true),
+  createdAt: timestamp('created_at', { withTimezone: true }).defaultNow(),
+});
+
+export const conversaciones = pgTable(
+  'conversaciones',
+  {
+    id: uuid('id').defaultRandom().primaryKey(),
+    recolectorId: uuid('recolector_id').references(() => recolectores.id, { onDelete: 'cascade' }),
+    canal: text('canal').notNull(),
+    canalUserId: text('canal_user_id').notNull(),
+    estado: text('estado').default('idle'),
+    contexto: jsonb('contexto').$type<ConversacionContexto>(),
+    ultimoMsgAt: timestamp('ultimo_msg_at', { withTimezone: true }).defaultNow(),
+  },
+  (t) => ({
+    canalUserIdx: uniqueIndex('conversaciones_canal_user_idx').on(t.canal, t.canalUserId),
+  }),
+);

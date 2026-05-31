@@ -308,7 +308,7 @@ export default function MonitoreoPage() {
                     </thead>
                     <tbody>
                       {mensajes.map((m, i) => (
-                        <tr key={m.id} className={i % 2 === 0 ? 'bg-card' : 'bg-[#FAFAF9]'}>
+                        <tr key={m.id} className={i % 2 === 0 ? 'bg-card' : 'bg-alt'}>
                           <td className="px-4 py-3 whitespace-nowrap">{canalBadge(m.canal)}</td>
                           <td className="px-4 py-3 text-black-heading max-w-xs">
                             <span className="line-clamp-1 text-[13px]">{m.contenidoTexto ?? '—'}</span>
@@ -342,7 +342,7 @@ export default function MonitoreoPage() {
                     </thead>
                     <tbody>
                       {extracciones.map((e, i) => (
-                        <tr key={e.id} className={i % 2 === 0 ? 'bg-card' : 'bg-[#FAFAF9]'}>
+                        <tr key={e.id} className={i % 2 === 0 ? 'bg-card' : 'bg-alt'}>
                           <td className="px-4 py-3 font-bold text-black-heading">
                             <span className="inline-flex items-center gap-2">
                               <span className="w-2 h-2 rounded-[2px] bg-[#4BAF47] opacity-80 flex-shrink-0" />

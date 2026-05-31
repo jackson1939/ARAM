@@ -84,7 +84,7 @@ export default function ExtraerPage() {
           <p className="mt-2 text-sm">Registrá los materiales recolectados mediante texto, imagen o video.</p>
         </div>
 
-        <div ref={cardRef} className="bg-white rounded-card shadow-card overflow-hidden">
+        <div ref={cardRef} className="bg-card rounded-card shadow-card overflow-hidden">
           <TabSwitcher activeTab={activeTab} onChange={setActiveTab} />
           <div className="p-6 md:p-8">
             <AnimatePresence mode="wait">
@@ -225,7 +225,7 @@ function ImagenTab({ onSubmit, isLoading }: { onSubmit: () => void; isLoading: b
           <input type="file" ref={fileInputRef} className="hidden" accept="image/jpeg,image/png,image/webp" onChange={(e) => e.target.files && setFile(e.target.files[0])} />
         </motion.div>
       ) : (
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="relative rounded-card overflow-hidden h-48 bg-gray-100 flex items-center justify-center">
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="relative rounded-card overflow-hidden h-48 bg-bg-page flex items-center justify-center">
           <img src={URL.createObjectURL(file)} alt="Preview" className="w-full h-full object-cover" />
           <div className="absolute inset-x-0 bottom-0 bg-black/60 p-3"><p className="text-white text-sm truncate">{file.name}</p></div>
           <button onClick={() => setFile(null)} className="absolute top-2 right-2 bg-black/50 hover:bg-black/70 text-white rounded-full p-1 transition-colors" aria-label="Remove image">
@@ -328,7 +328,7 @@ function SuccessState({ result }: { result: ExtractionResult }) {
   }, [result]);
 
   return (
-    <motion.div exit={{ opacity: 0, y: 10 }} ref={cardRef} className={`bg-white rounded-card shadow-card border-l-[3px] ${borderColor} overflow-hidden`} role="status" aria-live="polite">
+    <motion.div exit={{ opacity: 0, y: 10 }} ref={cardRef} className={`bg-card rounded-card shadow-card border-l-[3px] ${borderColor} overflow-hidden`} role="status" aria-live="polite">
       <div className="p-6 md:p-8 space-y-6">
         <div className="flex items-center justify-between">
           <h2 className="text-black-heading font-bold text-[16px]">Resultado</h2>
@@ -368,7 +368,7 @@ function SuccessState({ result }: { result: ExtractionResult }) {
             </div>
             <div>
               {result.materiales.map((m, idx) => (
-                <div key={idx} className={`table-row grid grid-cols-3 px-4 py-[10px] text-black-heading font-medium text-[14px] border-t border-border-default ${idx % 2 !== 0 ? 'bg-[#FAFAFA]' : 'bg-white'}`}>
+                <div key={idx} className={`table-row grid grid-cols-3 px-4 py-[10px] text-black-heading font-medium text-[14px] border-t border-border-default ${idx % 2 !== 0 ? 'bg-alt' : 'bg-card'}`}>
                   <div>{m.material}</div>
                   <div className="text-right">{m.cantidad}</div>
                   <div className="text-right">{m.unidad}</div>
@@ -392,7 +392,7 @@ function ErrorState({ result }: { result: ExtractionResult }) {
   }, [result]);
 
   return (
-    <motion.div exit={{ opacity: 0, y: 10 }} ref={cardRef} className="bg-white rounded-card border-l-[3px] border-error-red p-6 md:p-8" role="status" aria-live="polite">
+    <motion.div exit={{ opacity: 0, y: 10 }} ref={cardRef} className="bg-card rounded-card border-l-[3px] border-error-red p-6 md:p-8" role="status" aria-live="polite">
       <h2 className="text-error-red font-bold text-[16px] mb-1">No se pudo extraer</h2>
       <p className="text-body-text font-normal text-[14px] mb-4">Revisá los siguientes puntos:</p>
       <ul className="space-y-2">

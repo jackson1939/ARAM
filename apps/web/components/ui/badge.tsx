@@ -10,7 +10,7 @@ export function Badge({ variant = 'gray', children }: { variant?: BadgeVariant; 
         'bg-green-100 text-green-700':  variant === 'green',
         'bg-yellow-100 text-yellow-700': variant === 'yellow',
         'bg-red-100 text-red-700':      variant === 'red',
-        'bg-gray-100 text-body-text':    variant === 'gray',
+        'bg-bg-page text-body-text':      variant === 'gray',
         'bg-blue-100 text-blue-700':    variant === 'blue',
       }
     )}>

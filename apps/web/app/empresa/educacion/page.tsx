@@ -55,7 +55,7 @@ export default async function EducacionPage({
         <div className="flex flex-wrap gap-2">
           <a
             href="/empresa/educacion"
-            className={`px-3 py-1 rounded-full text-xs font-medium transition-colors ${!tag ? 'bg-primary-600 text-white' : 'bg-gray-100 text-body-text hover:bg-gray-200'}`}
+            className={`px-3 py-1 rounded-full text-xs font-medium transition-colors ${!tag ? 'bg-primary-600 text-white' : 'bg-bg-page text-body-text hover:bg-border-default'}`}
           >
             Todos
           </a>
@@ -63,7 +63,7 @@ export default async function EducacionPage({
             <a
               key={t}
               href={`/empresa/educacion?tag=${t}`}
-              className={`px-3 py-1 rounded-full text-xs font-medium transition-colors ${tag === t ? 'bg-primary-600 text-white' : 'bg-gray-100 text-body-text hover:bg-gray-200'}`}
+              className={`px-3 py-1 rounded-full text-xs font-medium transition-colors ${tag === t ? 'bg-primary-600 text-white' : 'bg-bg-page text-body-text hover:bg-border-default'}`}
             >
               {t}
             </a>
@@ -106,7 +106,7 @@ export default async function EducacionPage({
                   {item.tags && item.tags.length > 0 && (
                     <div className="flex flex-wrap gap-1 pt-1">
                       {item.tags.map((t) => (
-                        <span key={t} className="text-xs bg-gray-100 text-body-text px-2 py-0.5 rounded-full">
+                        <span key={t} className="text-xs bg-bg-page text-body-text px-2 py-0.5 rounded-full">
                           {t}
                         </span>
                       ))}

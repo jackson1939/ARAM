@@ -32,6 +32,7 @@ const config: Config = {
         'border-default': 'var(--bd)',
         'border-dark':    'var(--bdd)',
         'card':           'var(--card)',
+        'bg-alt':         'var(--alt)',
         'accent-blue':    '#066AAB',
         'error-red':      '#FF0000',
         'warning-amber':  '#F57F17',

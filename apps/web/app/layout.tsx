@@ -14,7 +14,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <head>
         <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
         <script dangerouslySetInnerHTML={{ __html:
-          `(function(){var t=localStorage.getItem('theme');if(t==='dark'||(!t&&matchMedia('(prefers-color-scheme:dark)').matches)){document.documentElement.classList.add('dark')}})()`
+          `(function(){if(localStorage.getItem('theme')==='dark'){document.documentElement.classList.add('dark')}})()`
         }} />
       </head>
       <body className="bg-bg-page text-body-text min-h-screen antialiased">

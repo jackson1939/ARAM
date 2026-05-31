@@ -462,7 +462,7 @@ export function ExtractionDemo() {
           {tab === 'texto' && (
             <div>
               <textarea
-                className="w-full resize-y min-h-[122px] p-4 border border-border-default rounded-input text-[14.5px] leading-relaxed text-black-heading bg-white outline-none focus:border-[#4BAF47] transition-colors"
+                className="w-full resize-y min-h-[122px] p-4 border border-border-default rounded-input text-[14.5px] leading-relaxed text-black-heading bg-card outline-none focus:border-[#4BAF47] transition-colors"
                 value={text}
                 onChange={e => setText(e.target.value)}
                 rows={4}
@@ -861,7 +861,7 @@ function NotesSection({
       {open && (
         <div className="mt-2.5">
           <textarea
-            className="w-full resize-y min-h-[66px] p-3 border border-border-default rounded-input text-[13.5px] leading-relaxed text-black-heading bg-white outline-none focus:border-[#4BAF47] transition-colors"
+            className="w-full resize-y min-h-[66px] p-3 border border-border-default rounded-input text-[13.5px] leading-relaxed text-black-heading bg-card outline-none focus:border-[#4BAF47] transition-colors"
             value={notes}
             onChange={e => setNotes(e.target.value)}
             placeholder={placeholder}

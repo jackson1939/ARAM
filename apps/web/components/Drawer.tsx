@@ -16,6 +16,7 @@ import { X, Maximize2, Minimize2 } from 'lucide-react';
 interface DrawerConfig {
   title: string;
   children: ReactNode;
+  defaultExpanded?: boolean;
 }
 
 interface DrawerCtx {
@@ -46,7 +47,7 @@ export function DrawerProvider({ children }: { children: ReactNode }) {
   const open = useCallback((cfg: DrawerConfig) => {
     if (closeTimer.current) clearTimeout(closeTimer.current);
     setConfig(cfg);
-    setExpanded(false);
+    setExpanded(cfg.defaultExpanded ?? false);
     setMounted(true);
     // allow one frame for mount before triggering transition
     requestAnimationFrame(() => requestAnimationFrame(() => setVisible(true)));

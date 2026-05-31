@@ -45,7 +45,7 @@ export function AppHeader({ onToggleSidebar, userName, userEmail, rol }: AppHead
   const { theme, toggle: toggleTheme } = useTheme();
   const drawer = useDrawer();
 
-  const meta     = PAGE_META[pathname] ?? { title: 'Fundares' };
+  const meta     = PAGE_META[pathname] ?? { title: 'ARAM' };
   const initials = (userName ?? userEmail ?? 'U')
     .split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2);
 

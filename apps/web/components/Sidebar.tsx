@@ -57,7 +57,7 @@ export function Sidebar({ rol, collapsed = false, onClose }: SidebarProps) {
           </div>
           {!collapsed && (
             <div className="overflow-hidden">
-              <p className="font-display font-bold text-[16px] text-black-heading tracking-tight leading-none mb-1 whitespace-nowrap">Fundares</p>
+              <p className="font-display font-bold text-[16px] text-black-heading tracking-tight leading-none mb-1 whitespace-nowrap">ARAM</p>
               <p className="font-mono text-[10px] font-medium tracking-[0.16em] uppercase text-muted-text leading-none">
                 {rol === 'admin' ? 'Administración' : 'Empresa'}
               </p>

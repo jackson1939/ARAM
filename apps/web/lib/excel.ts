@@ -38,7 +38,7 @@ export function generarReporteExcel(
 
   // Sheet 1: Resumen de métricas
   const resumenRows = [
-    ['Reporte Fundares Recycling'],
+    ['Reporte ARAM'],
     [`${todasLasEmpresas ? 'Alcance: Todas las empresas' : `Empresa: ${empresa.nombre}`}`],
     [`Período: ${anio}`],
     [`Generado: ${new Date().toLocaleDateString('es-BO')}`],

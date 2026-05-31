@@ -3,7 +3,7 @@ import type { ExtraccionIA } from '@/types';
 
 const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 
-const SYSTEM_PROMPT = `Eres un asistente de extracción de datos de reciclaje para Fundares.
+const SYSTEM_PROMPT = `Eres un asistente de extracción de datos de reciclaje para ARAM.
 Dado un mensaje de un recolector de reciclaje, extrae los datos en JSON.
 Responde SOLO con JSON válido, sin explicaciones ni markdown.
 

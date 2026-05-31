@@ -154,8 +154,8 @@ export default function LandingPage() {
             </svg>
           </div>
           <div>
-            <div className="font-display font-bold text-[16px] lg:text-[18px] tracking-tight" style={{ color: 'var(--bk)' }}>Fundares</div>
-            <div className="hidden sm:block font-mono text-[9px] lg:text-[9.5px] tracking-[0.16em] uppercase" style={{ color: 'var(--ink3)' }}>Plataforma de reciclaje</div>
+            <div className="font-display font-bold text-[16px] lg:text-[18px] tracking-tight" style={{ color: 'var(--bk)' }}>ARAM</div>
+            <div className="hidden sm:block font-mono text-[9px] lg:text-[9.5px] tracking-[0.16em] uppercase" style={{ color: 'var(--ink3)' }}>Recolección Automatizada Multicanal</div>
           </div>
         </div>
 
@@ -220,7 +220,7 @@ export default function LandingPage() {
             <motion.div initial={{ opacity: 0, y: 22 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.85, ease: EASE, delay: 0.05 }}
               className="inline-flex items-center gap-2.5 font-mono text-[10px] lg:text-[11px] tracking-[0.18em] uppercase mb-5 lg:mb-7" style={{ color: 'var(--green)' }}>
               <span className="w-[18px] h-[1.5px] inline-block" style={{ background: 'currentColor' }} />
-              Fundación para el Reciclaje · Bolivia
+              ARAM · Bolivia
             </motion.div>
 
             <motion.h1 initial={{ opacity: 0, y: 22 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.85, ease: EASE, delay: 0.15 }}
@@ -232,7 +232,7 @@ export default function LandingPage() {
 
             <motion.p initial={{ opacity: 0, y: 22 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.85, ease: EASE, delay: 0.28 }}
               className="text-[15px] lg:text-[17.5px] leading-[1.7] max-w-[460px] mt-5 mb-7 lg:mt-6 lg:mb-9" style={{ color: 'var(--bt)' }}>
-              Fundares convierte el mensaje desordenado del recolector — texto, foto o video — en datos validados, métricas de impacto y reportes certificados.
+              ARAM convierte el mensaje desordenado del recolector — texto, foto o video — en datos validados, métricas de impacto y reportes certificados.
             </motion.p>
 
             <motion.div initial={{ opacity: 0, y: 22 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.85, ease: EASE, delay: 0.4 }}
@@ -408,7 +408,7 @@ export default function LandingPage() {
           <div data-reveal>
             <div className="inline-flex items-center gap-2.5 font-mono text-[10px] lg:text-[11px] tracking-[0.18em] uppercase mb-4 lg:mb-5" style={{ color: 'var(--green)' }}>
               <span className="w-[18px] h-[1.5px] inline-block" style={{ background: 'currentColor' }} />
-              Qué hace Fundares
+              Qué hace ARAM
             </div>
             <h2 className="font-display font-black tracking-[-0.03em] leading-tight" style={{ fontSize: 'clamp(26px,4vw,50px)', color: 'var(--bk)' }}>
               Todo el ciclo del dato,<br/>en un solo lugar.
@@ -465,7 +465,7 @@ export default function LandingPage() {
             {[
               { n: '01', t: 'La empresa carga',  d: 'Texto, imagen o video del comprobante de recolección.',                        icon: <path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/> },
               { n: '02', t: 'La IA extrae',       d: 'Empresa, fecha, materiales y cantidades, con nivel de confianza.',              icon: <><path d="M12 2a10 10 0 110 20 10 10 0 010-20z"/><path d="M12 8v4l3 3"/></> },
-              { n: '03', t: 'Fundares valida',    d: 'Revisión y aprobación humana antes del registro oficial.',                     icon: <><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></> },
+              { n: '03', t: 'ARAM valida',    d: 'Revisión y aprobación humana antes del registro oficial.',                     icon: <><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 01-2 2H5a2 2 0 01-2-2V5a2 2 0 012-2h11"/></> },
               { n: '04', t: 'Reporte generado',   d: 'PDF certificado con impacto calculado, listo para compartir.', last: true,     icon: <><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/></> },
             ].map((step) => (
               <div key={step.n} className="step-item relative p-7 lg:p-9 lg:px-7 border-b sm:border-r lg:border-b-0 last:border-r-0" style={{ borderColor: 'rgba(255,255,255,0.1)', opacity: 0 }}>
@@ -514,7 +514,7 @@ export default function LandingPage() {
               <span className="font-medium italic" style={{ color: 'var(--gp)' }}>Empezá a medirlo.</span>
             </h2>
             <p className="text-[14px] lg:text-[16px] leading-[1.7] mb-7 lg:mb-8" style={{ color: 'rgba(231,239,226,0.74)' }}>
-              Solicitá acceso a Fundares y convertí cada recolección en datos que generan impacto real y verificable.
+              Solicitá acceso a ARAM y convertí cada recolección en datos que generan impacto real y verificable.
             </p>
             <div className="flex items-center gap-3 lg:gap-4 flex-wrap">
               <Link href="/login" className="inline-flex items-center gap-2 font-bold text-[14px] lg:text-[15px] py-3 lg:py-3.5 px-5 lg:px-7 rounded-[9px] transition-all hover:-translate-y-px group" style={{ background: 'var(--gp)', color: '#fff' }}>
@@ -537,11 +537,11 @@ export default function LandingPage() {
               <svg viewBox="0 0 24 24" className="w-[18px] h-[18px] stroke-white fill-none stroke-2 [stroke-linecap:round] [stroke-linejoin:round]"><path d="M12 22V12M12 12C12 7 7 5 3 7M12 12C12 7 17 5 21 7"/><circle cx="12" cy="12" r="2"/></svg>
             </div>
             <div>
-              <div className="font-display font-bold text-[15px]" style={{ color: 'var(--bg)' }}>Fundares</div>
-              <div className="font-mono text-[9.5px] tracking-[0.16em] uppercase" style={{ color: 'rgba(246,244,236,0.4)' }}>Plataforma de reciclaje</div>
+              <div className="font-display font-bold text-[15px]" style={{ color: 'var(--bg)' }}>ARAM</div>
+              <div className="font-mono text-[9.5px] tracking-[0.16em] uppercase" style={{ color: 'rgba(246,244,236,0.4)' }}>Recolección Automatizada Multicanal</div>
             </div>
           </div>
-          <div className="font-mono text-[11px] lg:text-[12px]" style={{ color: 'rgba(246,244,236,0.45)' }}>© {new Date().getFullYear()} Fundación para el Reciclaje · Santa Cruz, Bolivia</div>
+          <div className="font-mono text-[11px] lg:text-[12px]" style={{ color: 'rgba(246,244,236,0.45)' }}>© {new Date().getFullYear()} ARAM · Santa Cruz, Bolivia</div>
           <div className="flex gap-5 lg:gap-6">
             {['Privacidad', 'Términos', 'Contacto'].map(l => (
               <a key={l} href="#" className="text-[12px] lg:text-[12.5px] font-semibold transition-colors hover:text-[var(--gp)]" style={{ color: 'rgba(246,244,236,0.5)' }}>{l}</a>

@@ -98,8 +98,8 @@ export default function LoginPage() {
               </svg>
             </div>
             <div>
-              <p className="font-display font-bold text-[20px] text-black-heading tracking-tight leading-none">Fundares</p>
-              <p className="font-mono text-[10px] font-medium tracking-[0.16em] uppercase text-muted-text mt-1">Plataforma de reciclaje</p>
+              <p className="font-display font-bold text-[20px] text-black-heading tracking-tight leading-none">ARAM</p>
+              <p className="font-mono text-[10px] font-medium tracking-[0.16em] uppercase text-muted-text mt-1">Recolección Automatizada Multicanal</p>
             </div>
           </div>
 
@@ -181,7 +181,7 @@ export default function LoginPage() {
           </form>
 
           <p className="font-mono text-[11.5px] text-muted-text text-center tracking-[0.04em] mt-10">
-            Fundación para el Reciclaje · Santa Cruz, Bolivia
+            ARAM · Santa Cruz, Bolivia
           </p>
         </div>
       </div>
@@ -241,7 +241,7 @@ export default function LoginPage() {
           </h2>
 
           <p className="text-[16px] leading-[1.7] text-[rgba(231,239,226,0.74)] max-w-[400px]">
-            Gestión de recolección de materiales reciclables para la red de empresas aliadas a la Fundación para el Reciclaje.
+            Asistente de Recolección Automatizada Multicanal para empresas aliadas.
           </p>
 
           {/* Stats — real data */}

@@ -195,7 +195,7 @@ async function handleMessage(msg: TelegramMessage): Promise<void> {
     await resetConversacion(conversacion.id);
     await sendMessage(
       chatId,
-      '🌿 <b>Bot de Fundares</b>\n\nSoy el asistente de registro de recolecciones.\n\nPodés enviarme:\n• Un <b>mensaje de texto</b> con los datos del retiro\n• Una <b>foto</b> del remito o comprobante\n• Un <b>video</b> corto (máx. 2 min)\n\n¡Empezá enviando los datos de tu próxima recolección!',
+      '🌿 <b>Bot de ARAM</b>\n\nSoy el asistente de registro de recolecciones.\n\nPodés enviarme:\n• Un <b>mensaje de texto</b> con los datos del retiro\n• Una <b>foto</b> del remito o comprobante\n• Un <b>video</b> corto (máx. 2 min)\n\n¡Empezá enviando los datos de tu próxima recolección!',
     );
     return;
   }
@@ -352,7 +352,7 @@ async function handleCallbackQuery(cbq: TelegramCallbackQuery): Promise<void> {
     await editMessageText(
       chatId,
       cbq.message.message_id,
-      '✅ ¡Recolección guardada! Quedará visible en el panel de Fundares para su validación.',
+      '✅ ¡Recolección guardada! Quedará visible en el panel de ARAM para su validación.',
     );
   }
 }

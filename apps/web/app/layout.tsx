@@ -4,8 +4,8 @@ import { Providers } from './providers';
 import './globals.css';
 
 export const metadata: Metadata = {
-  title: 'Fundares Recycling Platform',
-  description: 'Plataforma digital de gestión de reciclaje · Fundares',
+  title: 'ARAM · Asistente de Recolección Automatizada Multicanal',
+  description: 'Asistente de Recolección Automatizada Multicanal',
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

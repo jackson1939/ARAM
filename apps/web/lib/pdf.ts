@@ -66,7 +66,7 @@ function ReportePDF({ empresa, recolecciones, anio, metricas }: ReporteProps) {
       // Header
       React.createElement(View, { style: styles.header },
         React.createElement(View, null,
-          React.createElement(Text, { style: styles.title }, 'Fundares Recycling'),
+          React.createElement(Text, { style: styles.title }, 'ARAM'),
           React.createElement(Text, { style: styles.subtitle },
             todasLasEmpresas
               ? `Reporte Global ${anio} — Todas las Empresas`
@@ -147,7 +147,7 @@ function ReportePDF({ empresa, recolecciones, anio, metricas }: ReporteProps) {
 
       // Footer
       React.createElement(Text, { style: styles.footer },
-        `Generado por Fundares Recycling Platform · ${new Date().toLocaleDateString('es-BO')}`
+        `Generado por ARAM Platform · ${new Date().toLocaleDateString('es-BO')}`
       ),
     )
   );

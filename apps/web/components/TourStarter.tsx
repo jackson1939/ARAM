@@ -14,13 +14,13 @@ export function TourStarter() {
     const tour = getTour(tourId);
     if (!tour) return;
 
-    // Remove the query param from the URL without navigating
-    const url = new URL(window.location.href);
-    url.searchParams.delete('tour');
-    window.history.replaceState({}, '', url.toString());
-
     // Small delay so the page finishes rendering
     const timer = setTimeout(async () => {
+      // Clean up URL here — after the timer fires it's too late to cancel it
+      const url = new URL(window.location.href);
+      url.searchParams.delete('tour');
+      window.history.replaceState({}, '', url.toString());
+
       const introJs = (await import('intro.js')).default;
 
       const instance = introJs();

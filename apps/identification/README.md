@@ -1,59 +1,77 @@
-# Identification Service — Age Verification
+# apps/identification — Servicio de Extracción IA
 
-Serverless REST API that verifies a user's age by analysing a government-issued identity document photo using **AWS Bedrock (Claude Sonnet 4.5)**.
+Servicio serverless que analiza mensajes de texto, imágenes y videos de recolecciones de materiales reciclables y devuelve datos estructurados usando Amazon Bedrock.
 
-**Base URL:** `https://cm981m6ag1.execute-api.us-east-1.amazonaws.com/api/v1`
+**Base URL (prod):** `https://um5iwhzmob.execute-api.us-east-1.amazonaws.com/api/v1`
 
 ---
 
 ## Stack
 
-| Layer | Technology |
-|-------|-----------|
+| Capa | Tecnología |
+|------|-----------|
 | Runtime | Node.js 22.x (AWS Lambda) |
-| Framework | [Hono](https://hono.dev) |
-| Build | esbuild — `< 50 ms`, minified in production |
-| AI model | Claude Sonnet 4.5 via AWS Bedrock (cross-region inference profile) |
-| Storage | S3 — temporary image staging (auto-deleted after verify) |
-| Infra | AWS CDK — API Gateway → Lambda → Bedrock + S3 |
+| Framework | Hono |
+| Build | esbuild — bundle único < 2 MB, minificado en producción |
+| Modelo primario | Amazon Nova 2 Lite via AWS Bedrock |
+| Modelo fallback | Amazon Nova Pro (activado si confianza es baja) |
+| Storage | S3 — staging temporal de imágenes/videos |
+| Infra | AWS CDK → API Gateway HTTP v2 → Lambda |
 
 ---
 
-## How it works
+## Cómo funciona
+
+### Texto
 
 ```
-Client                   Lambda                    AWS
-  │                         │                        │
-  │  POST /presign          │                        │
-  │ ──────────────────────► │                        │
-  │ { sessionId, uploadUrl }│                        │
-  │ ◄────────────────────── │                        │
-  │                         │                        │
-  │  PUT <uploadUrl> (image)│                        │
-  │ ──────────────────────────────────────────────► S3
-  │                         │                        │
-  │  POST /verify           │                        │
-  │ ──────────────────────► │                        │
-  │                         │── getObject ──────────► S3
-  │                         │── InvokeModel ────────► Bedrock
-  │                         │── deleteObject ───────► S3
-  │  VerificationResult     │                        │
-  │ ◄────────────────────── │                        │
+POST /extract/text  {message: "..."}
+        │
+        ▼
+  Nova 2 Lite — extrae empresa, fecha, materiales, cantidades
+        │
+        ▼
+  confidence < threshold?
+        │
+        ├─ no  → responde 200 con extracted
+        └─ sí  → reintenta con Nova Pro
+                      │
+                      ├─ ok  → responde 200 con extracted
+                      └─ falla → responde 422 EXTRACTION_FAILED
 ```
 
-1. **Presign** — client requests a presigned S3 upload URL + a `sessionId`.
-2. **Upload** — client PUTs the image directly to S3 (never touches Lambda bandwidth).
-3. **Verify** — Lambda reads the image, sends it to Claude Sonnet 4.5 for analysis, deletes the image from S3, and returns the result.
+### Imagen / Video
+
+```
+1. POST /extract/presign  {mimeType}
+        → devuelve {sessionId, uploadUrl}
+
+2. PUT <uploadUrl>  (directo a S3, sin pasar por Lambda)
+
+3. POST /extract/media  {sessionId, type, notes?}
+        │
+        ▼
+  Paso 1 — Nova 2 Lite describe lo que ve en la imagen/video
+  (two-step: descripción visual → extracción estructurada)
+        │
+        ▼
+  Paso 2 — extrae JSON con empresa, fecha, materiales
+  usando la descripción como contexto adicional
+        │
+        ▼
+  confidence check → fallback a Nova Pro si es baja
+        │
+        ▼
+  Lambda elimina el archivo de S3 tras cada análisis
+```
+
+El two-step para imágenes mejora significativamente la precisión en fotos de documentos parciales, notas manuscritas y fotos de materiales sin remito.
 
 ---
 
 ## API Reference
 
-### Health
-
-| Method | Path |
-|--------|------|
-| `GET` | `/api/v1/health` |
+### `GET /api/v1/health`
 
 ```json
 { "status": "ok" }
@@ -61,185 +79,296 @@ Client                   Lambda                    AWS
 
 ---
 
-### POST `/api/v1/identification/presign`
+### `POST /api/v1/extract/text`
 
-Request a presigned S3 upload URL before sending the document image.
+**Request**
+```json
+{
+  "message": "Empresa Verdesur entregó 50 kg de papel y 20 kg de cartón el 15/06/2026"
+}
+```
 
-**Request body**
+**Response `200`**
+```json
+{
+  "data": {
+    "sessionId": "a1b2c3d4-...",
+    "inputType": "text",
+    "confidence": "high",
+    "extracted": {
+      "company": "Verdesur",
+      "date": "2026-06-15",
+      "materials": [
+        { "type": "papel",  "quantity": 50, "unit": "kg" },
+        { "type": "cartón", "quantity": 20, "unit": "kg" }
+      ],
+      "notes": null
+    },
+    "usage": {
+      "inputTokens": 398,
+      "outputTokens": 81,
+      "costUsd": 0.00005698,
+      "modelId": "us.amazon.nova-2-lite-v1:0"
+    }
+  }
+}
+```
 
+**Response `422`** — no se pudo extraer
+```json
+{
+  "data": {
+    "sessionId": "a1b2c3d4-...",
+    "inputType": "text",
+    "confidence": "low",
+    "extracted": null,
+    "rejectedReasons": ["no_collection_data"],
+    "usage": { ... }
+  }
+}
+```
+
+---
+
+### `POST /api/v1/extract/presign`
+
+**Request**
 ```json
 { "mimeType": "image/jpeg" }
 ```
 
-| Field | Type | Required | Values |
-|-------|------|:--------:|--------|
-| `mimeType` | `string` | ✅ | `image/jpeg` \| `image/png` \| `image/webp` |
+Formatos soportados: `image/jpeg` · `image/png` · `image/webp` · `video/mp4` · `video/quicktime` · `video/avi` · `video/x-matroska`
 
 **Response `200`**
-
 ```json
 {
   "data": {
-    "sessionId": "550e8400-e29b-41d4-a716-446655440000",
+    "sessionId": "f9f3b2dc-...",
     "uploadUrl": "https://s3.amazonaws.com/...",
     "expiresIn": 300
   }
 }
 ```
 
-| Field | Description |
+> El PUT a S3 debe incluir `Content-Type: <mimeType>` o S3 rechaza con 403. No agregar headers de Authorization.
+
+---
+
+### `POST /api/v1/extract/media`
+
+**Request**
+```json
+{
+  "sessionId": "f9f3b2dc-...",
+  "type": "image",
+  "notes": "Empresa Verdesur, retiro del 15/06. El remito está incompleto."
+}
+```
+
+| Campo | Tipo | Requerido | Descripción |
+|-------|------|-----------|-------------|
+| `sessionId` | string | ✅ | De `/extract/presign` |
+| `type` | `"image"` \| `"video"` | ✅ | Debe coincidir con lo subido |
+| `notes` | string | no | Contexto adicional. Se inyecta al prompt antes de la extracción estructurada. Útil cuando imagen/video no muestra empresa o fecha claramente. |
+
+**Response `200` — con documento**
+```json
+{
+  "data": {
+    "sessionId": "f9f3b2dc-...",
+    "inputType": "image",
+    "confidence": "high",
+    "extracted": {
+      "company": "Recicladora del Sur S.R.L.",
+      "date": "2026-06-15",
+      "materials": [
+        { "type": "papel",  "quantity": 80, "unit": "kg" },
+        { "type": "vidrio", "quantity": 30, "unit": "kg" }
+      ],
+      "notes": "Sello RECIBIDO visible"
+    },
+    "description": "The image shows a delivery receipt...",
+    "usage": { ... }
+  }
+}
+```
+
+**Response `200` — foto de materiales sin documento** (campos no visibles retornan `null`, nunca se inventan)
+```json
+{
+  "data": {
+    "confidence": "medium",
+    "extracted": {
+      "company": null,
+      "date": null,
+      "materials": [
+        { "type": "cartón", "quantity": null, "unit": null }
+      ],
+      "notes": null
+    },
+    "description": "The image shows flattened cardboard boxes...",
+    ...
+  }
+}
+```
+
+---
+
+## Niveles de confianza
+
+| Valor | Significado |
 |-------|-------------|
-| `sessionId` | Opaque token — pass it to `POST /verify`. |
-| `uploadUrl` | Presigned S3 PUT URL. Set `Content-Type` to the same `mimeType`. |
-| `expiresIn` | Seconds until the URL expires (300 s = 5 min). |
+| `"high"` | Confianza ≥ 0.75 — todos los campos clave presentes |
+| `"medium"` | Confianza 0.45–0.74 — algunos campos pueden ser `null` |
+| `"low"` | Confianza < 0.45 — `extracted` siempre es `null` |
 
-> **Important:** The `PUT` request to S3 must include the header `Content-Type: <mimeType>` or S3 will reject it with 403.
+Cuando Nova 2 Lite devuelve `"low"`, el servicio reintenta automáticamente con Nova Pro. Si Nova Pro también devuelve `"low"`, responde `422`.
 
 ---
 
-### POST `/api/v1/identification/verify`
+## Códigos de rechazo
 
-Analyse the uploaded document and return the verification result.
+| Código | Cuándo aparece |
+|--------|---------------|
+| `no_collection_data` | El input no contiene datos de recolección |
+| `low_confidence` | Confianza baja después del retry con Nova Pro |
+| `not_a_collection_document` | Imagen es un documento pero no de reciclaje |
+| `no_recycling_data` | Sin información reconocible de materiales |
+| `poor_image_quality` | Imagen demasiado borrosa u oscura |
+| `poor_video_quality` | Video muy corto, oscuro o fuera de foco |
 
-**Request body**
+---
 
-```json
-{ "sessionId": "550e8400-e29b-41d4-a716-446655440000" }
-```
+## Errores HTTP
 
-**Response `200` — Approved**
+| Status | Código | Causa |
+|--------|--------|-------|
+| `400` | `MISSING_MESSAGE` | Falta `message` en `/extract/text` |
+| `400` | `MISSING_SESSION_ID` | Falta `sessionId` en `/extract/media` |
+| `400` | `MISSING_MIME_TYPE` | Falta `mimeType` en `/extract/presign` |
+| `400` | `INVALID_TYPE` | `type` no es `image` ni `video` |
+| `404` | `SESSION_NOT_FOUND` | Sesión expirada o archivo nunca subido |
+| `415` | `UNSUPPORTED_MIME_TYPE` | Formato no soportado |
+| `422` | `EXTRACTION_FAILED` | Confianza baja tras retry con Nova Pro |
+| `500` | — | Error inesperado en Lambda o Bedrock |
 
-```json
-{
-  "data": {
-    "sessionId": "550e8400-e29b-41d4-a716-446655440000",
-    "approved": true,
-    "details": {
-      "isAdult": true,
-      "appearsAuthentic": true,
-      "imageQuality": "good",
-      "confidence": 0.97,
-      "dob": "1995-03-14"
-    },
-    "rejectedReasons": []
-  }
+Todos los errores siguen el envelope: `{ "error": { "code": "...", "message": "..." } }`
+
+---
+
+## Integración completa (TypeScript)
+
+```typescript
+const API = 'https://um5iwhzmob.execute-api.us-east-1.amazonaws.com/api/v1';
+
+// ── Texto ────────────────────────────────────────────────────────────────────
+async function extractFromText(message: string) {
+  const res = await fetch(`${API}/extract/text`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ message }),
+  });
+  if (!res.ok && res.status !== 422) throw new Error(await res.text());
+  const { data } = await res.json();
+  return data;
+}
+
+// ── Imagen / Video ────────────────────────────────────────────────────────────
+async function extractFromFile(file: File, notes?: string) {
+  const type = file.type.startsWith('video/') ? 'video' : 'image';
+
+  // 1. Presign
+  const presignRes = await fetch(`${API}/extract/presign`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ mimeType: file.type }),
+  });
+  const { data: presign } = await presignRes.json();
+
+  // 2. Subir directo a S3
+  await fetch(presign.uploadUrl, {
+    method: 'PUT',
+    headers: { 'Content-Type': file.type },
+    body: file,
+  });
+
+  // 3. Extraer
+  const extractRes = await fetch(`${API}/extract/media`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      sessionId: presign.sessionId,
+      type,
+      ...(notes?.trim() ? { notes: notes.trim() } : {}),
+    }),
+  });
+  if (!extractRes.ok && extractRes.status !== 422) throw new Error(await extractRes.text());
+  const { data } = await extractRes.json();
+  return data;
 }
 ```
 
-**Response `422` — Rejected**
+---
 
-```json
-{
-  "data": {
-    "sessionId": "550e8400-e29b-41d4-a716-446655440000",
-    "approved": false,
-    "details": {
-      "isAdult": false,
-      "appearsAuthentic": true,
-      "imageQuality": "acceptable",
-      "confidence": 0.91,
-      "dob": "2010-07-22"
-    },
-    "rejectedReasons": ["underage"]
-  }
-}
+## Estructura del código
+
+```
+src/
+├── index.ts                        # Lambda handler (entry point)
+├── main.ts                         # Local dev server
+├── app.ts                          # Hono app — middlewares, rutas
+├── config/
+│   ├── config.ts                   # Variables de entorno
+│   ├── logger.ts                   # Logger estructurado
+│   ├── middleware.ts               # CORS, logging, error handling
+│   └── router.ts                   # Registro de módulos
+├── common/
+│   ├── adapters/bedrock/
+│   │   ├── nova.adapter.ts         # Amazon Nova 2 Lite + Nova Pro
+│   │   └── claude.adapter.ts       # Claude Haiku/Sonnet (disponible)
+│   └── services/
+│       ├── bedrock.service.ts      # Wrapper Bedrock Converse API
+│       └── s3.service.ts           # Upload / presign / delete
+└── modules/identification/
+    ├── identification.controller.ts
+    ├── identification.service.ts   # Lógica de extracción + two-step
+    ├── identification.dto.ts       # Validación de requests
+    ├── identification.types.ts     # Tipos de respuesta
+    └── pricing.ts                  # Cálculo de costo por tokens
 ```
 
-**`rejectedReasons` codes**
+---
 
-| Code | Meaning |
-|------|---------|
-| `not_identity_document` | Image is not a government-issued ID (selfie, receipt, blank photo, etc.) |
-| `underage` | Person is under 18 based on the date of birth on the document |
-| `document_not_authentic` | Document shows signs of tampering or forgery |
-| `low_confidence` | Model confidence below the configured threshold (default `0.85`) |
-| `poor_image_quality` | Image is too blurry or dark to analyse reliably |
+## Variables de entorno
 
-> `not_identity_document` is always returned alone — no further checks run when the image is not a valid document.
+| Variable | Descripción | Valor en prod |
+|----------|-------------|---------------|
+| `BEDROCK_MODEL_ID` | Modelo primario | `global.amazon.nova-2-lite-v1:0` |
+| `BEDROCK_FALLBACK_MODEL_ID` | Modelo fallback | `amazon.nova-pro-v1:0` |
+| `S3_COLLECTIONS_BUCKET` | Bucket para staging de media | `fundares-prod-collections` |
+| `CONFIDENCE_THRESHOLD` | Umbral para activar fallback (0–1) | `0.75` |
+| `CORS_ORIGINS` | Orígenes permitidos | `*` o dominio específico |
+| `LOG_LEVEL` | Nivel de logs | `info` |
+
+Variables sensibles en **AWS Secrets Manager** bajo `fundares/prod/app`.
 
 ---
 
-## AI Model — Claude Sonnet 4.5
+## Desarrollo local
 
-| Setting | Value |
-|---------|-------|
-| Model ID | `us.anthropic.claude-sonnet-4-5-20250929-v1:0` |
-| Invocation | Cross-region inference profile (required for on-demand throughput) |
-| Max tokens | `512` |
-| Temperature | `0` (deterministic) |
-| Confidence threshold | `0.85` (configurable via `CONFIDENCE_THRESHOLD` env var) |
-
-### What the model extracts
-
-- `is_identity_document` — whether the image is a government-issued document at all
-- `full_name` — full legal name as printed
-- `dob` — date of birth (`YYYY-MM-DD`)
-- `document_number` — ID or passport number
-- `is_adult` — calculated from `dob` vs today
-- `appears_authentic` — no visible signs of tampering
-- `image_quality` — `good` | `acceptable` | `poor`
-- `confidence` — overall confidence `0.0–1.0`
-
-### Security — prompt injection & jailbreak prevention
-
-The system prompt enforces strict guardrails:
-- Text embedded in the image cannot override the model's role or output format.
-- The model never reveals its system prompt or instructions.
-- Jailbreak attempts or manipulation trigger the `not_identity_document` fallback with `confidence: 0`.
-
----
-
-## Environment Variables
-
-| Variable | Description | Example |
-|----------|-------------|---------|
-| `BEDROCK_MODEL_ID` | Bedrock inference profile ID | `us.anthropic.claude-sonnet-4-5-20250929-v1:0` |
-| `S3_VERIFICATION_BUCKET` | Bucket for temporary image staging | `decouple-services-dev-verification` |
-| `CONFIDENCE_THRESHOLD` | Minimum confidence to approve (0–1) | `0.85` |
-| `CORS_ORIGINS` | Allowed origins (comma-separated or `*`) | `https://app.example.com` |
-| `LOG_LEVEL` | Logger level | `debug` \| `info` \| `warn` \| `error` |
-| `DATABASE_URL` | PostgreSQL connection string | `postgresql://user:pass@host:5432/db` |
-
-Sensitive variables are stored in **AWS Secrets Manager** under `decouple-services/<env>/app` and injected at deploy time.
-
----
-
-## Error Responses
-
-All errors follow the same envelope:
-
-```json
-{ "error": "<message>", "code": "<CODE>" }
+```bash
+cd apps/identification
+npm install
+npm run dev     # servidor local en puerto 4000
+npm run build   # build de desarrollo (con source maps)
+npm run build:prod  # build de producción (minificado)
 ```
-
-| Status | Code | Cause |
-|--------|------|-------|
-| `400` | `MISSING_MIME_TYPE` | `mimeType` not provided in presign request |
-| `415` | `UNSUPPORTED_MIME_TYPE` | `mimeType` not in `image/jpeg`, `image/png`, `image/webp` |
-| `400` | `MISSING_SESSION_ID` | `sessionId` not provided in verify request |
-| `404` | — | Session not found (expired or never uploaded) |
-| `422` | — | Verification complete but document rejected (see `rejectedReasons`) |
-| `500` | — | Unexpected Lambda or Bedrock error |
-
----
-
-## Scripts
-
-| Command | Description |
-|---------|-------------|
-| `npm run build` | Development build (source maps on) |
-| `npm run build:prod` | Production build (minified, no source maps) |
-| `npm run dev` | Local server via `main.ts` (ECS-compatible) |
 
 ## Deploy
 
 ```bash
 cd infra
-npx cdk deploy DecoupleServicesStack-Dev
+npx cdk deploy FundaresStack-Prod -c environment=prod
 ```
 
-IAM permissions required on the Lambda role:
-- `bedrock:InvokeModel` on `arn:aws:bedrock:*:<account>:inference-profile/us.anthropic.claude-sonnet-4*` and `arn:aws:bedrock:*::foundation-model/anthropic.claude-sonnet-4*`
-- `s3:GetObject`, `s3:PutObject`, `s3:DeleteObject` on the verification bucket
-- `secretsmanager:GetSecretValue` on the app secret
-- `aws-marketplace:ViewSubscriptions`, `aws-marketplace:Subscribe` for first-time Bedrock model activation
+Documentación de infraestructura: [`infra/README.md`](../../infra/README.md)

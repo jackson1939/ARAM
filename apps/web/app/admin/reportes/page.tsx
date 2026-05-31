@@ -184,29 +184,29 @@ export default function AdminReportesPage() {
 
       {/* ── Right panel ── */}
       <div className="flex-1 flex flex-col overflow-hidden">
-        <div className="flex items-center justify-between px-6 py-3.5 border-b border-border-default bg-card flex-shrink-0">
-          <div>
-            <p className="font-extrabold text-[15px] text-black-heading">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 px-4 sm:px-6 py-3 sm:py-3.5 border-b border-border-default bg-card flex-shrink-0">
+          <div className="min-w-0">
+            <p className="font-extrabold text-[14px] sm:text-[15px] text-black-heading truncate">
               {selectedEmpresa ? selectedEmpresa.nombre : 'Todas las empresas'}
             </p>
             <p className="text-[12px] text-body-text">{rangeLabel(filtroTipo, anio, mes, desde, hasta)}</p>
           </div>
-          <div className="flex items-center gap-2">
+          <div className="flex items-center gap-2 flex-shrink-0">
             <button onClick={handleDescargarExcel} disabled={generandoExcel}
-              className="inline-flex items-center gap-1.5 bg-[#217346] hover:bg-[#1a5c38] text-white text-[13px] font-bold px-4 py-2 rounded-[8px] disabled:opacity-50 transition-colors">
-              <Download className="w-3.5 h-3.5"/>
-              {generandoExcel ? 'Generando…' : 'Descargar Excel'}
+              className="inline-flex items-center gap-1.5 bg-[#217346] hover:bg-[#1a5c38] text-white text-[12px] sm:text-[13px] font-bold px-3 sm:px-4 py-2 rounded-[8px] disabled:opacity-50 transition-colors whitespace-nowrap">
+              <Download className="w-3.5 h-3.5 flex-shrink-0"/>
+              {generandoExcel ? 'Generando…' : <><span className="hidden sm:inline">Descargar </span>Excel</>}
             </button>
             <button data-tour="btn-descargar" onClick={handleDescargar} disabled={generando}
-              className="inline-flex items-center gap-1.5 bg-[#4BAF47] hover:bg-[#3d9a3a] text-white text-[13px] font-bold px-4 py-2 rounded-[8px] disabled:opacity-50 transition-colors">
-              <Download className="w-3.5 h-3.5"/>
-              {generando ? 'Generando…' : 'Descargar PDF'}
+              className="inline-flex items-center gap-1.5 bg-[#4BAF47] hover:bg-[#3d9a3a] text-white text-[12px] sm:text-[13px] font-bold px-3 sm:px-4 py-2 rounded-[8px] disabled:opacity-50 transition-colors whitespace-nowrap">
+              <Download className="w-3.5 h-3.5 flex-shrink-0"/>
+              {generando ? 'Generando…' : <><span className="hidden sm:inline">Descargar </span>PDF</>}
             </button>
           </div>
         </div>
 
         <div className="flex-1 overflow-y-auto p-6 space-y-5">
-          <div className="grid grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
             <MetricCard loading={loadingPreview} label="Total reciclado" value={`${preview?.metricas.total_kg ?? 0} kg`} icon={Recycle} color="green"/>
             <MetricCard loading={loadingPreview} label="CO₂ evitado" value={`${preview?.metricas.co2_kg ?? 0} kg`} icon={Droplets} color="blue"/>
             <MetricCard loading={loadingPreview} label="Agua ahorrada" value={`${(preview?.metricas.agua_litros ?? 0).toLocaleString()} L`} icon={TreePine} color="blue"/>

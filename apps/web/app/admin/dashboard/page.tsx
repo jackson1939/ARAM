@@ -194,19 +194,19 @@ export default async function AdminDashboardPage() {
       </div>
 
       {/* Row 3 — impact cards */}
-      <div data-tour="impact-cards" className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <div className="rounded-[12px] border border-border-default p-5 text-center bg-green-light">
-          <p className="text-3xl font-black text-[#4BAF47]">{metricas.co2_kg}</p>
+      <div data-tour="impact-cards" className="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
+        <div className="rounded-[12px] border border-border-default p-4 sm:p-5 text-center bg-green-light min-w-0">
+          <p className="font-black text-[#4BAF47] break-all leading-tight" style={{ fontSize: 'clamp(22px, 5vw, 30px)' }}>{metricas.co2_kg}</p>
           <p className="text-body-text text-sm mt-1">kg CO₂ evitado</p>
         </div>
-        <div className="rounded-[12px] border border-border-default p-5 text-center bg-bg-page">
-          <p className="text-3xl font-black text-black-heading">
+        <div className="rounded-[12px] border border-border-default p-4 sm:p-5 text-center bg-bg-page min-w-0">
+          <p className="font-black text-black-heading break-all leading-tight" style={{ fontSize: 'clamp(22px, 5vw, 30px)' }}>
             {metricas.agua_litros.toLocaleString()}
           </p>
           <p className="text-body-text text-sm mt-1">Agua ahorrada (L)</p>
         </div>
-        <div className="rounded-[12px] border border-border-default p-5 text-center bg-bg-page">
-          <p className="text-3xl font-black text-black-heading">{metricas.arboles}</p>
+        <div className="rounded-[12px] border border-border-default p-4 sm:p-5 text-center bg-bg-page min-w-0">
+          <p className="font-black text-black-heading break-all leading-tight" style={{ fontSize: 'clamp(22px, 5vw, 30px)' }}>{metricas.arboles}</p>
           <p className="text-body-text text-sm mt-1">Árboles equivalentes</p>
         </div>
       </div>

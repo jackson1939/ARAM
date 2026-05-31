@@ -258,9 +258,9 @@ export default function MonitoreoPage() {
                 { label: 'Validados',  value: (stats as CanalStat).validados ?? 0,        color: '#2E7D32' },
                 { label: 'Rechazados', value: (stats as CanalStat).rechazados ?? 0,       color: '#D32F2F' },
               ].map(card => (
-                <div key={card.label} className="bg-card rounded-[10px] border border-border-default px-4 py-4">
-                  <div className="text-[12px] font-semibold text-body-text uppercase tracking-wide mb-1">{card.label}</div>
-                  <div className="text-3xl font-extrabold tracking-tight" style={{ color: card.color }}>
+                <div key={card.label} className="bg-card rounded-[10px] border border-border-default px-3 sm:px-4 py-3 sm:py-4 min-w-0">
+                  <div className="text-[11px] sm:text-[12px] font-semibold text-body-text uppercase tracking-wide mb-1 truncate">{card.label}</div>
+                  <div className="font-extrabold tracking-tight leading-none break-all" style={{ color: card.color, fontSize: 'clamp(18px, 4vw, 30px)' }}>
                     {card.value}
                   </div>
                 </div>
@@ -268,21 +268,21 @@ export default function MonitoreoPage() {
             </div>
 
             {/* Second row: kg + recolectores + usuarios */}
-            <div className="grid grid-cols-3 gap-3">
-              <div className="bg-card rounded-[10px] border border-border-default px-4 py-4">
-                <div className="text-[12px] font-semibold text-body-text uppercase tracking-wide mb-1">Kg total extraído</div>
-                <div className="text-2xl font-extrabold text-black-heading">
-                  {extracciones.reduce((s, e) => s + parseFloat(e.cantidad_kg ?? '0'), 0).toLocaleString('es-AR', { maximumFractionDigits: 1 })}
-                  <span className="text-sm font-semibold text-body-text ml-1">kg</span>
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              <div className="bg-card rounded-[10px] border border-border-default px-4 py-4 min-w-0">
+                <div className="text-[11px] sm:text-[12px] font-semibold text-body-text uppercase tracking-wide mb-1">Kg total extraído</div>
+                <div className="font-extrabold text-black-heading leading-none flex items-baseline gap-1 flex-wrap" style={{ fontSize: 'clamp(18px, 4vw, 24px)' }}>
+                  <span className="break-all">{extracciones.reduce((s, e) => s + parseFloat(e.cantidad_kg ?? '0'), 0).toLocaleString('es-AR', { maximumFractionDigits: 1 })}</span>
+                  <span className="text-sm font-semibold text-body-text">kg</span>
                 </div>
               </div>
-              <div className="bg-card rounded-[10px] border border-border-default px-4 py-4">
-                <div className="text-[12px] font-semibold text-body-text uppercase tracking-wide mb-1">Recolectores</div>
-                <div className="text-2xl font-extrabold text-black-heading">{recolectores.length}</div>
+              <div className="bg-card rounded-[10px] border border-border-default px-4 py-4 min-w-0">
+                <div className="text-[11px] sm:text-[12px] font-semibold text-body-text uppercase tracking-wide mb-1">Recolectores</div>
+                <div className="font-extrabold text-black-heading leading-none" style={{ fontSize: 'clamp(18px, 4vw, 24px)' }}>{recolectores.length}</div>
               </div>
-              <div className="bg-card rounded-[10px] border border-border-default px-4 py-4">
-                <div className="text-[12px] font-semibold text-body-text uppercase tracking-wide mb-1">Usuarios únicos</div>
-                <div className="text-2xl font-extrabold text-black-heading">
+              <div className="bg-card rounded-[10px] border border-border-default px-4 py-4 min-w-0">
+                <div className="text-[11px] sm:text-[12px] font-semibold text-body-text uppercase tracking-wide mb-1">Usuarios únicos</div>
+                <div className="font-extrabold text-black-heading leading-none" style={{ fontSize: 'clamp(18px, 4vw, 24px)' }}>
                   {(stats as CanalStat).usuarios_unicos ?? 0}
                 </div>
               </div>

@@ -58,17 +58,21 @@ export default function EmpresaDashboardPage() {
 
       {/* Impact banner */}
       {!loading && totalKg > 0 && (
-        <div className="relative rounded-card overflow-hidden bg-[var(--forest)] text-white p-7 flex items-center justify-between gap-6 flex-wrap">
+        <div className="relative rounded-card overflow-hidden bg-[var(--forest)] text-white px-5 py-5 sm:p-7 flex items-center justify-between gap-4 flex-wrap">
           <div className="absolute w-64 h-64 rounded-full bg-[rgba(75,175,71,0.15)] -right-16 -top-20 pointer-events-none" />
-          <div className="relative z-10">
-            <p className="font-mono text-[11px] font-medium tracking-[0.18em] uppercase text-[#4BAF47] mb-2 flex items-center gap-2">
-              <span className="w-4 h-px bg-[#4BAF47] inline-block" /> Total reciclado · {new Date().getFullYear()}
+          <div className="relative z-10 min-w-0">
+            <p className="font-mono text-[10px] sm:text-[11px] font-medium tracking-[0.18em] uppercase text-[#4BAF47] mb-2 flex items-center gap-2">
+              <span className="w-4 h-px bg-[#4BAF47] inline-block shrink-0" /> Total reciclado · {new Date().getFullYear()}
             </p>
-            <h2 className="font-display font-bold text-[30px] tracking-tight leading-none text-white">
-              {totalKg.toLocaleString()} <small className="text-[18px] font-bold text-white/70">kg · {totalRec} recolecciones</small>
+            <h2 className="font-display font-bold tracking-tight leading-tight text-white break-words"
+                style={{ fontSize: 'clamp(20px, 5vw, 30px)' }}>
+              {totalKg.toLocaleString()}{' '}
+              <small className="font-bold text-white/70" style={{ fontSize: 'clamp(14px, 3vw, 18px)' }}>
+                kg · {totalRec} recolecciones
+              </small>
             </h2>
           </div>
-          <span className="relative z-10 inline-flex items-center gap-2 text-[12px] font-mono font-medium text-white/80 bg-white/10 px-3 py-1.5 rounded-full">
+          <span className="relative z-10 inline-flex items-center gap-2 text-[11px] sm:text-[12px] font-mono font-medium text-white/80 bg-white/10 px-3 py-1.5 rounded-full shrink-0">
             <span className="w-1.5 h-1.5 rounded-full bg-[#4BAF47] animate-pulse" />
             en vivo
           </span>

@@ -4,9 +4,10 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { signOut } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import { Menu, Plus, LogOut, ChevronDown, Sun, Moon } from 'lucide-react';
+import { Menu, Plus, LogOut, ChevronDown, Sun, Moon, PanelRight } from 'lucide-react';
 import { useState } from 'react';
 import { useTheme } from '@/components/ThemeProvider';
+import { useDrawer } from '@/components/Drawer';
 
 interface PageMeta {
   title: string;
@@ -41,6 +42,7 @@ export function AppHeader({ onToggleSidebar, userName, userEmail, rol }: AppHead
   const router    = useRouter();
   const [menuOpen, setMenuOpen] = useState(false);
   const { theme, toggle: toggleTheme } = useTheme();
+  const drawer = useDrawer();
 
   const meta   = PAGE_META[pathname] ?? { title: 'Fundares' };
   const initials = (userName ?? userEmail ?? 'U')
@@ -76,6 +78,23 @@ export function AppHeader({ onToggleSidebar, userName, userEmail, rol }: AppHead
 
       {/* Right */}
       <div className="flex items-center gap-2 flex-shrink-0">
+
+        {/* Drawer toggle */}
+        <button
+          onClick={() => drawer.open({
+            title: 'Panel',
+            children: (
+              <div className="p-5 space-y-3">
+                <p className="text-sm text-body-text">Usá <code className="bg-bg-page px-1 rounded text-xs">useDrawer().open()</code> desde cualquier página para insertar contenido aquí.</p>
+              </div>
+            ),
+          })}
+          className="w-8 h-8 rounded-[7px] flex items-center justify-center text-body-text hover:bg-bg-page hover:text-black-heading transition-colors flex-shrink-0"
+          aria-label="Abrir panel"
+          title="Panel lateral"
+        >
+          <PanelRight className="w-4 h-4" />
+        </button>
 
         {/* Theme toggle */}
         <button

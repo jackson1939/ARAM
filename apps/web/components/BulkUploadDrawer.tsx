@@ -82,9 +82,10 @@ function normalizeRows(raw: Record<string, unknown>[]): ParsedRow[] {
 function downloadTemplate() {
   const ws = XLSX.utils.aoa_to_sheet([
     ['fecha',       'material', 'cantidad_kg'],
-    ['2025-06-01',  'papel',    120          ],
-    ['2025-06-03',  'plástico', 85           ],
-    ['2025-06-05',  'cartón',   200          ],
+    ['2026-05-05',  'papel',    120          ],
+    ['2026-05-12',  'plástico', 85           ],
+    ['2026-05-20',  'cartón',   200          ],
+    ['2026-05-27',  'vidrio',   60           ],
   ]);
   ws['!cols'] = [{ wch: 14 }, { wch: 16 }, { wch: 14 }];
   const wb = XLSX.utils.book_new();
@@ -136,7 +137,7 @@ function UploadZone({ onParsed }: { onParsed: (rows: ParsedRow[]) => void }) {
         <p className="text-[12px] font-bold text-black-heading mb-2">Formato esperado</p>
         <div className="grid grid-cols-3 gap-2 text-center">
           {[
-            { col: 'fecha',        hint: '2025-06-01', req: true  },
+            { col: 'fecha',        hint: '2026-05-15', req: true  },
             { col: 'material',     hint: 'papel',      req: true  },
             { col: 'cantidad_kg',  hint: '120',        req: true  },
           ].map(c => (

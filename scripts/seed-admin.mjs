@@ -184,3 +184,51 @@ await sql`
 console.log('Admin user created successfully');
 console.log(`Email: ${email}`);
 console.log(`Password: ${password}`);
+
+// ── Demo empresa user ─────────────────────────────────────────────────────────
+
+const demoEmpresaEmail    = 'empresa@demo.com';
+const demoEmpresaPassword = '12345';
+const demoEmpresaNombre   = 'Empresa Demo';
+
+const demoEmpresaPasswordHash = await bcrypt.hash(demoEmpresaPassword, 12);
+
+const existingDemoEmpresa = await sql`SELECT id FROM users WHERE email = ${demoEmpresaEmail} LIMIT 1`;
+
+if (existingDemoEmpresa.length > 0) {
+  const demoUserId = existingDemoEmpresa[0].id;
+  console.log(`\nDemo empresa user already exists: ${demoEmpresaEmail}. Updating password...`);
+  await sql`UPDATE users SET password_hash = ${demoEmpresaPasswordHash} WHERE id = ${demoUserId}`;
+  console.log('Demo empresa user updated.');
+} else {
+  // Create demo empresa
+  const [demoEmpresa] = await sql`
+    INSERT INTO empresas (nombre, contacto_email)
+    VALUES (${demoEmpresaNombre}, ${demoEmpresaEmail})
+    ON CONFLICT DO NOTHING
+    RETURNING id
+  `;
+
+  let demoEmpresaId = demoEmpresa?.id;
+  if (!demoEmpresaId) {
+    const [existing] = await sql`SELECT id FROM empresas WHERE nombre = ${demoEmpresaNombre} LIMIT 1`;
+    demoEmpresaId = existing?.id;
+  }
+
+  // Create demo user
+  const [demoUser] = await sql`
+    INSERT INTO users (email, password_hash)
+    VALUES (${demoEmpresaEmail}, ${demoEmpresaPasswordHash})
+    RETURNING id
+  `;
+
+  await sql`
+    INSERT INTO perfiles (id, rol, empresa_id, nombre)
+    VALUES (${demoUser.id}, 'empresa', ${demoEmpresaId}, ${demoEmpresaNombre})
+  `;
+
+  console.log(`\nDemo empresa user created:`);
+  console.log(`  Email:    ${demoEmpresaEmail}`);
+  console.log(`  Password: ${demoEmpresaPassword}`);
+  console.log(`  Empresa:  ${demoEmpresaNombre}`);
+}

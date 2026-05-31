@@ -33,6 +33,7 @@ export default withAuth(
           path.startsWith('/api/webhook') ||
           path.startsWith('/api/telegram') ||
           path.startsWith('/api/auth') ||
+          path === '/api/public-stats' ||
           path === '/login'
         ) {
           return true;

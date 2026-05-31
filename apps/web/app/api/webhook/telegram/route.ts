@@ -7,6 +7,6 @@ export async function POST(req: NextRequest) {
     return new Response('ok');
   }
   const update = await req.json();
-  handleTelegramUpdate(update).catch(console.error);
+  await handleTelegramUpdate(update).catch(console.error);
   return new Response('ok');
 }

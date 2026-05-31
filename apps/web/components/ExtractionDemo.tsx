@@ -104,16 +104,10 @@ function formatUsd(usd: number): string {
   return `$${usd.toFixed(5)}`;
 }
 
-function confBg(c?: string | null): string {
-  if (c === 'high')   return '#EDF7ED';
-  if (c === 'medium') return '#FFF8E1';
-  return '#FBEAEA';
-}
-
-function confFg(c?: string | null): string {
-  if (c === 'high')   return '#4BAF47';
-  if (c === 'medium') return '#F57F17';
-  return '#D32F2F';
+function confClasses(c?: string | null): string {
+  if (c === 'high')   return 'bg-green-light text-[#4BAF47]';
+  if (c === 'medium') return 'bg-warning-light text-[#F57F17] dark:text-[#FFB74D]';
+  return 'bg-[#FBEAEA] text-[#D32F2F] dark:bg-[#D32F2F]/15 dark:text-[#EF9A9A]';
 }
 
 function confLabel(c?: string | null): string {
@@ -510,7 +504,7 @@ export function ExtractionDemo() {
                   <div className="text-body-text text-sm mt-1">Arrastrá el archivo o hacé clic para buscarlo</div>
                 </div>
               ) : (
-                <div className="border border-border-default rounded-[10px] p-4 flex gap-4 items-center bg-white">
+                <div className="border border-border-default rounded-[10px] p-4 flex gap-4 items-center bg-card">
                   {imgPreview && (
                     <img src={imgPreview} alt="preview" className="max-h-48 max-w-[200px] h-auto rounded object-cover border border-border-default" />
                   )}
@@ -612,7 +606,7 @@ export function ExtractionDemo() {
 
             {/* Loading skeleton */}
             {phase === 'loading' && (
-              <div className="bg-white rounded-[7px] border-l-4 border-l-[#E3E3E3] shadow-[0_1px_4px_rgba(0,0,0,0.08)] p-6">
+              <div className="bg-card rounded-[7px] border-l-4 border-l-border-default shadow-card p-6">
                 <div className="flex items-center gap-3 mb-5 text-body-text font-semibold text-sm">
                   <span className="text-[#4BAF47]"><IconSpinDark /></span>
                   {loadingMsg}
@@ -639,7 +633,7 @@ export function ExtractionDemo() {
 
             {/* Reject card */}
             {phase === 'done' && result?.status === 'reject' && (
-              <div className="bg-white rounded-[7px] border-l-4 border-l-[#D32F2F] shadow-[0_1px_4px_rgba(0,0,0,0.08)] p-6">
+              <div className="bg-card rounded-[7px] border-l-4 border-l-[#D32F2F] shadow-card p-6">
                 <div className="flex items-center gap-2.5 mb-1 text-[#D32F2F]">
                   <IconWarning />
                   <h3 className="text-[16.5px] font-bold">No se pudo extraer</h3>
@@ -655,7 +649,7 @@ export function ExtractionDemo() {
                   </ul>
                 )}
                 {result.tip && (
-                  <div className="flex items-start gap-2 mt-4 p-3 rounded-[7px] bg-[#FFF8E1] text-[#7B5E00] text-sm font-semibold leading-relaxed">
+                  <div className="flex items-start gap-2 mt-4 p-3 rounded-[7px] bg-warning-light text-[#7B5E00] dark:text-[#FFD54F] text-sm font-semibold leading-relaxed">
                     <span className="text-[#F57F17] mt-0.5"><IconInfo /></span>
                     {result.tip}
                   </div>
@@ -671,12 +665,11 @@ export function ExtractionDemo() {
 
             {/* Success card */}
             {phase === 'done' && result?.status === 'success' && (
-              <div className="bg-white rounded-[7px] border-l-4 border-l-[#4BAF47] shadow-[0_1px_4px_rgba(0,0,0,0.08)] p-6">
+              <div className="bg-card rounded-[7px] border-l-4 border-l-[#4BAF47] shadow-card p-6">
                 <div className="flex items-center justify-between mb-1.5 flex-wrap gap-2">
                   <h3 className="text-[17px] font-extrabold text-black-heading tracking-tight">Resultado</h3>
                   <span
-                    className="inline-flex items-center gap-1.5 font-bold text-[12.5px] px-3 py-1.5 rounded-full whitespace-nowrap"
-                    style={{ background: confBg(result.confidence), color: confFg(result.confidence) }}
+                    className={`inline-flex items-center gap-1.5 font-bold text-[12.5px] px-3 py-1.5 rounded-full whitespace-nowrap ${confClasses(result.confidence)}`}
                   >
                     <span className="w-[7px] h-[7px] rounded-full bg-current flex-shrink-0" />
                     {confLabel(result.confidence)}

@@ -1,32 +1,32 @@
 'use client';
 
-import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { signOut } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import { Menu, Plus, LogOut, ChevronDown, Sun, Moon, PanelRight } from 'lucide-react';
+import { Menu, Plus, LogOut, ChevronDown, Sun, Moon } from 'lucide-react';
 import { useState } from 'react';
 import { useTheme } from '@/components/ThemeProvider';
 import { useDrawer } from '@/components/Drawer';
+import { ExtractionDemo } from '@/components/ExtractionDemo';
 
 interface PageMeta {
   title: string;
-  action?: { label: string; href: string };
+  showAction?: boolean;
 }
 
 const PAGE_META: Record<string, PageMeta> = {
-  '/admin/dashboard':       { title: 'Dashboard',        action: { label: 'Nueva recolección', href: '/empresa/extraer' } },
+  '/admin/dashboard':       { title: 'Dashboard',        showAction: true  },
   '/admin/validacion':      { title: 'Validación' },
   '/admin/empresas':        { title: 'Empresas' },
   '/admin/reportes':        { title: 'Reportes' },
-  '/admin/ingreso-datos':   { title: 'Ingreso de datos', action: { label: 'Nueva recolección', href: '/empresa/extraer' } },
+  '/admin/ingreso-datos':   { title: 'Ingreso de datos', showAction: true  },
   '/admin/monitoreo':       { title: 'Monitoreo' },
   '/admin/demostracion':    { title: 'Demostración' },
-  '/empresa/dashboard':     { title: 'Mi impacto',       action: { label: 'Nueva recolección', href: '/empresa/extraer' } },
+  '/empresa/dashboard':     { title: 'Mi impacto',       showAction: true  },
   '/empresa/extraer':       { title: 'Recolectar' },
   '/empresa/educacion':     { title: 'Educación' },
   '/empresa/reportes':      { title: 'Reportes' },
-  '/empresa/ingreso-datos': { title: 'Ingreso de datos' },
+  '/empresa/ingreso-datos': { title: 'Ingreso de datos', showAction: true  },
   '/empresa/demostracion':  { title: 'Demostración' },
 };
 
@@ -44,13 +44,16 @@ export function AppHeader({ onToggleSidebar, userName, userEmail, rol }: AppHead
   const { theme, toggle: toggleTheme } = useTheme();
   const drawer = useDrawer();
 
-  const meta   = PAGE_META[pathname] ?? { title: 'Fundares' };
+  const meta     = PAGE_META[pathname] ?? { title: 'Fundares' };
   const initials = (userName ?? userEmail ?? 'U')
-    .split(' ')
-    .map(w => w[0])
-    .join('')
-    .toUpperCase()
-    .slice(0, 2);
+    .split(' ').map(w => w[0]).join('').toUpperCase().slice(0, 2);
+
+  function openRecoleccion() {
+    drawer.open({
+      title: 'Nueva recolección',
+      children: <ExtractionDemo />,
+    });
+  }
 
   async function handleLogout() {
     setMenuOpen(false);
@@ -79,23 +82,6 @@ export function AppHeader({ onToggleSidebar, userName, userEmail, rol }: AppHead
       {/* Right */}
       <div className="flex items-center gap-2 flex-shrink-0">
 
-        {/* Drawer toggle */}
-        <button
-          onClick={() => drawer.open({
-            title: 'Panel',
-            children: (
-              <div className="p-5 space-y-3">
-                <p className="text-sm text-body-text">Usá <code className="bg-bg-page px-1 rounded text-xs">useDrawer().open()</code> desde cualquier página para insertar contenido aquí.</p>
-              </div>
-            ),
-          })}
-          className="w-8 h-8 rounded-[7px] flex items-center justify-center text-body-text hover:bg-bg-page hover:text-black-heading transition-colors flex-shrink-0"
-          aria-label="Abrir panel"
-          title="Panel lateral"
-        >
-          <PanelRight className="w-4 h-4" />
-        </button>
-
         {/* Theme toggle */}
         <button
           onClick={toggleTheme}
@@ -105,15 +91,15 @@ export function AppHeader({ onToggleSidebar, userName, userEmail, rol }: AppHead
           {theme === 'dark' ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
         </button>
 
-        {/* CTA action */}
-        {meta.action && (
-          <Link
-            href={meta.action.href}
+        {/* Nueva recolección */}
+        {meta.showAction && (
+          <button
+            onClick={openRecoleccion}
             className="inline-flex items-center gap-1.5 bg-[#4BAF47] hover:bg-[#3d9a3a] text-white text-[13px] font-bold px-3 py-1.5 rounded-[7px] transition-colors"
           >
             <Plus className="w-3.5 h-3.5" />
-            {meta.action.label}
-          </Link>
+            Nueva recolección
+          </button>
         )}
 
         {/* User menu */}

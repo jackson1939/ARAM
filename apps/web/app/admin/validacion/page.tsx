@@ -271,8 +271,10 @@ export default function ValidacionPage() {
   const cells     = Math.ceil((startDay + totalDays) / 7) * 7;
 
   return (
-    <div className="p-6 max-w-2xl">
-      <div className="flex items-center gap-3 mb-6">
+    <div className="flex flex-col h-[calc(100vh-56px)] p-5 gap-4">
+
+      {/* Header */}
+      <div className="flex items-center gap-3 flex-shrink-0">
         <h1 className="text-2xl font-extrabold text-black-heading tracking-tight">Validación</h1>
         {!loading && extracciones.length > 0 && (
           <span className="text-[12px] font-bold px-2.5 py-1 rounded-full bg-[#FFF8E1] text-[#F57F17]">
@@ -282,15 +284,15 @@ export default function ValidacionPage() {
       </div>
 
       {loading ? (
-        <div className="space-y-3">
+        <div className="space-y-3 flex-1">
           <Skeleton className="h-10 w-48" />
-          <Skeleton className="h-72 w-full" />
+          <Skeleton className="h-full w-full" />
         </div>
       ) : (
-        <div className="bg-card border border-border-default rounded-[12px] overflow-hidden shadow-card">
+        <div className="flex-1 min-h-0 bg-card border border-border-default rounded-[12px] overflow-hidden shadow-card flex flex-col">
 
           {/* Month nav */}
-          <div className="flex items-center justify-between px-5 py-4 border-b border-border-default">
+          <div className="flex items-center justify-between px-5 py-3 border-b border-border-default flex-shrink-0">
             <button onClick={prevMonth}
               className="w-8 h-8 rounded-[7px] flex items-center justify-center text-body-text hover:bg-bg-page hover:text-black-heading transition-colors">
               <ChevronLeft className="w-4 h-4" />
@@ -305,22 +307,22 @@ export default function ValidacionPage() {
           </div>
 
           {/* Day labels */}
-          <div className="grid grid-cols-7 border-b border-border-default">
+          <div className="grid grid-cols-7 border-b border-border-default flex-shrink-0">
             {DAYS.map(d => (
-              <div key={d} className="py-2 text-center text-[11px] font-bold uppercase tracking-wider text-body-text">
+              <div key={d} className="py-2.5 text-center text-[11px] font-bold uppercase tracking-wider text-body-text">
                 {d}
               </div>
             ))}
           </div>
 
-          {/* Grid */}
-          <div className="grid grid-cols-7">
+          {/* Grid — fills remaining height */}
+          <div className="flex-1 min-h-0 grid grid-cols-7" style={{ gridTemplateRows: `repeat(${Math.ceil(cells / 7)}, 1fr)` }}>
             {Array.from({ length: cells }, (_, i) => {
               const dayNum = i - startDay + 1;
               const valid  = dayNum >= 1 && dayNum <= totalDays;
 
               if (!valid) {
-                return <div key={i} className="aspect-square border-b border-r border-border-default last:border-r-0 bg-bg-page/30" />;
+                return <div key={i} className="border-b border-r border-border-default last:border-r-0 bg-bg-page/30" />;
               }
 
               const iso     = `${year}-${String(month + 1).padStart(2, '0')}-${String(dayNum).padStart(2, '0')}`;
@@ -333,18 +335,18 @@ export default function ValidacionPage() {
                   key={i}
                   onClick={() => openDay(iso)}
                   className={[
-                    'relative aspect-square border-b border-r border-border-default last:border-r-0',
-                    'flex flex-col items-center justify-center gap-1 transition-colors',
-                    isSel   ? 'bg-[#4BAF47]'     :
-                    isToday ? 'bg-green-light'    :
+                    'border-b border-r border-border-default last:border-r-0',
+                    'flex flex-col items-center justify-center gap-1.5 transition-colors',
+                    isSel   ? 'bg-[#4BAF47]'      :
+                    isToday ? 'bg-green-light'     :
                     count > 0 ? 'hover:bg-bg-page' :
                     'hover:bg-bg-page/50',
                   ].join(' ')}
                 >
                   <span className={[
-                    'text-[13px] font-bold leading-none',
-                    isSel   ? 'text-white'       :
-                    isToday ? 'text-[#4BAF47]'   :
+                    'text-[14px] font-bold leading-none',
+                    isSel   ? 'text-white'      :
+                    isToday ? 'text-[#4BAF47]'  :
                               'text-black-heading',
                   ].join(' ')}>
                     {dayNum}
@@ -363,7 +365,7 @@ export default function ValidacionPage() {
           </div>
 
           {/* Legend */}
-          <div className="px-5 py-3 border-t border-border-default flex items-center gap-5 text-[12px] text-body-text">
+          <div className="px-5 py-2.5 border-t border-border-default flex items-center gap-5 text-[12px] text-body-text flex-shrink-0">
             <span className="flex items-center gap-1.5">
               <span className="w-2.5 h-2.5 rounded-full bg-[#4BAF47]" />
               Con extracciones
@@ -371,10 +373,6 @@ export default function ValidacionPage() {
             <span className="flex items-center gap-1.5">
               <span className="w-2.5 h-2.5 rounded-full bg-green-light border border-[#4BAF47]" />
               Hoy
-            </span>
-            <span className="flex items-center gap-1.5">
-              <span className="w-2.5 h-2.5 rounded-full bg-[#4BAF47]" />
-              Seleccionado
             </span>
           </div>
         </div>

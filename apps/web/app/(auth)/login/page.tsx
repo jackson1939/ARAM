@@ -237,7 +237,7 @@ export default function LoginPage() {
           </p>
 
           <h2 className="font-display font-extrabold text-[46px] text-white tracking-tight leading-none mb-6">
-            Fundares
+            ARAM
           </h2>
 
           <p className="text-[16px] leading-[1.7] text-[rgba(231,239,226,0.74)] max-w-[400px]">

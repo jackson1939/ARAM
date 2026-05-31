@@ -1,4 +1,10 @@
-# Infrastructure Diagram Prompt — Fundares
+# Infrastructure Diagram — Fundares
+
+![Fundares Infrastructure Diagram](assets/fundares-infrastructure-diagram.png)
+
+---
+
+## Diagram generation prompt
 
 Use the following description to generate a cloud infrastructure diagram focused on deployed services and their connections. Do not include application code, business logic, or data flows — only infrastructure components, network boundaries, and service integrations.
 

@@ -7,25 +7,38 @@
 body { font-family: 'Manrope', sans-serif; scroll-behavior: smooth; }
 
 @layer base {
-  :root { 
-    --color-primary: #16a34a; 
-    --gp: #4BAF47;
-    --gl: #EDF7ED;
-    --bg: #F8F7F0;
-    --bk: #24231D;
-    --bt: #878680;
-    --bd: #E3E3E3;
+  :root {
+    --color-primary:  #16a34a;
+    --gp:  #4BAF47;
+    --gl:  #EDF7ED;
+    --bg:  #F8F7F0;
+    --bk:  #24231D;
+    --bt:  #878680;
+    --bd:  #E3E3E3;
     --bdd: #333F4D;
-    --wh: #FFFFFF;
-    --ab: #066AAB;
-    --er: #FF0000;
-    --wa: #F57F17;
+    --wh:  #FFFFFF;
+    --card:#FFFFFF;
+    --ab:  #066AAB;
+    --er:  #FF0000;
+    --wa:  #F57F17;
     --wal: #FFF8E1;
     --gradient-brand: linear-gradient(180deg, rgba(36,35,29,0.85) 0%, #4BAF47 100%);
   }
+
+  .dark {
+    --gl:  #162016;
+    --bg:  #111110;
+    --bk:  #EEECEA;
+    --bt:  #8A8980;
+    --bd:  #2C2C29;
+    --bdd: #3A3A36;
+    --wh:  #1C1C1A;
+    --card:#1C1C1A;
+    --wal: #2A2200;
+  }
 }
 
-/* Scrollbar personalizado */
+/* Scrollbar */
 ::-webkit-scrollbar { width: 6px; }
 ::-webkit-scrollbar-track { background: var(--bg); }
 ::-webkit-scrollbar-thumb { background: rgba(75,175,71,0.3); border-radius: 99px; }

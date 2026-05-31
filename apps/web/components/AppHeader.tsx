@@ -4,8 +4,9 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { signOut } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import { Menu, Plus, LogOut, ChevronDown } from 'lucide-react';
+import { Menu, Plus, LogOut, ChevronDown, Sun, Moon } from 'lucide-react';
 import { useState } from 'react';
+import { useTheme } from '@/components/ThemeProvider';
 
 interface PageMeta {
   title: string;
@@ -39,6 +40,7 @@ export function AppHeader({ onToggleSidebar, userName, userEmail, rol }: AppHead
   const pathname  = usePathname();
   const router    = useRouter();
   const [menuOpen, setMenuOpen] = useState(false);
+  const { theme, toggle: toggleTheme } = useTheme();
 
   const meta   = PAGE_META[pathname] ?? { title: 'Fundares' };
   const initials = (userName ?? userEmail ?? 'U')
@@ -56,7 +58,7 @@ export function AppHeader({ onToggleSidebar, userName, userEmail, rol }: AppHead
   }
 
   return (
-    <header className="sticky top-0 z-20 h-14 bg-white/80 backdrop-blur-sm border-b border-border-default flex items-center justify-between px-4 gap-4">
+    <header className="sticky top-0 z-20 h-14 bg-card/90 backdrop-blur-sm border-b border-border-default flex items-center justify-between px-4 gap-4">
 
       {/* Left */}
       <div className="flex items-center gap-3 min-w-0">
@@ -74,6 +76,15 @@ export function AppHeader({ onToggleSidebar, userName, userEmail, rol }: AppHead
 
       {/* Right */}
       <div className="flex items-center gap-2 flex-shrink-0">
+
+        {/* Theme toggle */}
+        <button
+          onClick={toggleTheme}
+          className="w-8 h-8 rounded-[7px] flex items-center justify-center text-body-text hover:bg-bg-page transition-colors flex-shrink-0"
+          aria-label="Toggle theme"
+        >
+          {theme === 'dark' ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+        </button>
 
         {/* CTA action */}
         {meta.action && (
@@ -107,7 +118,7 @@ export function AppHeader({ onToggleSidebar, userName, userEmail, rol }: AppHead
           {menuOpen && (
             <>
               <div className="fixed inset-0 z-10" onClick={() => setMenuOpen(false)} />
-              <div className="absolute right-0 top-full mt-1.5 w-48 bg-white border border-border-default rounded-[9px] shadow-card z-20 py-1 overflow-hidden">
+              <div className="absolute right-0 top-full mt-1.5 w-48 bg-card border border-border-default rounded-[9px] shadow-card z-20 py-1 overflow-hidden">
                 <div className="px-3 py-2.5 border-b border-border-default">
                   <div className="text-[12px] font-bold text-black-heading truncate">{userName ?? '—'}</div>
                   <div className="text-[11px] text-body-text truncate">{userEmail ?? '—'}</div>

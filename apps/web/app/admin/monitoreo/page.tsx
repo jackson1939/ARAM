@@ -180,7 +180,7 @@ export default function MonitoreoPage() {
     <div className="flex h-[calc(100vh-56px)] overflow-hidden">
 
       {/* ── Left: channel list ──────────────────────────────────────── */}
-      <aside className="w-56 flex-shrink-0 border-r border-border-default bg-white flex flex-col">
+      <aside className="w-56 flex-shrink-0 border-r border-border-default bg-card flex flex-col">
         <div className="px-4 py-4 border-b border-border-default flex items-center justify-between">
           <span className="text-[12px] font-bold uppercase tracking-widest text-body-text">Canales</span>
           <button
@@ -258,7 +258,7 @@ export default function MonitoreoPage() {
                 { label: 'Validados',  value: (stats as CanalStat).validados ?? 0,        color: '#2E7D32' },
                 { label: 'Rechazados', value: (stats as CanalStat).rechazados ?? 0,       color: '#D32F2F' },
               ].map(card => (
-                <div key={card.label} className="bg-white rounded-[10px] border border-border-default px-4 py-4">
+                <div key={card.label} className="bg-card rounded-[10px] border border-border-default px-4 py-4">
                   <div className="text-[12px] font-semibold text-body-text uppercase tracking-wide mb-1">{card.label}</div>
                   <div className="text-3xl font-extrabold tracking-tight" style={{ color: card.color }}>
                     {card.value}
@@ -269,18 +269,18 @@ export default function MonitoreoPage() {
 
             {/* Second row: kg + recolectores + usuarios */}
             <div className="grid grid-cols-3 gap-3">
-              <div className="bg-white rounded-[10px] border border-border-default px-4 py-4">
+              <div className="bg-card rounded-[10px] border border-border-default px-4 py-4">
                 <div className="text-[12px] font-semibold text-body-text uppercase tracking-wide mb-1">Kg total extraído</div>
                 <div className="text-2xl font-extrabold text-black-heading">
                   {extracciones.reduce((s, e) => s + parseFloat(e.cantidad_kg ?? '0'), 0).toLocaleString('es-AR', { maximumFractionDigits: 1 })}
                   <span className="text-sm font-semibold text-body-text ml-1">kg</span>
                 </div>
               </div>
-              <div className="bg-white rounded-[10px] border border-border-default px-4 py-4">
+              <div className="bg-card rounded-[10px] border border-border-default px-4 py-4">
                 <div className="text-[12px] font-semibold text-body-text uppercase tracking-wide mb-1">Recolectores</div>
                 <div className="text-2xl font-extrabold text-black-heading">{recolectores.length}</div>
               </div>
-              <div className="bg-white rounded-[10px] border border-border-default px-4 py-4">
+              <div className="bg-card rounded-[10px] border border-border-default px-4 py-4">
                 <div className="text-[12px] font-semibold text-body-text uppercase tracking-wide mb-1">Usuarios únicos</div>
                 <div className="text-2xl font-extrabold text-black-heading">
                   {(stats as CanalStat).usuarios_unicos ?? 0}
@@ -293,7 +293,7 @@ export default function MonitoreoPage() {
               <div className="text-[12px] font-bold uppercase tracking-widest text-body-text mb-3">
                 Mensajes recientes ({mensajes.length})
               </div>
-              <div className="bg-white border border-border-default rounded-[10px] overflow-hidden">
+              <div className="bg-card border border-border-default rounded-[10px] overflow-hidden">
                 {mensajes.length === 0 ? (
                   <p className="text-center text-body-text text-sm py-10">Sin mensajes aún.</p>
                 ) : (
@@ -308,7 +308,7 @@ export default function MonitoreoPage() {
                     </thead>
                     <tbody>
                       {mensajes.map((m, i) => (
-                        <tr key={m.id} className={i % 2 === 0 ? 'bg-white' : 'bg-[#FAFAF9]'}>
+                        <tr key={m.id} className={i % 2 === 0 ? 'bg-card' : 'bg-[#FAFAF9]'}>
                           <td className="px-4 py-3 whitespace-nowrap">{canalBadge(m.canal)}</td>
                           <td className="px-4 py-3 text-black-heading max-w-xs">
                             <span className="line-clamp-1 text-[13px]">{m.contenidoTexto ?? '—'}</span>
@@ -329,7 +329,7 @@ export default function MonitoreoPage() {
                 <div className="text-[12px] font-bold uppercase tracking-widest text-body-text mb-3">
                   Materiales extraídos ({extracciones.length})
                 </div>
-                <div className="bg-white border border-border-default rounded-[10px] overflow-hidden">
+                <div className="bg-card border border-border-default rounded-[10px] overflow-hidden">
                   <table className="w-full border-collapse text-sm">
                     <thead>
                       <tr className="bg-bg-page border-b border-border-default">
@@ -342,7 +342,7 @@ export default function MonitoreoPage() {
                     </thead>
                     <tbody>
                       {extracciones.map((e, i) => (
-                        <tr key={e.id} className={i % 2 === 0 ? 'bg-white' : 'bg-[#FAFAF9]'}>
+                        <tr key={e.id} className={i % 2 === 0 ? 'bg-card' : 'bg-[#FAFAF9]'}>
                           <td className="px-4 py-3 font-bold text-black-heading">
                             <span className="inline-flex items-center gap-2">
                               <span className="w-2 h-2 rounded-[2px] bg-[#4BAF47] opacity-80 flex-shrink-0" />
@@ -371,7 +371,7 @@ export default function MonitoreoPage() {
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
                   {recolectores.map(r => (
-                    <div key={r.id} className="bg-white border border-border-default rounded-[10px] px-4 py-3.5 flex items-center gap-3">
+                    <div key={r.id} className="bg-card border border-border-default rounded-[10px] px-4 py-3.5 flex items-center gap-3">
                       <div className="w-9 h-9 rounded-full bg-green-light text-[#4BAF47] grid place-items-center text-[13px] font-extrabold flex-shrink-0">
                         {(r.nombre ?? 'R').slice(0, 2).toUpperCase()}
                       </div>

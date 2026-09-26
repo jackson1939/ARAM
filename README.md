@@ -1,178 +1,354 @@
-# Fundares — Plataforma de Gestión de Reciclaje
+<p align="center">
+  <img src="https://capsule-render.vercel.app/api?type=waving&color=0:1B5E20,100:66BB6A&height=220&section=header&text=FUNDARES&fontSize=68&fontColor=ffffff&animation=fadeIn&fontAlignY=36&desc=Plataforma%20de%20Gesti%C3%B3n%20de%20Reciclaje%20con%20IA&descAlignY=58&descSize=20" width="100%" alt="Fundares banner"/>
+</p>
 
-**Monorepo Turborepo que automatiza la recepción, extracción con IA y validación de datos de recolección de materiales reciclables, con dashboards en tiempo real para administradores y empresas aliadas.**
+<p align="center">
+  <img src="https://readme-typing-svg.demolab.com?font=JetBrains+Mono&weight=600&size=20&duration=2800&pause=900&color=2E7D32&center=true&vCenter=true&width=820&lines=Reciclaje+reportado+por+WhatsApp+y+Telegram;Extracci%C3%B3n+de+datos+con+IA+generativa+(AWS+Bedrock);Dashboards+en+tiempo+real+para+fundaci%C3%B3n+y+empresas;Impacto+ambiental+medido+en+cada+recolecci%C3%B3n" alt="Typing SVG"/>
+</p>
 
-🌐 **Idioma / Language:** [Español](#español) | [English](#english)
+<p align="center">
+  <img src="https://img.shields.io/badge/Next.js-14-000000?style=for-the-badge&logo=nextdotjs&logoColor=white"/>
+  <img src="https://img.shields.io/badge/React-18-61DAFB?style=for-the-badge&logo=react&logoColor=black"/>
+  <img src="https://img.shields.io/badge/TypeScript-strict-3178C6?style=for-the-badge&logo=typescript&logoColor=white"/>
+  <img src="https://img.shields.io/badge/AWS_Bedrock-Nova_2_Lite-FF9900?style=for-the-badge&logo=amazonaws&logoColor=white"/>
+  <img src="https://img.shields.io/badge/Neon-Postgres-00E599?style=for-the-badge&logo=postgresql&logoColor=white"/>
+  <img src="https://img.shields.io/badge/Drizzle-ORM-C5F74F?style=for-the-badge&logo=drizzle&logoColor=black"/>
+  <img src="https://img.shields.io/badge/Turborepo-monorepo-EF4444?style=for-the-badge&logo=turborepo&logoColor=white"/>
+  <img src="https://img.shields.io/badge/Estado-producci%C3%B3n%20activa-16a34a?style=for-the-badge"/>
+  <img src="https://img.shields.io/badge/Licencia-MIT-2E7D32?style=for-the-badge"/>
+</p>
+
+<p align="center">
+  <img src="https://skillicons.dev/icons?i=ts,nextjs,react,tailwind,nodejs,aws,postgres,vercel,githubactions&theme=dark" alt="stack icons"/>
+</p>
+
+<p align="center">
+  <a href="#español"><b>🇪🇸 Español</b></a> &nbsp;·&nbsp; <a href="#english"><b>🇬🇧 English</b></a>
+</p>
 
 ---
 
 <a name="español"></a>
+## 🇪🇸 Español
 
-## Español
+### 📑 Tabla de contenidos
 
-### Índice
-
-- [Descripción general](#descripción-general)
-- [Flujo de datos](#flujo-de-datos)
+- [¿Qué es Fundares?](#qué-es-fundares)
+- [Arquitectura](#arquitectura)
+- [Flujo de extracción con IA](#flujo-de-extracción-con-ia)
+- [Modelo de datos](#modelo-de-datos)
 - [Características principales](#características-principales)
 - [Stack tecnológico](#stack-tecnológico)
-- [Arquitectura y estructura del repositorio](#arquitectura-y-estructura-del-repositorio)
-- [Requisitos previos](#requisitos-previos)
-- [Instalación y configuración](#instalación-y-configuración)
-- [Uso — correr el proyecto](#uso--correr-el-proyecto)
-- [Variables de entorno](#variables-de-entorno)
-- [Despliegue](#despliegue)
+- [Estructura del proyecto](#estructura-del-proyecto)
+- [CI/CD y automatización](#cicd-y-automatización)
+- [Seguridad y aislamiento de datos](#seguridad-y-aislamiento-de-datos)
 - [Estado del proyecto y roadmap](#estado-del-proyecto-y-roadmap)
 - [Licencia](#licencia)
 - [Autor y contacto](#autor-y-contacto)
 
 ---
 
-### Descripción general
+### ¿Qué es Fundares?
 
-**Fundares** es la plataforma digital construida para la **Fundación para el Reciclaje, Santa Cruz (Bolivia)**. Resuelve un problema muy concreto: los recolectores de materiales reciclables reportan sus entregas por **WhatsApp o Telegram** —mensajes de texto informales, fotos borrosas de remitos, videos de los materiales— y ese flujo se procesaba manualmente en hojas de cálculo, con datos incompletos, errores frecuentes y sin trazabilidad ni métricas de impacto.
+**Fundares** es la plataforma digital construida para la **Fundación para el Reciclaje, Santa Cruz (Bolivia)**. Resuelve un problema muy concreto y muy humano: los recolectores de materiales reciclables — personas que recorren la ciudad juntando cartón, plástico, vidrio y metal — reportaban sus entregas por **WhatsApp o Telegram** con mensajes de texto informales, fotos borrosas de remitos y videos de los materiales. Ese flujo se procesaba a mano en hojas de cálculo: datos incompletos, errores de tipeo, cero trazabilidad y ninguna forma de mostrarle a nadie el impacto ambiental real de todo ese trabajo.
 
-Fundares automatiza ese ciclo completo: desde el mensaje crudo del recolector hasta el reporte validado con el impacto ambiental calculado (kg reciclados, CO₂ evitado, agua ahorrada, árboles equivalentes).
+Fundares automatiza el ciclo completo, de punta a punta: desde el mensaje crudo del recolector hasta un reporte validado por un humano, con el impacto ambiental ya calculado — kilos reciclados, CO₂ evitado, agua ahorrada, árboles equivalentes — listo para mostrarse en un dashboard o exportarse como PDF/Excel certificado.
 
 **¿Para quién es?**
-- **Recolectores** — envían sus reportes por el canal que ya usan (WhatsApp, Telegram o un formulario web), sin curva de aprendizaje.
-- **Administradores de la fundación** — validan cada extracción antes de que cuente como oficial, gestionan empresas aliadas y generan reportes.
-- **Empresas aliadas** — consultan en tiempo real su propio impacto ambiental y descargan reportes certificados (PDF/Excel) para sus propios informes de sostenibilidad.
 
-> **Nota sobre el origen del repositorio:** el `package.json` raíz conserva el nombre histórico `decouple-services` y el `CHANGELOG.md`/`CODEOWNERS` referencian un origen previo (`walteribanez555/decouple-services`), centrado en un servicio de **verificación de identidad/edad** (`not_identity_document`, flujo de documentos, app móvil Flutter). El código actual en este repositorio (`jackson1939/aram`) fue reorientado por completo hacia el dominio de **gestión de reciclaje** descrito arriba: no hay app móvil en el árbol de trabajo actual (`apps/mobile` no existe), y el servicio de identificación ahora extrae datos de recolección, no documentos de identidad. No se encontró ninguna referencia a un repositorio `aramcl` en el código, por lo que no se puede confirmar esa relación desde aquí.
+| Rol | Qué hace en la plataforma |
+|---|---|
+| 🚴 **Recolector** | Envía su reporte por el canal que ya usa a diario — WhatsApp, Telegram o un formulario web — sin curva de aprendizaje ni instalar nada nuevo. |
+| 🛡️ **Administrador de la fundación** | Valida cada extracción de IA antes de que cuente como oficial, da de alta empresas aliadas, monitorea los tres canales en tiempo real y emite reportes. |
+| 🏢 **Empresa aliada** | Consulta en vivo su propio impacto ambiental y descarga reportes certificados (PDF/Excel) para sus informes de sostenibilidad corporativa. |
+
+> **Sobre el origen del repositorio (nota de portfolio):** el `package.json` raíz aún conserva el nombre histórico `decouple-services`, y `CHANGELOG.md`/`CODEOWNERS` apuntan a un origen previo (`walteribanez555/decouple-services`) centrado en un servicio de **verificación de identidad/edad** — con flujo de documentos y una app móvil en Flutter. El código que vive hoy en `jackson1939/aram` fue **reorientado por completo** hacia el dominio de gestión de reciclaje descrito arriba: no queda ninguna app móvil en el árbol de trabajo actual (`apps/mobile` no existe), y el servicio que antes leía documentos de identidad ahora extrae datos de recolección de materiales. Es, en los hechos, un **pivot de producto** completo sobre una base de infraestructura ya madura (Lambda + Bedrock + CDK + CI/CD), reaprovechada para un dominio totalmente distinto.
 
 ---
 
-### Flujo de datos
+### Arquitectura
 
+Fundares combina tres canales de entrada, un servicio serverless de extracción con IA generativa y dos dashboards Next.js que sirven roles distintos, todo sobre una base de datos serverless compartida.
+
+```mermaid
+graph LR
+    subgraph Entrada["📥 Canales de entrada"]
+        WA["📱 WhatsApp<br/>(Twilio webhook)"]
+        TG["✈️ Telegram<br/>(Bot webhook)"]
+        WEB["🌐 Formulario web<br/>(texto / imagen / video)"]
+    end
+
+    subgraph IA["🧠 apps/identification · AWS Lambda"]
+        Hono["API Hono<br/>(TypeScript + esbuild)"]
+        Nova["Amazon Nova 2 Lite<br/>(Bedrock Converse API)"]
+        NovaPro["Amazon Nova Pro<br/>(fallback si confianza < 0.75)"]
+        Hono --> Nova
+        Nova -.confianza baja.-> NovaPro
+    end
+
+    subgraph Datos["💾 Persistencia"]
+        Neon[("Neon Postgres<br/>serverless · Drizzle ORM")]
+        S3[("S3<br/>staging de media, 2 días")]
+    end
+
+    subgraph Dash["📊 Dashboards · Next.js 14"]
+        Admin["Panel Admin<br/>(/admin/*, NextAuth)"]
+        Empresa["Panel Empresa<br/>(/empresa/*, NextAuth)"]
+        Fundares2["apps/fundares<br/>(variante, Supabase Auth)"]
+    end
+
+    subgraph Salida["📄 Reportes"]
+        PDF["PDF<br/>(react-pdf/renderer)"]
+        XLS["Excel<br/>(SheetJS)"]
+    end
+
+    WA -->|POST /api/webhook/whatsapp| Neon
+    TG -->|POST /api/webhook/telegram| Neon
+    WEB -->|foto/video| S3
+    Neon -->|POST /api/extraer| Hono
+    S3 --> Hono
+    Nova -->|JSON estructurado| Neon
+    NovaPro -->|JSON estructurado| Neon
+    Neon --> Admin
+    Neon --> Empresa
+    Neon --> Fundares2
+    Admin --> PDF
+    Admin --> XLS
+    Empresa --> PDF
+    Empresa --> XLS
+
+    style Entrada fill:#16a34a22,stroke:#16a34a
+    style IA fill:#f59e0b22,stroke:#f59e0b
+    style Datos fill:#0ea5e922,stroke:#0ea5e9
+    style Dash fill:#22c55e22,stroke:#22c55e
+    style Salida fill:#84cc1622,stroke:#84cc16
 ```
-Recolector (WhatsApp / Telegram / Web)
-  │
-  ├─ POST /api/webhook/whatsapp   (Twilio)
-  └─ POST /api/webhook/telegram
-       │
-       ▼
-  Guarda mensaje en DB (mensajes_recolector)
-       │
-       ▼
-  POST /api/extraer  ──►  Servicio de Identificación IA
-       │                  (Amazon Nova 2 Lite vía AWS Bedrock)
-       │                  extrae: empresa / fecha / materiales / cantidades
-       ▼
-  Extracción en DB (estado: "pendiente")
-       │
-       ▼
-  Admin valida en /admin/validacion
-  (aprueba / edita / rechaza)
-       │
-       ▼
-  Recolección validada en DB (recolecciones)
-       │
-       ▼
-  Métricas visibles en dashboards en tiempo real
-  Reportes PDF + Excel descargables
+
+> **Infraestructura como código:** todo lo que ves dentro de `IA` (API Gateway HTTP v2 + Lambda + Secrets Manager + IAM + CloudWatch) está definido con **AWS CDK v2** en `infra/`, con *validation aspects* propios (`SecurityValidationAspect`, `CostOptimizationAspect`) que corren en cada `synth`/`deploy` para bloquear configuraciones inseguras o costosas antes de que lleguen a producción.
+
+---
+
+### Flujo de extracción con IA
+
+El corazón técnico del producto es cómo convierte un mensaje ambiguo de WhatsApp en un dato estructurado y confiable. Así se ve una recolección real de principio a fin:
+
+```mermaid
+sequenceDiagram
+    actor R as Recolector
+    participant Canal as WhatsApp / Telegram / Web
+    participant DB as Neon Postgres
+    participant IA as Servicio de Identificación<br/>(Lambda + Bedrock)
+    participant Nova as Amazon Nova 2 Lite
+    actor A as Administrador
+    participant Rep as Dashboard / Reportes
+
+    R->>Canal: Envía mensaje (texto, foto o video)
+    Canal->>DB: Guarda en mensajes_recolector
+    DB->>IA: POST /api/extraer
+
+    alt Contenido es imagen o video
+        IA->>Nova: Paso 1 — describir visualmente el contenido
+        Nova-->>IA: Descripción textual del remito/material
+        IA->>Nova: Paso 2 — extraer JSON usando la descripción como contexto
+    else Contenido es solo texto
+        IA->>Nova: Extraer JSON directamente del mensaje
+    end
+
+    Nova-->>IA: {empresa, fecha, materiales, cantidades, confianza}
+
+    alt Confianza < 0.75
+        IA->>IA: Fallback automático a Amazon Nova Pro
+    end
+
+    IA->>DB: Guarda extracción (estado: "pendiente")
+    A->>DB: Revisa cola de validación (/admin/validacion)
+    A->>DB: Aprueba, edita o rechaza
+    DB->>DB: Crea recolección validada
+    DB->>Rep: Recalcula métricas de impacto ambiental
+    Rep-->>A: Dashboard actualizado (kg, CO₂, agua, árboles)
+    Rep-->>R: (indirecto) su recolección ya cuenta oficialmente
 ```
+
+**Detalles que hacen la diferencia:**
+
+- **Flujo two-step para imagen/video** — primero se pide al modelo una descripción visual libre, y esa descripción se reinyecta como contexto para la segunda llamada de extracción estructurada. Esto mejora notablemente la precisión en remitos parciales, fotos sin documento visible o materiales fotografiados sin ningún papel de respaldo.
+- **Videos** (MP4, MOV, AVI, MKV, WebM, máx. 2 minutos) se referencian siempre por URI de S3 — nunca se envían en base64 al modelo.
+- **Niveles de confianza explícitos:** `high` (≥ 0.75), `medium` (0.45–0.74), `low` (< 0.45, siempre devuelve `extracted: null`).
+- **Cero alucinación por diseño:** si un campo no es visible o inferible con certeza, la respuesta es `null` — nunca un valor inventado por el modelo.
+- **Costo por extracción** calculado y devuelto en cada respuesta (`usage.costUsd`), a partir del uso real de tokens.
+- IAM ya está aprovisionado (aunque sin uso actual en el flujo) para invocar Claude Haiku 4 y Sonnet 4 vía Bedrock, dejando la puerta abierta a comparar modelos sin tocar infraestructura.
+
+---
+
+### Modelo de datos
+
+El núcleo del negocio gira en torno a la ficha de cliente/recolector y su historial de recolecciones, con acceso SQL directo vía Drizzle (sin capas de ORM pesadas):
+
+```mermaid
+erDiagram
+    RECOLECTOR ||--o{ MENSAJE_RECOLECTOR : envía
+    MENSAJE_RECOLECTOR ||--o| EXTRACCION : genera
+    EXTRACCION ||--o| RECOLECCION : "se valida como"
+    RECOLECCION }o--|| EMPRESA : "pertenece a"
+    USERS ||--o{ EXTRACCION : valida
+    EMPRESA ||--o{ USERS : "tiene rol empresa"
+    CONTENIDO_EDUCATIVO }o--|| EMPRESA : "visible para"
+
+    RECOLECTOR {
+        string id PK
+        string canal "whatsapp / telegram / web"
+        string identificador_canal
+    }
+    MENSAJE_RECOLECTOR {
+        string id PK
+        string recolector_id FK
+        string tipo "texto / imagen / video"
+        string contenido_url
+        timestamp recibido_en
+    }
+    EXTRACCION {
+        string id PK
+        string mensaje_id FK
+        string empresa_extraida
+        string materiales_json
+        float confianza
+        string estado "pendiente / aprobada / rechazada"
+        float costo_usd
+    }
+    RECOLECCION {
+        string id PK
+        string extraccion_id FK
+        string empresa_id FK
+        float kg_total
+        float co2_evitado
+        float agua_ahorrada
+        date fecha
+    }
+    EMPRESA {
+        string id PK
+        string nombre
+        string credenciales_acceso
+    }
+    USERS {
+        string id PK
+        string rol "admin / empresa"
+        string empresa_id FK
+    }
+    CONTENIDO_EDUCATIVO {
+        string id PK
+        string titulo
+        string empresa_id FK
+    }
+```
+
+> Esquema simplificado a partir de `packages/db/schema.ts` y `db/neon.schema.sql`. Las tablas reales incluyen además `recolectores` y `conversaciones` como soporte de estado por canal (para sostener contexto conversacional en WhatsApp/Telegram entre mensajes).
 
 ---
 
 ### Características principales
 
-#### Canales de entrada (3 activos)
+#### 📥 Canales de entrada (3 activos)
+
 | Canal | Mecanismo |
-|-------|-----------|
-| WhatsApp | Webhook Twilio — `POST /api/webhook/whatsapp` |
+|---|---|
+| WhatsApp | Webhook de Twilio — `POST /api/webhook/whatsapp` |
 | Telegram | Webhook de Bot — `POST /api/webhook/telegram` |
 | Web | Formulario en el dashboard (texto, imagen o video) |
 
-#### Extracción con IA (`apps/identification`)
-- Servicio serverless (AWS Lambda) que analiza texto, imagen o video y devuelve JSON estructurado: empresa, fecha, materiales, cantidades y nivel de confianza.
-- **Modelo primario:** Amazon Nova 2 Lite (`global.amazon.nova-2-lite-v1:0`) vía Bedrock Converse API, contexto de 1M tokens.
-- **Fallback automático:** Amazon Nova Pro cuando la confianza cae por debajo de `CONFIDENCE_THRESHOLD` (0.75 por defecto).
-- **Flujo two-step para imagen/video:** primero describe visualmente el contenido, luego extrae el JSON estructurado usando esa descripción como contexto — mejora notablemente la precisión en remitos parciales o fotos sin documento.
-- Videos (MP4, MOV, AVI, MKV, WebM, máx. 2 min) se referencian por URI de S3, nunca en base64.
-- Niveles de confianza: `high` (≥ 0.75), `medium` (0.45–0.74), `low` (< 0.45, siempre `extracted: null`).
-- Rechazo explícito sin inventar datos: si un campo no es visible, se devuelve `null`, nunca un valor inferido.
-- Cálculo de costo por extracción incluido en cada respuesta (`usage.costUsd`), basado en tokens reales.
-- IAM ya habilitado (sin uso actual en el flujo) para modelos Claude Haiku 4 y Sonnet 4 vía Bedrock.
+#### 🧠 Extracción con IA (`apps/identification`)
 
-#### Dashboard web (`apps/web`) — dos roles diferenciados
+- Servicio serverless en AWS Lambda que analiza texto, imagen o video y devuelve JSON estructurado: empresa, fecha, materiales, cantidades y nivel de confianza.
+- **Modelo primario:** Amazon Nova 2 Lite (`global.amazon.nova-2-lite-v1:0`) vía Bedrock Converse API, con ventana de contexto de 1M de tokens.
+- **Fallback automático** a Amazon Nova Pro cuando la confianza cae por debajo de `CONFIDENCE_THRESHOLD` (0.75 por defecto).
+- **Flujo two-step** para imagen/video, descrito en detalle en la sección anterior.
+- Cálculo de costo por extracción incluido en cada respuesta, basado en tokens reales consumidos.
+- IAM ya habilitado para modelos Claude Haiku 4 y Sonnet 4 vía Bedrock, sin uso actual en el flujo de producción.
+
+#### 📊 Dashboard web (`apps/web`) — dos roles diferenciados
+
 **Panel Admin (`/admin/*`):**
 - Métricas globales en tiempo real (kg reciclados, CO₂ evitado, agua ahorrada, árboles equivalentes) con gráficos por material y por canal.
 - Cola de validación con calendario mensual — aprobar, editar o rechazar cada extracción con un clic.
-- Alta y gestión de empresas aliadas, incluida la generación de credenciales de acceso.
+- Alta y gestión de empresas aliadas, incluida la generación de sus credenciales de acceso.
 - Reportes PDF y Excel filtrados por empresa, año, mes o rango de fechas, o consolidado global.
 - Monitoreo de canales en tiempo real: mensajes recibidos, estados de extracción, usuarios únicos, kg totales.
-- Contenido educativo y guías interactivas (tours con `intro.js`).
+- Contenido educativo y guías interactivas con tours (`intro.js`).
 
 **Panel Empresa (`/empresa/*`):**
 - Impacto ambiental propio con gráficos de evolución mensual y por material, refrescado cada 30 segundos.
 - Reportes propios en PDF y Excel con filtros de fecha.
 - Formulario de nueva recolección (texto, imagen o video) con paso de revisión antes de guardar.
 
-#### Reportes
+#### 📄 Reportes
+
 - **PDF** (`@react-pdf/renderer`): encabezado, métricas de impacto, tabla por material, tabla por mes y tabla por empresa (en el reporte global).
 - **Excel** (SheetJS `xlsx`): hojas de Resumen, Por Material, Por Mes, Por Empresa y Detalle completo.
-
-#### Seguridad y aislamiento de datos
-- Cada empresa solo accede a sus propios datos — el filtro se aplica a nivel de base de datos por `session.user.empresaId`.
-- El middleware de Next.js bloquea `/admin/*` para el rol `empresa` y `/empresa/*` para el rol `admin`.
-- Las rutas de API sensibles verifican el rol nuevamente en el servidor (no solo en el middleware).
-- Secretos productivos en AWS Secrets Manager — nunca en variables de build ni en el repositorio.
-
-#### CI/CD
-Tres workflows de GitHub Actions:
-| Workflow | Disparador | Qué hace |
-|----------|-----------|----------|
-| `cicd.yml` | Push a `main`, tags `v*`, PR | Detecta qué cambió → deploy de infraestructura (CDK) si aplica → deploy de la Lambda → health check → GitHub Release |
-| `production-release.yml` | Manual (Actions UI) | Deploy a producción con un clic, con tag opcional |
-| `rollback.yml` | Manual (Actions UI) | Rollback a cualquier tag previo, con registro de auditoría |
-
-El pipeline solo redeploya CDK si `infra/` cambió (o hay *drift*), solo actualiza la Lambda si `apps/`/`packages/` cambiaron, y serializa los despliegues por ambiente (cola, sin cancelar el anterior).
 
 ---
 
 ### Stack tecnológico
 
-| Capa | Tecnología |
-|------|-----------|
-| Extracción IA | AWS Bedrock — Amazon Nova 2 Lite (primario) + Nova Pro (fallback) |
-| API serverless | [Hono](https://hono.dev/) `^4.6` · Node.js 22 · TypeScript · esbuild |
-| Dashboard | Next.js `14.2` (App Router) · React `18.3` · TypeScript · Tailwind CSS `3.4` |
-| ORM / Base de datos | Drizzle ORM `^0.38` · Neon Postgres (serverless) |
-| Auth | NextAuth.js `^4.24` (JWT, roles) en `apps/web` · Supabase Auth en `apps/fundares` |
-| Reportes | `@react-pdf/renderer` (PDF) · SheetJS `xlsx` (Excel) |
-| Gráficos | Recharts |
-| Tours interactivos | intro.js |
-| Notificaciones UI | react-hot-toast |
-| Storage de media | S3 (staging temporal, 2 días) · Vercel Blob (fotos permanentes) |
-| Mensajería | Twilio (WhatsApp) · Telegram Bot API |
-| Infraestructura como código | AWS CDK v2 (TypeScript) · API Gateway HTTP v2 · Lambda · Secrets Manager · CloudWatch |
-| Monorepo | Turborepo `^2.9` · npm workspaces (`npm@11.6.1`) |
-| CI/CD | GitHub Actions (3 workflows) |
-| Testing | Jest / ts-jest (`apps/identification`, `infra`) |
+| Capa | Tecnología | Rol |
+|---|---|---|
+| 🧠 Extracción IA | AWS Bedrock — Amazon Nova 2 Lite (primario) + Nova Pro (fallback) | Convierte texto/imagen/video en JSON estructurado |
+| ⚙️ API serverless | [Hono](https://hono.dev/) `^4.6` · Node.js 22 · TypeScript · esbuild | Handler Lambda del servicio de identificación |
+| 📊 Dashboard | Next.js `14.2` (App Router) · React `18.3` · TypeScript · Tailwind CSS `3.4` | Paneles admin y empresa |
+| 🗄️ ORM / Base de datos | Drizzle ORM `^0.38` · Neon Postgres (serverless) | Persistencia de mensajes, extracciones y recolecciones |
+| 🔑 Auth | NextAuth.js `^4.24` (JWT, roles) en `apps/web` · Supabase Auth en `apps/fundares` | Sesión y control de acceso por rol |
+| 📄 Reportes | `@react-pdf/renderer` (PDF) · SheetJS `xlsx` (Excel) | Generación de reportes certificados |
+| 📈 Gráficos | Recharts | Visualización de métricas de impacto |
+| 🎓 Tours interactivos | intro.js | Onboarding guiado dentro del dashboard |
+| 🔔 Notificaciones UI | react-hot-toast | Feedback de acciones en el dashboard |
+| 🖼️ Storage de media | S3 (staging temporal, 2 días) · Vercel Blob (fotos permanentes) | Ciclo de vida de imágenes y videos |
+| 💬 Mensajería | Twilio (WhatsApp) · Telegram Bot API | Canales de entrada |
+| ☁️ Infraestructura como código | AWS CDK v2 (TypeScript) · API Gateway HTTP v2 · Lambda · Secrets Manager · CloudWatch | Despliegue reproducible y auditable |
+| 📦 Monorepo | Turborepo `^2.9` · npm workspaces (`npm@11.6.1`) | Orquestación de builds entre apps y packages |
+| 🔁 CI/CD | GitHub Actions (3 workflows) | Deploys automáticos, releases y rollback |
+| ✅ Testing | Jest / ts-jest | `apps/identification`, `infra` |
 
 ---
 
-### Arquitectura y estructura del repositorio
+### Estructura del proyecto
 
-```
-aram/
-├── apps/
-│   ├── identification/   # Servicio de extracción IA — Lambda serverless (Hono + Bedrock)
-│   ├── web/               # Dashboard Next.js principal — roles admin y empresa (NextAuth)
-│   └── fundares/          # App Next.js paralela — misma lógica, auth vía Supabase, puerto 3001
-├── packages/
-│   ├── db/                 # Drizzle ORM + schema compartido (Neon Postgres) — @fundares/db
-│   ├── auth/                # Configuración NextAuth compartida — @fundares/auth
-│   └── shared-types/        # Tipos TypeScript de dominio compartidos entre apps
-├── infra/                  # AWS CDK v2 — stacks, aspectos de validación, tests de infraestructura
-├── db/                      # SQL de referencia: schema completo + migración de Telegram
-├── docs/                    # Documentación técnica bilingüe (arquitectura, costos, integración)
-├── scripts/                 # Script de seed (usuario admin inicial)
-├── supabase/                # Schema SQL alternativo para el flujo con Supabase Auth
-├── .github/workflows/       # CI/CD: cicd.yml, production-release.yml, rollback.yml
-├── turbo.json               # Pipeline de tareas de Turborepo (build, lint, test, dev)
-└── package.json             # Workspace raíz — nombre interno "decouple-services"
+```mermaid
+graph TD
+    Root["aram/"] --> Apps["apps/"]
+    Root --> Packages["packages/"]
+    Root --> Infra["infra/"]
+    Root --> DbDir["db/"]
+    Root --> Docs["docs/"]
+    Root --> Scripts["scripts/"]
+    Root --> Supabase["supabase/"]
+    Root --> Workflows[".github/workflows/"]
+
+    Apps --> Identification["identification/<br/>servicio IA · Lambda serverless"]
+    Apps --> Web["web/<br/>dashboard principal · NextAuth"]
+    Apps --> FundaresApp["fundares/<br/>variante paralela · Supabase Auth · puerto 3001"]
+
+    Identification --> IdxTs["src/index.ts · handler Lambda"]
+    Identification --> AppTs["src/app.ts · app Hono"]
+    Identification --> Adapters["src/common/adapters/bedrock/<br/>Nova + Claude"]
+    Identification --> Modules["src/modules/identification/<br/>controller, service, DTOs, pricing"]
+
+    Packages --> DbPkg["db/ · schema Drizzle<br/>@fundares/db"]
+    Packages --> AuthPkg["auth/ · config NextAuth<br/>@fundares/auth"]
+    Packages --> Types["shared-types/<br/>tipos de dominio compartidos"]
+
+    Infra --> Stacks["stacks CDK v2<br/>FundaresStack-Prod / SharedStack"]
+    Infra --> Aspects["validation aspects<br/>Security · CostOptimization"]
+
+    DbDir --> Schema["neon.schema.sql"]
+    DbDir --> Migration["telegram.migration.sql"]
+
+    Workflows --> Cicd["cicd.yml"]
+    Workflows --> Release["production-release.yml"]
+    Workflows --> Rollback["rollback.yml"]
+
+    style Root fill:#1B5E2033,stroke:#1B5E20
+    style Apps fill:#16a34a22,stroke:#16a34a
+    style Packages fill:#0ea5e922,stroke:#0ea5e9
+    style Infra fill:#f59e0b22,stroke:#f59e0b
+    style Workflows fill:#84cc1622,stroke:#84cc16
 ```
 
 **Qué hace cada parte:**
@@ -190,155 +366,43 @@ aram/
 
 ---
 
-### Requisitos previos
+### CI/CD y automatización
 
-| Herramienta | Versión mínima |
-|-------------|-----------------|
-| Node.js | ≥ 18 (recomendado 22, es el runtime de producción) |
-| npm | ≥ 11 (`npm@11.6.1` fijado como `packageManager`) |
-| Base de datos | Postgres compatible con Neon (serverless) |
-| AWS CLI | v2 (solo para desplegar `apps/identification` / `infra`) |
-| AWS CDK | v2 (`npm i -g aws-cdk`, solo para infraestructura) |
-| Cuenta de Twilio | Solo si se usará el canal WhatsApp |
-| Bot de Telegram | Solo si se usará el canal Telegram (vía [@BotFather](https://t.me/BotFather)) |
+Tres workflows de GitHub Actions cubren todo el ciclo de despliegue:
 
----
+| Workflow | Disparador | Qué hace |
+|---|---|---|
+| `cicd.yml` | Push a `main`, tags `v*`, PR | Detecta qué cambió → deploy de infraestructura (CDK) si aplica → deploy de la Lambda → health check → GitHub Release |
+| `production-release.yml` | Manual (Actions UI) | Deploy a producción con un clic, con tag opcional |
+| `rollback.yml` | Manual (Actions UI) | Rollback a cualquier tag previo, con registro de auditoría |
 
-### Instalación y configuración
-
-```bash
-# 1. Clonar el repositorio
-git clone https://github.com/jackson1939/aram.git
-cd aram
-
-# 2. Instalar todas las dependencias del monorepo (workspaces + Turborepo)
-npm install
-```
-
-#### Variables de entorno
-
-Crear los siguientes archivos antes de correr las apps (hay `.env.example` / `.env.local.example` de referencia en cada carpeta):
-
-**`apps/web/.env.local`**
-```env
-DATABASE_URL=postgresql://user:password@ep-xxx.us-east-1.aws.neon.tech/neondb?sslmode=require
-NEXTAUTH_URL=http://localhost:3000
-NEXTAUTH_SECRET=generate-with-openssl-rand-base64-32
-BLOB_READ_WRITE_TOKEN=vercel_blob_rw_xxx
-ANTHROPIC_API_KEY=sk-ant-your-key                 # opcional — features de IA adicionales
-GOOGLE_VISION_API_KEY=your-google-vision-key      # opcional — OCR
-TWILIO_ACCOUNT_SID=ACxxxx                         # opcional — canal WhatsApp
-TWILIO_AUTH_TOKEN=your-twilio-auth-token
-TWILIO_WHATSAPP_NUMBER=whatsapp:+14155238886
-WEBHOOK_SECRET=your-random-secret-here
-NEXT_PUBLIC_APP_URL=http://localhost:3000
-TELEGRAM_BOT_TOKEN=123456789:ABCdef...
-TELEGRAM_WEBHOOK_SECRET=random-secret-string
-NEXT_PUBLIC_IDENTIFICATION_API=https://...execute-api.us-east-1.amazonaws.com/api/v1
-ADMIN_EMAIL=admin@fundares.org                    # solo para scripts/seed-admin.mjs
-ADMIN_PASSWORD=Admin123!
-ADMIN_NAME=Administrador
-```
-
-**`apps/identification/.env`**
-```env
-NODE_ENV=development
-DEBUG=false
-CORS_ORIGINS=*
-LOG_LEVEL=info
-S3_COLLECTIONS_BUCKET=fundares-prod-collections
-BEDROCK_MODEL_ID=global.amazon.nova-2-lite-v1:0
-BEDROCK_FALLBACK_MODEL_ID=amazon.nova-pro-v1:0
-CONFIDENCE_THRESHOLD=0.75
-DATABASE_URL=postgresql://postgres:postgres@localhost:5432/app   # solo dev local con docker-compose
-```
-
-> Los valores de ejemplo aquí son ficticios. Nunca commitees credenciales reales — en producción viven en AWS Secrets Manager (`fundares/prod/app`) y en las variables de entorno del proyecto en Vercel.
-
-#### Base de datos
-
-```bash
-# Aplicar el schema de referencia sobre una instancia Postgres/Neon vacía
-psql "$DATABASE_URL" -f db/neon.schema.sql
-
-# (opcional) migración específica del canal Telegram
-psql "$DATABASE_URL" -f db/telegram.migration.sql
-```
+El pipeline es deliberadamente conservador con los recursos: solo redeploya CDK si `infra/` cambió (o hay *drift* detectado), solo actualiza la Lambda si `apps/`/`packages/` cambiaron, y serializa los despliegues por ambiente en una cola — nunca cancela un deploy en curso para lanzar otro.
 
 ---
 
-### Uso — correr el proyecto
+### Seguridad y aislamiento de datos
 
-```bash
-# Dashboard web (Next.js, puerto 3000)
-npm run dev:web
-
-# Servicio de identificación (Lambda local vía Hono, puerto 4000)
-npm run dev:identification
-
-# Ambos en paralelo, orquestado por Turborepo
-npm run dev
-
-# Crear el primer usuario administrador
-npm run seed:admin
-
-# Build de todo el monorepo
-npm run build
-
-# Lint / chequeo de tipos en todos los workspaces
-npm run lint
-npm run check-types
-```
-
-La app alternativa `apps/fundares` (Supabase Auth) se corre de forma independiente:
-```bash
-cd apps/fundares && npm run dev   # puerto 3001
-```
-
-El servicio `apps/identification` también soporta Docker para desarrollo local con Postgres (`apps/identification/docker-compose.yml`).
-
----
-
-### Variables de entorno
-
-Ver la tabla completa arriba en [Instalación y configuración](#instalación-y-configuración). Resumen de las obligatorias por servicio:
-
-| Servicio | Variables obligatorias |
-|----------|------------------------|
-| `apps/web` | `DATABASE_URL`, `NEXTAUTH_SECRET`, `NEXTAUTH_URL`, `WEBHOOK_SECRET`, `NEXT_PUBLIC_IDENTIFICATION_API` |
-| `apps/identification` | `S3_COLLECTIONS_BUCKET`, `BEDROCK_MODEL_ID`, `CORS_ORIGINS` |
-| Canales opcionales | `TWILIO_ACCOUNT_SID` / `TWILIO_AUTH_TOKEN` (WhatsApp), `TELEGRAM_BOT_TOKEN` (Telegram) |
-
----
-
-### Despliegue
-
-**Servicio de identificación (AWS Lambda vía CDK):**
-```bash
-npx cdk bootstrap aws://ACCOUNT_ID/us-east-1        # una vez por cuenta/región
-
-aws secretsmanager create-secret \
-  --name fundares/prod/app \
-  --secret-string '{"CORS_ORIGINS":"*","LOG_LEVEL":"info"}'   # antes del primer deploy
-
-cd infra
-npx cdk deploy FundaresSharedStack
-npx cdk deploy FundaresStack-Prod -c environment=prod
-```
-
-**Dashboard web:** desplegado en **Vercel** — conectar el repositorio y configurar las variables de entorno en el panel de Vercel. Build command: `turbo run build --filter=web` (deploy automático en cada push a `main`).
-
-**Automatizado:** el workflow `cicd.yml` ejecuta ambos despliegues en cada push a `main`, con detección de cambios (solo redeploya lo que cambió) y un *health check* post-deploy contra `GET /api/v1/health`.
+- Cada empresa aliada **solo accede a sus propios datos** — el filtro se aplica a nivel de base de datos a partir de `session.user.empresaId`, nunca solo en la capa de presentación.
+- El middleware de Next.js bloquea `/admin/*` para el rol `empresa` y `/empresa/*` para el rol `admin`.
+- Las rutas de API sensibles **verifican el rol de nuevo en el servidor**, no confían únicamente en el middleware.
+- Los secretos productivos viven en **AWS Secrets Manager** — nunca en variables de build ni en el repositorio.
+- El servicio de extracción está diseñado para **rechazar antes que inventar**: cualquier campo no visible con certeza vuelve como `null`.
 
 ---
 
 ### Estado del proyecto y roadmap
 
-- **Madurez:** proyecto en **producción activa** (no es un prototipo) — tiene infraestructura real desplegada en AWS, pipeline de CI/CD con tres workflows, tests (Jest) en `apps/identification` e `infra`, y una API en producción documentada con URL pública.
-- El historial de Git de este repositorio llegó como un único commit (`ARR 2.0.0`), es decir que se publicó como una instantánea consolidada — no refleja el historial completo de desarrollo original.
-- El `CHANGELOG.md` describe una versión anterior del proyecto (`v1.0.0`) centrada en verificación de identidad/edad con app móvil Flutter; ese código ya no está presente en el árbol de trabajo actual, lo que indica un **pivot de producto** hacia la gestión de reciclaje. El `CHANGELOG` no ha sido actualizado para reflejar ese cambio.
-- Existe una segunda app (`apps/fundares`) que duplica gran parte de la lógica de `apps/web` con un método de autenticación distinto (Supabase) — parece una migración en curso o una variante paralela, no confirmable con certeza solo desde el código.
-- La sección `[Unreleased]` del `CHANGELOG.md` está vacía; no hay roadmap explícito documentado en el repositorio más allá de lo anterior.
+- [x] Tres canales de entrada activos (WhatsApp, Telegram, Web) en producción.
+- [x] Extracción con IA generativa (Amazon Nova 2 Lite + fallback Nova Pro) con flujo two-step para imagen/video.
+- [x] Dos dashboards en producción (`apps/web` con NextAuth, `apps/fundares` con Supabase Auth).
+- [x] Reportes PDF y Excel para administradores y empresas aliadas.
+- [x] Infraestructura como código (AWS CDK v2) con *validation aspects* propios de seguridad y costo.
+- [x] Pipeline de CI/CD con tres workflows (deploy automático, release manual, rollback con auditoría).
+- [ ] Consolidar `apps/fundares` y `apps/web` en una única app (hoy parecen una migración de auth en curso, no confirmable con certeza solo desde el código).
+- [ ] Actualizar `CHANGELOG.md`, que aún describe la versión anterior de verificación de identidad — no refleja el pivot de producto.
+- [ ] Renombrar el `package.json` raíz, que conserva el nombre histórico `decouple-services`.
+
+> **Nota sobre el historial de Git:** el historial de este repositorio llegó como un **único commit squasheado** (`ARR 2.0.0`) — es decir, se publicó como una instantánea consolidada del *pivot de producto* descrito arriba, y no refleja el historial de desarrollo original completo.
 
 ---
 
@@ -350,102 +414,253 @@ Este repositorio incluye un archivo `LICENSE` con la **Licencia MIT**, con copyr
 
 ### Autor y contacto
 
-- **Cuenta de GitHub del repositorio:** [jackson1939](https://github.com/jackson1939)
+<p align="left">
+  <a href="https://github.com/jackson1939"><img src="https://img.shields.io/badge/GitHub-jackson1939-181717?style=for-the-badge&logo=github&logoColor=white"/></a>
+</p>
+
 - **Repositorio:** [github.com/jackson1939/aram](https://github.com/jackson1939/aram)
 - **Contacto de seguridad documentado en el repo** (heredado de `SECURITY.md`): walteribanez555@gmail.com — reportar vulnerabilidades de forma privada, nunca en un issue público.
 
 ---
 
 <a name="english"></a>
+## 🇬🇧 English
 
-## English
+### 📑 Table of contents
 
-### Table of contents
-
-- [Overview](#overview)
-- [Data flow](#data-flow)
+- [What is Fundares?](#what-is-fundares)
+- [Architecture](#architecture)
+- [AI extraction flow](#ai-extraction-flow)
+- [Data model](#data-model)
 - [Key features](#key-features)
 - [Tech stack](#tech-stack)
-- [Architecture and repository structure](#architecture-and-repository-structure)
-- [Prerequisites](#prerequisites)
-- [Installation and setup](#installation-and-setup)
-- [Usage — running the project](#usage--running-the-project)
-- [Environment variables](#environment-variables)
-- [Deployment](#deployment)
+- [Project structure](#project-structure)
+- [CI/CD and automation](#cicd-and-automation)
+- [Security and data isolation](#security-and-data-isolation)
 - [Project status and roadmap](#project-status-and-roadmap)
 - [License](#license)
 - [Author and contact](#author-and-contact)
 
 ---
 
-### Overview
+### What is Fundares?
 
-**Fundares** is the digital platform built for the **Fundación para el Reciclaje, Santa Cruz (Bolivia)**. It solves a very concrete problem: recyclable-material collectors report their deliveries over **WhatsApp or Telegram** — informal text messages, blurry photos of delivery slips, videos of the materials — and that flow used to be processed by hand in spreadsheets, resulting in incomplete data, frequent errors, and no traceability or impact metrics.
+**Fundares** is the digital platform built for the **Fundación para el Reciclaje, Santa Cruz (Bolivia)**. It solves a very concrete, very human problem: recyclable-material collectors — people who walk the city gathering cardboard, plastic, glass and metal — used to report their deliveries over **WhatsApp or Telegram**, with informal text messages, blurry photos of delivery slips, and videos of the materials. That flow was processed by hand in spreadsheets: incomplete data, typos, zero traceability, and no way to show anyone the real environmental impact of all that work.
 
-Fundares automates that entire cycle: from the collector's raw message to a validated report with calculated environmental impact (kg recycled, CO₂ avoided, water saved, equivalent trees).
+Fundares automates the entire cycle end to end: from the collector's raw message to a human-validated report with the environmental impact already calculated — kilograms recycled, CO₂ avoided, water saved, equivalent trees — ready to show on a dashboard or export as a certified PDF/Excel report.
 
 **Who is it for?**
-- **Collectors** — submit reports through the channel they already use (WhatsApp, Telegram, or a web form), with no learning curve.
-- **Foundation administrators** — validate every extraction before it counts as official, manage partner companies, and generate reports.
-- **Partner companies** — check their own environmental impact in real time and download certified reports (PDF/Excel) for their own sustainability disclosures.
 
-> **Note on the repository's origin:** the root `package.json` keeps the historical name `decouple-services`, and `CHANGELOG.md`/`CODEOWNERS` reference a previous origin (`walteribanez555/decouple-services`) centered on an **identity/age-verification** service (`not_identity_document`, document flow, Flutter mobile app). The current code in this repository (`jackson1939/aram`) has been fully repurposed toward the **recycling management** domain described above: there is no mobile app in the current working tree (`apps/mobile` does not exist), and the identification service now extracts collection data instead of identity documents. No reference to an `aramcl` repository was found anywhere in the code, so that relationship cannot be confirmed from here.
+| Role | What they do on the platform |
+|---|---|
+| 🚴 **Collector** | Submits their report through the channel they already use daily — WhatsApp, Telegram, or a web form — with no learning curve and nothing new to install. |
+| 🛡️ **Foundation administrator** | Validates every AI extraction before it counts as official, onboards partner companies, monitors all three channels in real time, and issues reports. |
+| 🏢 **Partner company** | Checks its own environmental impact live and downloads certified reports (PDF/Excel) for its corporate sustainability disclosures. |
+
+> **On the repository's origin (a portfolio-worthy note):** the root `package.json` still keeps the historical name `decouple-services`, and `CHANGELOG.md`/`CODEOWNERS` point to a previous origin (`walteribanez555/decouple-services`) centered on an **identity/age-verification** service — with a document flow and a Flutter mobile app. The code living in `jackson1939/aram` today has been **fully repurposed** toward the recycling-management domain described above: there is no mobile app left in the current working tree (`apps/mobile` does not exist), and the service that used to read identity documents now extracts collection data instead. In effect, this is a full **product pivot** on top of an already-mature infrastructure base (Lambda + Bedrock + CDK + CI/CD), repurposed for a completely different domain.
 
 ---
 
-### Data flow
+### Architecture
 
+Fundares combines three input channels, a serverless generative-AI extraction service, and two Next.js dashboards serving different roles, all backed by a shared serverless database.
+
+```mermaid
+graph LR
+    subgraph Input["📥 Input channels"]
+        WA["📱 WhatsApp<br/>(Twilio webhook)"]
+        TG["✈️ Telegram<br/>(Bot webhook)"]
+        WEB["🌐 Web form<br/>(text / image / video)"]
+    end
+
+    subgraph AI["🧠 apps/identification · AWS Lambda"]
+        Hono["Hono API<br/>(TypeScript + esbuild)"]
+        Nova["Amazon Nova 2 Lite<br/>(Bedrock Converse API)"]
+        NovaPro["Amazon Nova Pro<br/>(fallback if confidence < 0.75)"]
+        Hono --> Nova
+        Nova -.low confidence.-> NovaPro
+    end
+
+    subgraph Data["💾 Persistence"]
+        Neon[("Neon Postgres<br/>serverless · Drizzle ORM")]
+        S3[("S3<br/>media staging, 2-day lifecycle")]
+    end
+
+    subgraph Dash["📊 Dashboards · Next.js 14"]
+        Admin["Admin panel<br/>(/admin/*, NextAuth)"]
+        Company["Company panel<br/>(/empresa/*, NextAuth)"]
+        Fundares2["apps/fundares<br/>(variant, Supabase Auth)"]
+    end
+
+    subgraph Output["📄 Reports"]
+        PDF["PDF<br/>(react-pdf/renderer)"]
+        XLS["Excel<br/>(SheetJS)"]
+    end
+
+    WA -->|POST /api/webhook/whatsapp| Neon
+    TG -->|POST /api/webhook/telegram| Neon
+    WEB -->|photo/video| S3
+    Neon -->|POST /api/extraer| Hono
+    S3 --> Hono
+    Nova -->|structured JSON| Neon
+    NovaPro -->|structured JSON| Neon
+    Neon --> Admin
+    Neon --> Company
+    Neon --> Fundares2
+    Admin --> PDF
+    Admin --> XLS
+    Company --> PDF
+    Company --> XLS
+
+    style Input fill:#16a34a22,stroke:#16a34a
+    style AI fill:#f59e0b22,stroke:#f59e0b
+    style Data fill:#0ea5e922,stroke:#0ea5e9
+    style Dash fill:#22c55e22,stroke:#22c55e
+    style Output fill:#84cc1622,stroke:#84cc16
 ```
-Collector (WhatsApp / Telegram / Web)
-  │
-  ├─ POST /api/webhook/whatsapp   (Twilio)
-  └─ POST /api/webhook/telegram
-       │
-       ▼
-  Message saved to DB (mensajes_recolector)
-       │
-       ▼
-  POST /api/extraer  ──►  AI Identification Service
-       │                  (Amazon Nova 2 Lite via AWS Bedrock)
-       │                  extracts: company / date / materials / quantities
-       ▼
-  Extraction saved to DB (status: "pending")
-       │
-       ▼
-  Admin validates at /admin/validacion
-  (approve / edit / reject)
-       │
-       ▼
-  Validated collection in DB (recolecciones)
-       │
-       ▼
-  Metrics visible on real-time dashboards
-  Downloadable PDF + Excel reports
+
+> **Infrastructure as code:** everything inside `AI` (HTTP API Gateway v2 + Lambda + Secrets Manager + IAM + CloudWatch) is defined with **AWS CDK v2** under `infra/`, with custom *validation aspects* (`SecurityValidationAspect`, `CostOptimizationAspect`) that run on every `synth`/`deploy` to block insecure or costly configurations before they reach production.
+
+---
+
+### AI extraction flow
+
+The technical heart of the product is how it turns an ambiguous WhatsApp message into a structured, trustworthy record. Here's what a real collection looks like end to end:
+
+```mermaid
+sequenceDiagram
+    actor R as Collector
+    participant Channel as WhatsApp / Telegram / Web
+    participant DB as Neon Postgres
+    participant AI as Identification Service<br/>(Lambda + Bedrock)
+    participant Nova as Amazon Nova 2 Lite
+    actor A as Administrator
+    participant Rep as Dashboard / Reports
+
+    R->>Channel: Sends message (text, photo or video)
+    Channel->>DB: Saved to mensajes_recolector
+    DB->>AI: POST /api/extraer
+
+    alt Content is image or video
+        AI->>Nova: Step 1 — visually describe the content
+        Nova-->>AI: Textual description of the slip/material
+        AI->>Nova: Step 2 — extract JSON using that description as context
+    else Content is plain text
+        AI->>Nova: Extract JSON directly from the message
+    end
+
+    Nova-->>AI: {company, date, materials, quantities, confidence}
+
+    alt Confidence < 0.75
+        AI->>AI: Automatic fallback to Amazon Nova Pro
+    end
+
+    AI->>DB: Saves extraction (status: "pending")
+    A->>DB: Reviews validation queue (/admin/validacion)
+    A->>DB: Approves, edits or rejects
+    DB->>DB: Creates validated collection
+    DB->>Rep: Recalculates environmental impact metrics
+    Rep-->>A: Updated dashboard (kg, CO₂, water, trees)
+    Rep-->>R: (indirectly) their collection now counts officially
 ```
+
+**Details that make the difference:**
+
+- **Two-step flow for image/video** — the model is first asked for a free-form visual description, and that description is then fed back as context for the second, structured-extraction call. This materially improves accuracy on partial receipts, photos with no visible document, or materials photographed with no supporting paper at all.
+- **Videos** (MP4, MOV, AVI, MKV, WebM, max. 2 minutes) are always referenced by S3 URI — never sent as base64 to the model.
+- **Explicit confidence tiers:** `high` (≥ 0.75), `medium` (0.45–0.74), `low` (< 0.45, always returns `extracted: null`).
+- **Zero hallucination by design:** any field that isn't visible or reliably inferable comes back as `null` — never a value invented by the model.
+- **Per-extraction cost** computed and returned in every response (`usage.costUsd`), based on actual token usage.
+- IAM is already provisioned (though unused in the current flow) to invoke Claude Haiku 4 and Sonnet 4 via Bedrock, leaving the door open to compare models without touching infrastructure.
+
+---
+
+### Data model
+
+The business core revolves around the collector's record and their collection history, with direct SQL access via Drizzle (no heavy ORM layers):
+
+```mermaid
+erDiagram
+    RECOLECTOR ||--o{ MENSAJE_RECOLECTOR : sends
+    MENSAJE_RECOLECTOR ||--o| EXTRACCION : generates
+    EXTRACCION ||--o| RECOLECCION : "gets validated as"
+    RECOLECCION }o--|| EMPRESA : "belongs to"
+    USERS ||--o{ EXTRACCION : validates
+    EMPRESA ||--o{ USERS : "has company role"
+    CONTENIDO_EDUCATIVO }o--|| EMPRESA : "visible to"
+
+    RECOLECTOR {
+        string id PK
+        string canal "whatsapp / telegram / web"
+        string identificador_canal
+    }
+    MENSAJE_RECOLECTOR {
+        string id PK
+        string recolector_id FK
+        string tipo "text / image / video"
+        string contenido_url
+        timestamp recibido_en
+    }
+    EXTRACCION {
+        string id PK
+        string mensaje_id FK
+        string empresa_extraida
+        string materiales_json
+        float confianza
+        string estado "pending / approved / rejected"
+        float costo_usd
+    }
+    RECOLECCION {
+        string id PK
+        string extraccion_id FK
+        string empresa_id FK
+        float kg_total
+        float co2_evitado
+        float agua_ahorrada
+        date fecha
+    }
+    EMPRESA {
+        string id PK
+        string nombre
+        string credenciales_acceso
+    }
+    USERS {
+        string id PK
+        string rol "admin / empresa"
+        string empresa_id FK
+    }
+    CONTENIDO_EDUCATIVO {
+        string id PK
+        string titulo
+        string empresa_id FK
+    }
+```
+
+> Simplified schema based on `packages/db/schema.ts` and `db/neon.schema.sql`. The real tables also include `recolectores` and `conversaciones` for per-channel state support (keeping conversational context across WhatsApp/Telegram messages).
 
 ---
 
 ### Key features
 
-#### Input channels (3 active)
+#### 📥 Input channels (3 active)
+
 | Channel | Mechanism |
-|---------|-----------|
+|---|---|
 | WhatsApp | Twilio webhook — `POST /api/webhook/whatsapp` |
 | Telegram | Bot webhook — `POST /api/webhook/telegram` |
 | Web | Dashboard form (text, image or video) |
 
-#### AI extraction (`apps/identification`)
-- Serverless service (AWS Lambda) that analyzes text, image or video and returns structured JSON: company, date, materials, quantities, and confidence level.
-- **Primary model:** Amazon Nova 2 Lite (`global.amazon.nova-2-lite-v1:0`) via the Bedrock Converse API, 1M-token context window.
-- **Automatic fallback:** Amazon Nova Pro kicks in whenever confidence drops below `CONFIDENCE_THRESHOLD` (default 0.75).
-- **Two-step flow for image/video:** first visually describes what's in the file, then extracts the structured JSON using that description as extra context — this materially improves accuracy on partial receipts or photos with no visible document.
-- Videos (MP4, MOV, AVI, MKV, WebM, max. 2 min) are referenced by S3 URI, never sent as base64.
-- Confidence tiers: `high` (≥ 0.75), `medium` (0.45–0.74), `low` (< 0.45, always returns `extracted: null`).
-- Explicit rejection instead of hallucination: any field that isn't visible in the source is returned as `null`, never guessed.
-- Per-extraction cost is computed and returned (`usage.costUsd`), based on actual token usage.
-- IAM is already provisioned (though unused in the current flow) for Claude Haiku 4 and Sonnet 4 via Bedrock.
+#### 🧠 AI extraction (`apps/identification`)
 
-#### Web dashboard (`apps/web`) — two distinct roles
+- Serverless service on AWS Lambda that analyzes text, image or video and returns structured JSON: company, date, materials, quantities, and confidence level.
+- **Primary model:** Amazon Nova 2 Lite (`global.amazon.nova-2-lite-v1:0`) via the Bedrock Converse API, with a 1M-token context window.
+- **Automatic fallback** to Amazon Nova Pro whenever confidence drops below `CONFIDENCE_THRESHOLD` (default 0.75).
+- **Two-step flow** for image/video, detailed in the previous section.
+- Per-extraction cost computed in every response, based on actual token usage.
+- IAM is already enabled for Claude Haiku 4 and Sonnet 4 via Bedrock, though unused in the current production flow.
+
+#### 📊 Web dashboard (`apps/web`) — two distinct roles
+
 **Admin panel (`/admin/*`):**
 - Real-time global metrics (kg recycled, CO₂ avoided, water saved, equivalent trees) with charts by material and by channel.
 - Validation queue with a monthly calendar — approve, edit, or reject each extraction in one click.
@@ -459,70 +674,76 @@ Collector (WhatsApp / Telegram / Web)
 - Own PDF/Excel reports with date filters.
 - New-collection form (text, image, or video) with a review step before saving.
 
-#### Reporting
+#### 📄 Reporting
+
 - **PDF** (`@react-pdf/renderer`): header, impact metrics, a per-material table, a per-month table, and a per-company table (in the global report).
 - **Excel** (SheetJS `xlsx`): sheets for Summary, By Material, By Month, By Company, and full Detail.
-
-#### Security and data isolation
-- Each company can only access its own data — enforced at the database-query level via `session.user.empresaId`.
-- Next.js middleware blocks `/admin/*` for the `empresa` role and `/empresa/*` for the `admin` role.
-- Sensitive API routes re-check the role server-side (not just in the middleware).
-- Production secrets live in AWS Secrets Manager — never in build variables or in the repository.
-
-#### CI/CD
-Three GitHub Actions workflows:
-| Workflow | Trigger | What it does |
-|----------|---------|---------------|
-| `cicd.yml` | Push to `main`, `v*` tags, PR | Detects what changed → deploys infrastructure (CDK) if needed → deploys the Lambda → health check → GitHub Release |
-| `production-release.yml` | Manual (Actions UI) | One-click production deploy, with an optional tag |
-| `rollback.yml` | Manual (Actions UI) | Rollback to any previous tag, with an audit trail |
-
-The pipeline only redeploys CDK when `infra/` changed (or drift is detected), only updates the Lambda when `apps/`/`packages/` changed, and serializes deploys per environment (queued, never cancelled).
 
 ---
 
 ### Tech stack
 
-| Layer | Technology |
-|-------|------------|
-| AI extraction | AWS Bedrock — Amazon Nova 2 Lite (primary) + Nova Pro (fallback) |
-| Serverless API | [Hono](https://hono.dev/) `^4.6` · Node.js 22 · TypeScript · esbuild |
-| Dashboard | Next.js `14.2` (App Router) · React `18.3` · TypeScript · Tailwind CSS `3.4` |
-| ORM / Database | Drizzle ORM `^0.38` · Neon Postgres (serverless) |
-| Auth | NextAuth.js `^4.24` (JWT, roles) in `apps/web` · Supabase Auth in `apps/fundares` |
-| Reporting | `@react-pdf/renderer` (PDF) · SheetJS `xlsx` (Excel) |
-| Charts | Recharts |
-| Interactive tours | intro.js |
-| UI notifications | react-hot-toast |
-| Media storage | S3 (temporary staging, 2-day lifecycle) · Vercel Blob (permanent photos) |
-| Messaging | Twilio (WhatsApp) · Telegram Bot API |
-| Infrastructure as code | AWS CDK v2 (TypeScript) · API Gateway HTTP v2 · Lambda · Secrets Manager · CloudWatch |
-| Monorepo | Turborepo `^2.9` · npm workspaces (`npm@11.6.1`) |
-| CI/CD | GitHub Actions (3 workflows) |
-| Testing | Jest / ts-jest (`apps/identification`, `infra`) |
+| Layer | Technology | Role |
+|---|---|---|
+| 🧠 AI extraction | AWS Bedrock — Amazon Nova 2 Lite (primary) + Nova Pro (fallback) | Turns text/image/video into structured JSON |
+| ⚙️ Serverless API | [Hono](https://hono.dev/) `^4.6` · Node.js 22 · TypeScript · esbuild | Lambda handler for the identification service |
+| 📊 Dashboard | Next.js `14.2` (App Router) · React `18.3` · TypeScript · Tailwind CSS `3.4` | Admin and company panels |
+| 🗄️ ORM / Database | Drizzle ORM `^0.38` · Neon Postgres (serverless) | Persists messages, extractions and collections |
+| 🔑 Auth | NextAuth.js `^4.24` (JWT, roles) in `apps/web` · Supabase Auth in `apps/fundares` | Session and role-based access control |
+| 📄 Reporting | `@react-pdf/renderer` (PDF) · SheetJS `xlsx` (Excel) | Certified report generation |
+| 📈 Charts | Recharts | Impact metric visualization |
+| 🎓 Interactive tours | intro.js | Guided onboarding inside the dashboard |
+| 🔔 UI notifications | react-hot-toast | Action feedback across the dashboard |
+| 🖼️ Media storage | S3 (temporary staging, 2-day lifecycle) · Vercel Blob (permanent photos) | Image and video lifecycle |
+| 💬 Messaging | Twilio (WhatsApp) · Telegram Bot API | Input channels |
+| ☁️ Infrastructure as code | AWS CDK v2 (TypeScript) · API Gateway HTTP v2 · Lambda · Secrets Manager · CloudWatch | Reproducible, auditable deployment |
+| 📦 Monorepo | Turborepo `^2.9` · npm workspaces (`npm@11.6.1`) | Build orchestration across apps and packages |
+| 🔁 CI/CD | GitHub Actions (3 workflows) | Automatic deploys, releases and rollback |
+| ✅ Testing | Jest / ts-jest | `apps/identification`, `infra` |
 
 ---
 
-### Architecture and repository structure
+### Project structure
 
-```
-aram/
-├── apps/
-│   ├── identification/   # AI extraction service — serverless Lambda (Hono + Bedrock)
-│   ├── web/               # Main Next.js dashboard — admin and company roles (NextAuth)
-│   └── fundares/          # Parallel Next.js app — same logic, Supabase auth, port 3001
-├── packages/
-│   ├── db/                 # Drizzle ORM + shared schema (Neon Postgres) — @fundares/db
-│   ├── auth/                # Shared NextAuth configuration — @fundares/auth
-│   └── shared-types/        # Shared domain TypeScript types
-├── infra/                  # AWS CDK v2 — stacks, validation aspects, infra tests
-├── db/                      # Reference SQL: full schema + Telegram migration
-├── docs/                    # Bilingual technical documentation (architecture, costs, integration)
-├── scripts/                 # Seed script (initial admin user)
-├── supabase/                # Alternative SQL schema for the Supabase Auth flow
-├── .github/workflows/       # CI/CD: cicd.yml, production-release.yml, rollback.yml
-├── turbo.json               # Turborepo task pipeline (build, lint, test, dev)
-└── package.json             # Root workspace — internal name "decouple-services"
+```mermaid
+graph TD
+    Root["aram/"] --> Apps["apps/"]
+    Root --> Packages["packages/"]
+    Root --> Infra["infra/"]
+    Root --> DbDir["db/"]
+    Root --> Docs["docs/"]
+    Root --> Scripts["scripts/"]
+    Root --> Supabase["supabase/"]
+    Root --> Workflows[".github/workflows/"]
+
+    Apps --> Identification["identification/<br/>AI service · serverless Lambda"]
+    Apps --> Web["web/<br/>main dashboard · NextAuth"]
+    Apps --> FundaresApp["fundares/<br/>parallel variant · Supabase Auth · port 3001"]
+
+    Identification --> IdxTs["src/index.ts · Lambda handler"]
+    Identification --> AppTs["src/app.ts · Hono app"]
+    Identification --> Adapters["src/common/adapters/bedrock/<br/>Nova + Claude"]
+    Identification --> Modules["src/modules/identification/<br/>controller, service, DTOs, pricing"]
+
+    Packages --> DbPkg["db/ · Drizzle schema<br/>@fundares/db"]
+    Packages --> AuthPkg["auth/ · NextAuth config<br/>@fundares/auth"]
+    Packages --> Types["shared-types/<br/>shared domain types"]
+
+    Infra --> Stacks["CDK v2 stacks<br/>FundaresStack-Prod / SharedStack"]
+    Infra --> Aspects["validation aspects<br/>Security · CostOptimization"]
+
+    DbDir --> Schema["neon.schema.sql"]
+    DbDir --> Migration["telegram.migration.sql"]
+
+    Workflows --> Cicd["cicd.yml"]
+    Workflows --> Release["production-release.yml"]
+    Workflows --> Rollback["rollback.yml"]
+
+    style Root fill:#1B5E2033,stroke:#1B5E20
+    style Apps fill:#16a34a22,stroke:#16a34a
+    style Packages fill:#0ea5e922,stroke:#0ea5e9
+    style Infra fill:#f59e0b22,stroke:#f59e0b
+    style Workflows fill:#84cc1622,stroke:#84cc16
 ```
 
 **What each part does:**
@@ -540,155 +761,43 @@ aram/
 
 ---
 
-### Prerequisites
+### CI/CD and automation
 
-| Tool | Minimum version |
-|------|-------------------|
-| Node.js | ≥ 18 (22 recommended — it's the production runtime) |
-| npm | ≥ 11 (`npm@11.6.1` pinned as `packageManager`) |
-| Database | Neon-compatible serverless Postgres |
-| AWS CLI | v2 (only needed to deploy `apps/identification` / `infra`) |
-| AWS CDK | v2 (`npm i -g aws-cdk`, infrastructure only) |
-| Twilio account | Only if the WhatsApp channel will be used |
-| Telegram bot | Only if the Telegram channel will be used (via [@BotFather](https://t.me/BotFather)) |
+Three GitHub Actions workflows cover the full deployment cycle:
 
----
+| Workflow | Trigger | What it does |
+|---|---|---|
+| `cicd.yml` | Push to `main`, `v*` tags, PR | Detects what changed → deploys infrastructure (CDK) if needed → deploys the Lambda → health check → GitHub Release |
+| `production-release.yml` | Manual (Actions UI) | One-click production deploy, with an optional tag |
+| `rollback.yml` | Manual (Actions UI) | Rollback to any previous tag, with an audit trail |
 
-### Installation and setup
-
-```bash
-# 1. Clone the repository
-git clone https://github.com/jackson1939/aram.git
-cd aram
-
-# 2. Install all monorepo dependencies (workspaces + Turborepo)
-npm install
-```
-
-#### Environment variables
-
-Create the following files before running the apps (each folder ships a reference `.env.example` / `.env.local.example`):
-
-**`apps/web/.env.local`**
-```env
-DATABASE_URL=postgresql://user:password@ep-xxx.us-east-1.aws.neon.tech/neondb?sslmode=require
-NEXTAUTH_URL=http://localhost:3000
-NEXTAUTH_SECRET=generate-with-openssl-rand-base64-32
-BLOB_READ_WRITE_TOKEN=vercel_blob_rw_xxx
-ANTHROPIC_API_KEY=sk-ant-your-key                 # optional — extra AI features
-GOOGLE_VISION_API_KEY=your-google-vision-key      # optional — OCR
-TWILIO_ACCOUNT_SID=ACxxxx                         # optional — WhatsApp channel
-TWILIO_AUTH_TOKEN=your-twilio-auth-token
-TWILIO_WHATSAPP_NUMBER=whatsapp:+14155238886
-WEBHOOK_SECRET=your-random-secret-here
-NEXT_PUBLIC_APP_URL=http://localhost:3000
-TELEGRAM_BOT_TOKEN=123456789:ABCdef...
-TELEGRAM_WEBHOOK_SECRET=random-secret-string
-NEXT_PUBLIC_IDENTIFICATION_API=https://...execute-api.us-east-1.amazonaws.com/api/v1
-ADMIN_EMAIL=admin@fundares.org                    # scripts/seed-admin.mjs only
-ADMIN_PASSWORD=Admin123!
-ADMIN_NAME=Administrador
-```
-
-**`apps/identification/.env`**
-```env
-NODE_ENV=development
-DEBUG=false
-CORS_ORIGINS=*
-LOG_LEVEL=info
-S3_COLLECTIONS_BUCKET=fundares-prod-collections
-BEDROCK_MODEL_ID=global.amazon.nova-2-lite-v1:0
-BEDROCK_FALLBACK_MODEL_ID=amazon.nova-pro-v1:0
-CONFIDENCE_THRESHOLD=0.75
-DATABASE_URL=postgresql://postgres:postgres@localhost:5432/app   # local dev with docker-compose only
-```
-
-> The example values above are fictitious. Never commit real credentials — in production they live in AWS Secrets Manager (`fundares/prod/app`) and in the Vercel project's environment variables.
-
-#### Database
-
-```bash
-# Apply the reference schema to an empty Postgres/Neon instance
-psql "$DATABASE_URL" -f db/neon.schema.sql
-
-# (optional) Telegram-channel-specific migration
-psql "$DATABASE_URL" -f db/telegram.migration.sql
-```
+The pipeline is deliberately conservative with resources: it only redeploys CDK when `infra/` changed (or drift is detected), only updates the Lambda when `apps/`/`packages/` changed, and serializes deploys per environment in a queue — it never cancels an in-flight deploy to launch another.
 
 ---
 
-### Usage — running the project
+### Security and data isolation
 
-```bash
-# Web dashboard (Next.js, port 3000)
-npm run dev:web
-
-# Identification service (local Lambda via Hono, port 4000)
-npm run dev:identification
-
-# Both in parallel, orchestrated by Turborepo
-npm run dev
-
-# Create the first admin user
-npm run seed:admin
-
-# Build the whole monorepo
-npm run build
-
-# Lint / type-check every workspace
-npm run lint
-npm run check-types
-```
-
-The alternative app `apps/fundares` (Supabase Auth) runs independently:
-```bash
-cd apps/fundares && npm run dev   # port 3001
-```
-
-`apps/identification` also supports Docker for local development with Postgres (`apps/identification/docker-compose.yml`).
-
----
-
-### Environment variables
-
-See the full table above under [Installation and setup](#installation-and-setup). Summary of what's required per service:
-
-| Service | Required variables |
-|---------|---------------------|
-| `apps/web` | `DATABASE_URL`, `NEXTAUTH_SECRET`, `NEXTAUTH_URL`, `WEBHOOK_SECRET`, `NEXT_PUBLIC_IDENTIFICATION_API` |
-| `apps/identification` | `S3_COLLECTIONS_BUCKET`, `BEDROCK_MODEL_ID`, `CORS_ORIGINS` |
-| Optional channels | `TWILIO_ACCOUNT_SID` / `TWILIO_AUTH_TOKEN` (WhatsApp), `TELEGRAM_BOT_TOKEN` (Telegram) |
-
----
-
-### Deployment
-
-**Identification service (AWS Lambda via CDK):**
-```bash
-npx cdk bootstrap aws://ACCOUNT_ID/us-east-1        # once per account/region
-
-aws secretsmanager create-secret \
-  --name fundares/prod/app \
-  --secret-string '{"CORS_ORIGINS":"*","LOG_LEVEL":"info"}'   # before the first deploy
-
-cd infra
-npx cdk deploy FundaresSharedStack
-npx cdk deploy FundaresStack-Prod -c environment=prod
-```
-
-**Web dashboard:** deployed on **Vercel** — connect the repository and set the environment variables in the Vercel dashboard. Build command: `turbo run build --filter=web` (auto-deploys on every push to `main`).
-
-**Automated:** the `cicd.yml` workflow runs both deployments on every push to `main`, with change detection (only redeploying what changed) and a post-deploy health check against `GET /api/v1/health`.
+- Every partner company **only accesses its own data** — the filter is enforced at the database-query level from `session.user.empresaId`, never only in the presentation layer.
+- Next.js middleware blocks `/admin/*` for the `empresa` role and `/empresa/*` for the `admin` role.
+- Sensitive API routes **re-check the role server-side**, never trusting the middleware alone.
+- Production secrets live in **AWS Secrets Manager** — never in build variables or in the repository.
+- The extraction service is designed to **reject rather than invent**: any field that isn't reliably visible comes back as `null`.
 
 ---
 
 ### Project status and roadmap
 
-- **Maturity:** this is an **actively deployed production project**, not a prototype — it has real AWS infrastructure, a three-workflow CI/CD pipeline, tests (Jest) in `apps/identification` and `infra`, and a documented production API with a public URL.
-- This repository's Git history arrived as a single squashed commit (`ARR 2.0.0`) — it does not reflect the full original development history.
-- `CHANGELOG.md` describes an earlier version (`v1.0.0`) centered on identity/age verification with a Flutter mobile app; that code is no longer present in the current working tree, indicating a **product pivot** toward recycling management. The changelog itself has not been updated to reflect that pivot.
-- A second app (`apps/fundares`) duplicates much of `apps/web`'s logic with a different auth method (Supabase) — this looks like an in-progress migration or a parallel variant, though that can't be confirmed with certainty from the code alone.
-- The `[Unreleased]` section of `CHANGELOG.md` is empty; there is no explicit roadmap documented in the repository beyond the above.
+- [x] Three active input channels (WhatsApp, Telegram, Web) in production.
+- [x] Generative AI extraction (Amazon Nova 2 Lite + Nova Pro fallback) with a two-step flow for image/video.
+- [x] Two dashboards in production (`apps/web` with NextAuth, `apps/fundares` with Supabase Auth).
+- [x] PDF and Excel reports for administrators and partner companies.
+- [x] Infrastructure as code (AWS CDK v2) with custom security and cost validation aspects.
+- [x] CI/CD pipeline with three workflows (automatic deploy, manual release, audited rollback).
+- [ ] Consolidate `apps/fundares` and `apps/web` into a single app (today they look like an in-progress auth migration, though that can't be confirmed with certainty from the code alone).
+- [ ] Update `CHANGELOG.md`, which still describes the earlier identity-verification version — it doesn't reflect the product pivot.
+- [ ] Rename the root `package.json`, which still keeps the historical name `decouple-services`.
+
+> **Note on Git history:** this repository's history arrived as a **single squashed commit** (`ARR 2.0.0`) — that is, it was published as a consolidated snapshot of the *product pivot* described above, and does not reflect the full original development history.
 
 ---
 
@@ -700,6 +809,13 @@ This repository ships a `LICENSE` file under the **MIT License**, copyrighted to
 
 ### Author and contact
 
-- **Repository's GitHub account:** [jackson1939](https://github.com/jackson1939)
+<p align="left">
+  <a href="https://github.com/jackson1939"><img src="https://img.shields.io/badge/GitHub-jackson1939-181717?style=for-the-badge&logo=github&logoColor=white"/></a>
+</p>
+
 - **Repository:** [github.com/jackson1939/aram](https://github.com/jackson1939/aram)
 - **Security contact documented in the repo** (inherited from `SECURITY.md`): walteribanez555@gmail.com — report vulnerabilities privately, never in a public issue.
+
+<p align="center">
+  <img src="https://capsule-render.vercel.app/api?type=waving&color=0:66BB6A,100:1B5E20&height=120&section=footer" width="100%"/>
+</p>
